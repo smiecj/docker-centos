@@ -15,10 +15,12 @@ MAINTAINER lifeng 123@qq.com
 ENV HAHAHA="666"
 
 # RUN 
+## todo: set login password shell
 RUN echo "build before start" >> /tmp/test.log
+RUN echo $HAHAHA > /tmp/hahaha.log
 
 # ENTRYPOINT 一定会执行的初始化语句
-ENTRYPOINT ["/usr/sbin/init", "/bin/bash", "echo $HAHAHA > /tmp/hahaha.log"]
+ENTRYPOINT ["/usr/sbin/init"]
 
 # CMD 说明启动容器之后需要执行的指令
 #CMD ["/bin/bash", "echo $HAHAHA > /tmp/hahaha.log"]
