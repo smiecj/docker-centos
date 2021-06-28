@@ -12,12 +12,16 @@ WORKDIR /home
 # 设置镜像的作者
 MAINTAINER lifeng 123@qq.com
 
+ENV HAHAHA="666"
+
 # RUN 
 RUN echo "build before start" >> /tmp/test.log
 
+# ENTRYPOINT 一定会执行的初始化语句
+ENTRYPOINT ["/usr/sbin/init", "/bin/bash", "echo $HAHAHA > /tmp/hahaha.log"]
+
 # CMD 说明启动容器之后需要执行的指令
-CMD ["/bin/bash", "/home/modules/script/init.sh"]
-#CMD echo "启动容器之后的执行命令" >> /home/testdockerfile.txt
+#CMD ["/bin/bash", "echo $HAHAHA > /tmp/hahaha.log"]
 
 # EXPOSE 说明镜像启动之后，其对应的服务需要对外开放的端口，这里指定的是内部端口
 EXPOSE 22
