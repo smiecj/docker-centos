@@ -12,12 +12,12 @@ WORKDIR /home
 # 设置镜像的作者
 MAINTAINER lifeng 123@qq.com
 
-ENV HAHAHA="666"
+ENV ROOT_PWD="root!centos123"
 
 # RUN 
 ## todo: set login password shell
-RUN echo "build before start" >> /tmp/test.log
-RUN echo $HAHAHA > /tmp/hahaha.log
+RUN echo "build before scriptsstart" >> /tmp/test.log
+RUN /home/coding/init-system.sh $ROOT_PWD
 
 # ENTRYPOINT 一定会执行的初始化语句
 ENTRYPOINT ["/usr/sbin/init"]
