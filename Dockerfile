@@ -1,5 +1,5 @@
 # 第一行：指定需要拉取的镜像版本
-FROM mzsmieli/centos_dev
+FROM mzsmieli/centos_dev:v1.0.0
 
 # 本地测试dockerfile文件，从阿里云镜像中拉取最新版本
 # VERSION 1 -- for test
