@@ -7,8 +7,8 @@ set -euxo pipefail
 
 #### 默认密码: root!centos123
 root_pwd="root!centos123"
-if [ $# -eq 1 ]; then
-    root_pwd=$1
+if [ "" != "$ROOT_PWD" ]; then
+    root_pwd=$ROOT_PWD
 fi
 
 echo root:$root_pwd | chpasswd
