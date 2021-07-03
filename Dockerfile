@@ -16,11 +16,9 @@ ENV ROOT_PWD=$ROOT_PWD
 
 # RUN 
 ## 预装一些常用指令
-RUN yum -y install expect \
-    && yum -y install epel-release \
-    && yum -y install jq \
-    && git clone https://github.com/smiecj/docker-centos.git \
-    && cp -f docker-centos/scripts/init-system.sh /usr/sbin/init-system \
+RUN yum -y install expect epel-release jq \
+    && rm -f main.zip && rm -rf docker-centos-main && wget https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
+    && cp -f docker-centos-main/scripts/init-system.sh /usr/sbin/init-system \
     && chmod +x /usr/sbin/init-system
 
 # ENTRYPOINT 一定会执行的初始化语句
