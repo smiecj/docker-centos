@@ -4,7 +4,9 @@
 ## 使用方式
 docker build dockerfiles/
 
-docker run --name test_dev --env "ADMIN_PWD=root!centos123" -d --privileged=true -p 2222:22 mzsmieli/centos_dev
+### 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
+### --privileged 是必选项，因为系统需要初始化root 账户相关服务和权限
+docker run --name centos --env "ADMIN_PWD=root!centos123" -d --privileged -p 2222:22 mzsmieli/centos_dev
 
 然后 本地就可以直接连接到centos 镜像了:
 ssh root@root!centos123 -p 2222

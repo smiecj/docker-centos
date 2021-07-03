@@ -7,29 +7,24 @@ FROM mzsmieli/centos_dev
 # Command Format
 
 # WORKDIR 指定镜像内部的工作路径，在执行COPY、ADD的时候需要用到
-WORKDIR /home
+WORKDIR /home/coding
 
 # 设置镜像的作者
 MAINTAINER lifeng 123@qq.com
 
-ENV ROOT_PWD="root!centos123"
+ENV ROOT_PWD=$ROOT_PWD
 
 # RUN 
-## todo: set login password shell
-RUN echo "build before scriptsstart" >> /tmp/test.log
-RUN /home/coding/init-system.sh $ROOT_PWD
+## 预装一些常用指令
+RUN yum -y install expect \
+    && yum -y install epel-release \
+    && yum -y install jq \
+    && git clone https://github.com/smiecj/docker-centos.git \
+    && cp -f docker-centos/scripts/init-system.sh /usr/sbin/init-system \
+    && chmod +x /usr/sbin/init-system
 
 # ENTRYPOINT 一定会执行的初始化语句
-ENTRYPOINT ["/usr/sbin/init"]
-
-# CMD 说明启动容器之后需要执行的指令
-#CMD ["/bin/bash", "echo $HAHAHA > /tmp/hahaha.log"]
+ENTRYPOINT ["/usr/sbin/init-system"]
 
 # EXPOSE 说明镜像启动之后，其对应的服务需要对外开放的端口，这里指定的是内部端口
 EXPOSE 22
-
-# 磁盘挂载点（？）
-#VOLUME ["/home"]
-
-# COPY 指令：将本机文件拷贝到镜像里面去
-#COPY . ./music
