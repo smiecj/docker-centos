@@ -1,0 +1,27 @@
+# 官方deployment 示例：部署三个nginx 容器
+## https://k8s.io/examples/controllers/nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  ## selector: template 定义的 labels 中，满足 选择器中的镜像 才会被部署
+  selector:
+    matchLabels:
+      app: nginx
+  ## template: 容器对应的基本信息
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      ## containers: 镜像信息
+      ### 需要暴露更多端口: 
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
