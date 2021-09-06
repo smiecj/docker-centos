@@ -2,7 +2,7 @@
 ## 部署指令：
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   ### 部署名称，即通过 kubectl get deployments 展示的名称
   name: zk-0
@@ -60,7 +60,7 @@ spec:
           value: '/data/zk-logs'
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: zk-1
 spec:
@@ -110,7 +110,7 @@ spec:
 
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: zk-2
 spec:
