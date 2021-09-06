@@ -1,5 +1,6 @@
 # zookeeper 集群部署 deployment，参考仓库：https://github.com/cookeem/kubernetes-zookeeper-cluster
-## 部署指令：
+## 部署指令：git clone https://github.com/cookeem/kubernetes-zookeeper-cluster.git && 
+## cd kubernetes-zookeeper-cluster/ && kubectl create -f .
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -10,6 +11,10 @@ metadata:
 spec:
   ## 副本数: 1
   replicas: 1
+  selector:
+    matchLabels:
+      app: zk
+      node: node0
   template:
     metadata:
       labels:
@@ -65,6 +70,10 @@ metadata:
   name: zk-1
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: zk
+      node: node1
   template:
     metadata:
       labels:
@@ -115,6 +124,10 @@ metadata:
   name: zk-2
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: zk
+      node: node2
   template:
     metadata:
       labels:
