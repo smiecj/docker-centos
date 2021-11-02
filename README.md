@@ -2,7 +2,7 @@
 提供一个centos开发镜像
 
 ## 使用方式
-docker build dockerfiles/
+docker build -f docker-centos/Dockerfiles/centos
 
 ### 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 ### --privileged 是必选项，因为系统需要初始化root 账户相关服务和权限

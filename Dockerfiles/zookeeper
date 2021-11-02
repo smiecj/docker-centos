@@ -1,0 +1,15 @@
+FROM mzsmieli/centos_zookeeper:v1.0.0
+
+WORKDIR /home/coding
+
+MAINTAINER smiecj smiecj@github.com
+
+# RUN 
+RUN yum -y install expect epel-release jq \
+    && rm -f main.zip && rm -rf docker-centos-main && wget https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
+    && cp -f docker-centos-main/scripts/init-zookeeper.sh /usr/sbin/init-zookeeper \
+    && chmod +x /usr/sbin/init-zookeeper
+
+ENTRYPOINT ["/usr/sbin/init-zookeeper"]
+
+EXPOSE 22

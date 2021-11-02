@@ -1,16 +1,11 @@
 # 第一行：指定需要拉取的镜像版本
 FROM mzsmieli/centos_dev:v1.0.0
 
-# 本地测试dockerfile文件，从阿里云镜像中拉取最新版本
-# VERSION 1 -- for test
-# Author: ShuaiFeng
-# Command Format
-
 # WORKDIR 指定镜像内部的工作路径，在执行COPY、ADD的时候需要用到
 WORKDIR /home/coding
 
 # 设置镜像的作者
-MAINTAINER lifeng 123@qq.com
+MAINTAINER smiecj smiecj@github.com
 
 ENV ROOT_PWD=$ROOT_PWD
 
