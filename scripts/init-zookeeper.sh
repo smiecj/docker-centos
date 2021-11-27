@@ -10,7 +10,7 @@ if [ "" != "$DEPLOY_MODE" ]; then
     deploy_mode=$DEPLOY_MODE
 fi
 
-if [ $deploy_mode == $const_singleton ]; then
+if [ $deploy_mode == $DEPLOY_MODE_SINGLETON ]; then
     echo "singleton deploy mode"
     cp -f /home/modules/zookeeper/conf/zoo_singleton.cfg /home/modules/zookeeper/conf/zoo.cfg
 else
