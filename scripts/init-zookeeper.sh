@@ -14,6 +14,7 @@ if [ $deploy_mode == $DEPLOY_MODE_SINGLETON ]; then
     echo "singleton deploy mode"
     cp -f /home/modules/zookeeper/conf/zoo_singleton.cfg /home/modules/zookeeper/conf/zoo.cfg
 else
+    ## todo: support more than 3 nodes 
     echo "cluster deploy mode"
     sed -i "s/{zoo_node_1}/$ZK_NODE_1/g" $ZK_NODE_1
     sed -i "s/{zoo_node_2}/$ZK_NODE_2/g" $ZK_NODE_2

@@ -1,0 +1,113 @@
+# zookeeper 集群部署 deployment，参考仓库：https://github.com/cookeem/kubernetes-zookeeper-cluster
+## 部署指令：git clone https://github.com/cookeem/kubernetes-zookeeper-cluster.git && 
+## cd kubernetes-zookeeper-cluster/ && kubectl create -f .
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  ### 部署名称，即通过 kubectl get deployments 展示的名称
+  name: zk-1
+## 部署详细配置信息
+spec:
+  ## 副本数: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zk
+      node: node1
+  template:
+    metadata:
+      labels:
+        app: zk
+        node: node1
+    ## 当前副本的基本信息
+    spec:
+      ### 启动容器之后的 hostname
+      ### 注意这个hostname 非常重要，和 name 一样也是应该不重复的，因为随后集群之间相互访问，都是通过 host 访问的
+      hostname: zk-1
+      - name: zk-1
+        image: centos_zookeeper_test
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 2181
+        - containerPort: 2888
+        - containerPort: 3888
+        env:
+        - name: DEPLOY_MODE
+          value: 'cluster'
+        - name: ZK_NODE_1
+          value: zk-1
+        - name: ZK_NODE_2
+          value: zk-2
+        - name: ZK_NODE_3
+          value: zk-3
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: zk-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zk
+      node: node2
+  template:
+    metadata:
+      labels:
+        app: zk
+        node: node2
+    spec:
+      hostname: zk-2
+      containers:
+      - name: zk-2
+        image: centos_zookeeper_test
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 2181
+        - containerPort: 2888
+        - containerPort: 3888
+        env:
+        - name: DEPLOY_MODE
+          value: 'cluster'
+        - name: ZK_NODE_1
+          value: zk-1
+        - name: ZK_NODE_2
+          value: zk-2
+        - name: ZK_NODE_3
+          value: zk-3
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: zk-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zk
+      node: node3
+  template:
+    metadata:
+      labels:
+        app: zk
+        node: node3
+    spec:
+      hostname: zk-3
+      containers:
+      - name: zk-3
+        image: centos_zookeeper_test
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 2181
+        - containerPort: 2888
+        - containerPort: 3888
+        env:
+        - name: DEPLOY_MODE
+          value: 'cluster'
+        - name: ZK_NODE_1
+          value: zk-1
+        - name: ZK_NODE_2
+          value: zk-2
+        - name: ZK_NODE_3
+          value: zk-3
