@@ -1,4 +1,4 @@
-FROM centos/latest
+FROM centos:latest
 
 WORKDIR /home/coding
 

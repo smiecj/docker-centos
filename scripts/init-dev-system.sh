@@ -157,9 +157,6 @@ cd /tmp
 rm -rf python-tools-main
 rm -f main.zip
 
-## 测试: cd /tmp && cd python-tools-main && make install_conda
-## echo "{\"path\": \"/usr/java/test\"}" | jq -c -r '.path | split("/") | .[:length-1] | join("/")'
-
 ### python environment
 echo 'export PYTHON3_HOME=/usr/local/miniconda/envs/py3' >> /etc/profile
 
