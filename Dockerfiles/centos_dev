@@ -1,0 +1,15 @@
+FROM centos/latest
+
+WORKDIR /home/coding
+
+MAINTAINER smiecj smiecj@github.com
+
+ENV ROOT_PWD=$ROOT_PWD
+
+# RUN 
+RUN yum -y install expect epel-release jq wget zip \
+    && rm -f main.zip && rm -rf docker-centos-main && wget https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
+    && cp -f docker-centos-main/scripts/init-dev-system.sh /usr/sbin/init-dev-system \
+    && chmod +x /usr/sbin/init-dev-system && /bin/bash /usr/sbin/init-dev-system
+
+EXPOSE 22

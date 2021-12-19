@@ -15,8 +15,12 @@ ssh root@root!centos123 -p 2222
 scripts: 放到开发镜像中的脚本
 
 ## 待规划需求
+### centos_dev DockerFile 支持自定义需要安装的环境/组件
 可以在 docker run 中输入组件名，自动安装对应组件
 如: docker run --env "INSTALL_PLUGINS=zookeeper,mysql"
+
+### zookeeper 集群的本地部署
+通过 K8S 搭建zk 集群
 
 ## 最后，欢迎大家一起交流一起学习！
 如果你对镜像或者这个仓库有任何疑问，都欢迎直接通过 issue 直接提问题和建议
