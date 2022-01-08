@@ -45,27 +45,6 @@ else
     npm_folder=`echo $npm_pkg | sed 's/\.tar.gz.*//g'`
 fi
 
-## yum basic environment
-### initscripts refer: https://yum-info.contradodigital.com/view-package/installed/initscripts/
-yum -y install initscripts
-
-### sshd
-yum -y install openssh-server openssh-clients
-systemctl enable sshd
-
-### gcc
-yum -y install gcc
-yum -y install gcc-c++
-
-### other useful tools
-yum -y install lsof net-tools vim lrzsz zip ncurses git wget make sudo
-
-## bashrc
-sed -i "s/alias cp/#alias cp/g" ~/.bashrc
-sed -i "s/alias mv/#alias mv/g" ~/.bashrc
-echo "alias ll='ls -l'" >> ~/.bashrc
-echo "alias rm='rm -f'" >> ~/.bashrc
-
 ## java install (openjdk)
 java_home=/usr/java
 mkdir -p $java_home
@@ -175,3 +154,6 @@ echo -e "* soft nofile 100001\n* hard nofile 100002" >> /etc/security/limits.con
 
 ## clean history
 history -c
+
+## timezone
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
