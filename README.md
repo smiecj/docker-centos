@@ -2,11 +2,11 @@
 提供一个centos开发镜像
 
 ## 使用方式
-docker build -f docker-centos/Dockerfiles/centos_dev -t centos_dev .
+docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_dev -t centos_dev .
 
 ### 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 ### --privileged 是必选项，因为系统需要初始化root 账户相关服务和权限
-docker run --name centos --build-arg "ADMIN_PWD=root!centos123" -d --privileged -p 2222:22 centos_dev
+docker run --name centos -d --privileged -p 2222:22 centos_dev
 
 然后 本地就可以直接连接到centos 镜像了:
 ssh root@root!centos123 -p 2222

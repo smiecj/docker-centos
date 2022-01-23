@@ -6,9 +6,11 @@ MAINTAINER smiecj smiecj@github.com
 
 ARG ROOT_PWD=root!centos123
 
-# RUN 
-RUN yum -y install wget zip && cd /tmp \
+# RUN
+## todo: centos_dev support modify default password by set docker env
+
+RUN yum -y install wget zip \
     && rm -f main.zip && rm -rf docker-centos-main && wget https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
-    && cd docker-centos-main/scripts && sh init-system.sh ${ROOT_PWD} && sh init-dev-system.sh
+    && cd docker-centos-main/scripts && sh init-system.sh ${ROOT_PWD} && sh init-mysql.sh
 
 EXPOSE 22
