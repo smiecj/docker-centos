@@ -58,15 +58,13 @@ rpm -ivh $mysql_server_rpm_name
 #### 当前: 在当前仓库提供一个默认的配置
 #### 默认配置: mysql_default.cnf
 #### 后续需要特别定制化的操作才进行配置替换
-'''
-cp /etc/my.cnf /etc/my.cnf_bak
-cp ../mysql_default.cnf /etc/my.cnf
-mkdir -p /home/modules/mysql
-mv -f /var/lib/mysql/* /home/modules/mysql
-mkdir -p /home/modules/mysql/log
-mv /home/modules/mysql/binlog.index /home/modules/mysql/log
-chown -R mysql:mysql /home/modules/mysql
-'''
+#cp /etc/my.cnf /etc/my.cnf_bak
+#cp ../mysql_default.cnf /etc/my.cnf
+#mkdir -p $mysql_home
+#mv -f /var/lib/mysql/* $mysql_home
+#mkdir -p $mysql_home/log
+#mv /var/lib/mysql/binlog.index $mysql_home/log
+#chown -R mysql:mysql $mysql_home
 
 ## start mysql
 service mysqld start
