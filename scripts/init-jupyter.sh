@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+#set -euxo pipefail
 
 jupyter_home=/home/modules/jupyter
 rm -rf $jupyter_home
