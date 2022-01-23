@@ -18,6 +18,11 @@ sed -i "s/alias mv/#alias mv/g" ~/.bashrc
 echo "alias ll='ls -l'" >> ~/.bashrc
 echo "alias rm='rm -f'" >> ~/.bashrc
 
+## profile
+echo "export LC_CTYPE=en_US.UTF-8" >> /etc/profile
+echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
+echo "export BASHRCSOURCED=Y" >> /etc/profile
+
 ## set login password
 echo root:$root_pwd | chpasswd
 

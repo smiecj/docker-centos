@@ -11,6 +11,5 @@ unzip main.zip
 cd python-tools-main
 
 make install_conda
+source /etc/profile
 make install_jupyter
-
-# 当前: 直接在空容器上自行测试
