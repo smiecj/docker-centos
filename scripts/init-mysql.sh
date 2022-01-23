@@ -37,9 +37,9 @@ else
 fi
 
 ## install mysql
+rm -rf $mysql_home
 mkdir -p $mysql_home
 cd $mysql_home
-rm -rf $mysql_home
 wget --no-check-certificate $mysql_server_rpm_download_link -O $mysql_server_rpm_name
 wget --no-check-certificate $mysql_common_rpm_download_link -O $mysql_common_rpm_name
 wget --no-check-certificate $mysql_client_rpm_download_link -O $mysql_client_rpm_name
