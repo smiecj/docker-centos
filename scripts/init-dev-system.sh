@@ -61,7 +61,7 @@ tar -xzvf $jdk_8_pkg
 rm -f $jdk_8_pkg
 
 ### maven
-wget $maven_download_url
+wget --no-check-certificate $maven_download_url
 tar -xzvf $maven_pkg
 rm -f $maven_pkg
 
@@ -73,7 +73,7 @@ sed -i "s/maven_local_repo/$maven_repo_replace_str/g" $maven_home/conf/settings.
 rm -rf ~/.m2/repository && ln -s $maven_repo ~/.m2/repository
 
 ### gradle
-wget $gradle_download_url
+wget --no-check-certificate $gradle_download_url
 unzip $gradle_pkg
 rm -f $gradle_pkg
 
@@ -94,7 +94,7 @@ mkdir -p $go_home
 mkdir -p $go_repo_home
 cd $go_home
 rm -rf *
-wget $go_download_url
+wget --no-check-certificate $go_download_url
 tar -xzvf $go_pkg
 rm -f $go_pkg
 
@@ -111,7 +111,7 @@ mkdir -p $npm_repo_home
 cd $npm_home
 rm -rf *
 npm_home="$npm_home/$npm_folder"
-wget $npm_download_url
+wget --no-check-certificate $npm_download_url
 tar -xzvf $npm_pkg
 rm -f $npm_pkg
 
@@ -128,7 +128,7 @@ echo "cache = $npm_repo_home/cache" >> $npm_home/lib/node_modules/npm/.npmrc
 cd /tmp
 rm -f main.zip
 rm -rf python-tools-main
-wget https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
+wget --no-check-certificate https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
 unzip main.zip
 cd python-tools-main
 make install_conda

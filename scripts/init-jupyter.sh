@@ -6,7 +6,7 @@ rm -rf $jupyter_home
 mkdir -p $jupyter_home
 cd $jupyter_home
 
-wget https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
+wget --no-check-certificate https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
 unzip main.zip
 cd python-tools-main
 
