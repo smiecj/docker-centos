@@ -3,7 +3,7 @@
 
 . ./common.sh
 
-## yum basic environment
+## install centos basic tools
 install_basic_tools
 
 ## bashrc
@@ -21,4 +21,4 @@ fi
 
 echo root:$root_pwd | chpasswd
 
-exec /usr/sbin/init
+#exec /usr/sbin/init

@@ -11,9 +11,6 @@ ENV ROOT_PWD=$ROOT_PWD
 
 RUN yum -y install wget zip \
     && rm -f main.zip && rm -rf docker-centos-main && wget https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
-    && cp -f docker-centos-main/scripts/init-system.sh /usr/sbin/init-system \
-    && cp -f docker-centos-main/scripts/init-mysql.sh /usr/sbin/init-mysql \
-    && chmod +x /usr/sbin/init-system && /bin/bash /usr/sbin/init-system \
-    && chmod +x /usr/sbin/init-mysql && /bin/bash /usr/sbin/init-mysql
+    && cd docker-centos-main/scripts && sh init-system.sh && sh init-mysql.sh
 
 EXPOSE 22

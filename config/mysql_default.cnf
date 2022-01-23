@@ -1,0 +1,27 @@
+[mysqld]
+
+# port
+port = 3307
+
+# data dir
+datadir=/home/modules/mysql
+socket=/var/lib/mysql/mysql.sock
+
+# log dir
+slow_query_log_file=var/log/mysql/mysql_slow_query.log
+log-error=/var/log/mysql/mysql_error.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+# binlog dir
+binlog_format = ROW
+binlog_expire_logs_seconds=604800
+log-bin = /home/modules/mysql/log/binlog.log
+
+default-time_zone = '+8:00'
+
+[mysql]
+# default charset
+default-character-set=utf8
+
+[client]
+default-character-set=utf8
