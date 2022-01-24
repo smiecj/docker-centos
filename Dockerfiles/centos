@@ -12,7 +12,7 @@ ENV ROOT_PWD=$ROOT_PWD
 # RUN 
 ## 预装一些常用指令
 RUN yum -y install expect epel-release jq \
-    && rm -f main.zip && rm -rf docker-centos-main && wget --no-check-certificate https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
+    && rm -f main.zip && rm -rf docker-centos-main && curl -LO https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
     && cp -f docker-centos-main/scripts/init-system.sh /usr/sbin/init-system \
     && chmod +x /usr/sbin/init-system
 

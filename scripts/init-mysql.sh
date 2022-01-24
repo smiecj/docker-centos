@@ -42,11 +42,11 @@ fi
 rm -rf $mysql_home
 mkdir -p $mysql_home
 cd $mysql_home
-wget --no-check-certificate $mysql_server_rpm_download_link -O $mysql_server_rpm_name
-wget --no-check-certificate $mysql_common_rpm_download_link -O $mysql_common_rpm_name
-wget --no-check-certificate $mysql_client_rpm_download_link -O $mysql_client_rpm_name
-wget --no-check-certificate $mysql_client_plugins_rpm_download_link -O $mysql_client_plugins_rpm_name
-wget --no-check-certificate $mysql_libs_rpm_download_link -O $mysql_libs_rpm_name
+curl -Lo $mysql_server_rpm_name $mysql_server_rpm_download_link
+curl -Lo $mysql_common_rpm_name $mysql_common_rpm_download_link
+curl -Lo $mysql_client_rpm_name $mysql_client_rpm_download_link
+curl -Lo $mysql_client_plugins_rpm_name $mysql_client_plugins_rpm_download_link
+curl -Lo $mysql_libs_rpm_name $mysql_libs_rpm_download_link
 
 rpm -ivh $mysql_client_plugins_rpm_name
 rpm -ivh $mysql_common_rpm_name
