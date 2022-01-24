@@ -4,6 +4,8 @@
 # install centos develop system
 docker_centos_repo_home=/home/coding/docker-centos-main
 
+. ./env_system.sh
+
 ## judge system architecture and decide some variable value
 system_arch=`uname -p`
 ### default pkg download url is base on X86_64
@@ -23,11 +25,6 @@ gradle_pkg=`echo $gradle_download_url | sed 's/.*\///g'`
 gradle_version=7.0.2
 go_download_url=https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
 go_pkg=`echo $go_download_url | sed 's/.*\///g'`
-npm_download_url=https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.gz
-npm_pkg=`echo $npm_download_url | sed 's/.*\///g'`
-npm_folder=`echo $npm_pkg | sed 's/\.tar.gz.*//g'`
-
-repo_home=/home/repo
 
 if [ "x86_64" == "$system_arch" ]; then
     echo "The system arch is x86_64"
@@ -40,9 +37,6 @@ else
     jdk_8_folder=jdk8u312-b07
     go_download_url=https://go.dev/dl/go1.17.4.linux-arm64.tar.gz
     go_pkg=`echo $go_download_url | sed 's/.*\///g'`
-    npm_download_url=https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-arm64.tar.gz
-    npm_pkg=`echo $npm_download_url | sed 's/.*\///g'`
-    npm_folder=`echo $npm_pkg | sed 's/\.tar.gz.*//g'`
 fi
 
 ## java install (openjdk)
@@ -104,25 +98,7 @@ echo "export GOROOT=$go_home/go" >> /etc/profile
 echo "export GOPATH=$go_repo_home" >> /etc/profile
 
 ## npm install
-npm_home=/usr/nodejs
-npm_repo_home=$repo_home/nodejs
-mkdir -p $npm_home
-mkdir -p $npm_repo_home
-cd $npm_home
-rm -rf *
-npm_home="$npm_home/$npm_folder"
-curl -LO $npm_download_url
-tar -xzvf $npm_pkg
-rm -f $npm_pkg
-
-### npm environment
-echo -e '\n# nodejs' >> /etc/profile
-#echo 'export NODE_HOME=/usr/nodejs/node-v14.17.0-linux-arm64' >> /etc/profile
-echo "export NODE_HOME=$npm_home" >> /etc/profile
-echo "export NODE_REPO=$npm_repo_home/global_modules" >> /etc/profile
-
-echo "prefix = $npm_repo_home/global_modules" >> $npm_home/lib/node_modules/npm/.npmrc
-echo "cache = $npm_repo_home/cache" >> $npm_home/lib/node_modules/npm/.npmrc
+sh ./init-system-node.sh
 
 ## python install
 cd /tmp
@@ -141,7 +117,7 @@ echo 'export PYTHON3_HOME=/usr/local/miniconda/envs/py3' >> /etc/profile
 
 ## bin PATH
 echo "" >> /etc/profile
-echo 'export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin:$GOROOT/bin:$GOPATH/bin:$NODE_HOME/bin:$NODE_REPO/bin:$PYTHON3_HOME/bin' >> /etc/profile
+echo 'export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin:$GOROOT/bin:$GOPATH/bin:$NODE_REPO/bin:$PYTHON3_HOME/bin' >> /etc/profile
 
 ### check all develop environment have installed
 source /etc/profile && go version && java -version && npm -v && node -v && $CONDA_HOME/envs/py3/bin/python3 -V
