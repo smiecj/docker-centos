@@ -7,8 +7,6 @@ MAINTAINER smiecj smiecj@github.com
 ARG ROOT_PWD=root!centos123
 
 # RUN
-## todo: centos_dev support modify default password by set docker env
-
 RUN yum -y install wget zip && cd /tmp \
     && rm -f main.zip && rm -rf docker-centos-main && wget --no-check-certificate https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
     && cd docker-centos-main/scripts && sh init-system.sh ${ROOT_PWD} && sh init-jupyter.sh
