@@ -17,7 +17,7 @@ fi
 
 mkdir -p $npm_home
 mkdir -p $npm_repo_home
-cd $npm_home
+pushd $npm_home
 rm -rf *
 npm_home="$npm_home/$npm_folder"
 curl -LO $npm_download_url
@@ -33,3 +33,5 @@ echo 'export PATH=$PATH:$NODE_HOME/bin' >> /etc/profile
 
 echo "prefix = $npm_repo_home/global_modules" >> $npm_home/lib/node_modules/npm/.npmrc
 echo "cache = $npm_repo_home/cache" >> $npm_home/lib/node_modules/npm/.npmrc
+
+popd

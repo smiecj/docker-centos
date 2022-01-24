@@ -43,7 +43,7 @@ fi
 java_home=/usr/java
 mkdir -p $java_home
 mkdir -p $repo_home/java
-cd $java_home
+pushd $java_home
 rm -rf *
 
 curl -LO $jdk_11_download_url
@@ -81,12 +81,14 @@ echo "export GRADLE_HOME=/usr/java/gradle-$gradle_version" >> /etc/profile
 echo "export GRADLE_USER_HOME=$repo_home/java/gradle" >> /etc/profile
 echo "export JDK_HOME=$java_home/$jdk_11_folder" >> /etc/profile
 
+popd
+
 ## golang install
 go_home=/usr/golang
 go_repo_home=$repo_home/go
 mkdir -p $go_home
 mkdir -p $go_repo_home
-cd $go_home
+pushd $go_home
 rm -rf *
 curl -LO $go_download_url
 tar -xzvf $go_pkg
@@ -97,20 +99,23 @@ echo -e '\n# go' >> /etc/profile
 echo "export GOROOT=$go_home/go" >> /etc/profile
 echo "export GOPATH=$go_repo_home" >> /etc/profile
 
+popd
+
 ## npm install
 sh ./init-system-node.sh
 
 ## python install
-cd /tmp
+pushd /tmp
 rm -f main.zip
 rm -rf python-tools-main
 curl -LO https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
 unzip main.zip
-cd python-tools-main
+pushd python-tools-main
 make install_conda
-cd /tmp
+popd
 rm -rf python-tools-main
 rm -f main.zip
+popd
 
 ### python environment
 echo 'export PYTHON3_HOME=/usr/local/miniconda/envs/py3' >> /etc/profile

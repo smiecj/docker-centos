@@ -10,7 +10,7 @@ ARG ROOT_PWD=root!centos123
 RUN yum -y install wget zip && cd /tmp \
     && rm -f main.zip && rm -rf docker-centos-main && curl -LO https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
     && cd docker-centos-main/scripts && sh init-system.sh ${ROOT_PWD} \
-    && cd docker-centos-main/scripts && sh init-system-node.sh \
+    && sh init-system-node.sh \
     && sh init-jupyter.sh
 
 ENTRYPOINT ["service jupyter start"]
