@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:centos7
 
 WORKDIR /home/coding
 
@@ -7,10 +7,11 @@ MAINTAINER smiecj smiecj@github.com
 ARG ROOT_PWD=root!centos123
 
 # RUN
-RUN yum -y install wget zip && cd /tmp \
+RUN yum -y install wget zip unzip && cd /tmp \
     && rm -f main.zip && rm -rf docker-centos-main && curl -LO https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
     && cd docker-centos-main/scripts && sh init-system.sh ${ROOT_PWD} \
     && sh init-system-node.sh \
+    && sh init-system-glibc.sh \
     && sh init-jupyter.sh
 
 ENTRYPOINT ["service jupyter start"]

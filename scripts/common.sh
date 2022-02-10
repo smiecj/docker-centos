@@ -15,6 +15,9 @@ install_basic_tools() {
     yum -y install gcc-c++
 
     ### other useful tools
-    yum -y install lsof net-tools vim lrzsz zip ncurses git wget make sudo passwd cronie
+    yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget make sudo passwd cronie
     yum -y install expect epel-release jq
+
+    ### locale
+    localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
 }
