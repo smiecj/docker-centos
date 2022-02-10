@@ -47,7 +47,6 @@ glibc_home=/home/coding/glibc
 rm -rf $glibc_home
 mkdir -p $glibc_home
 
-rm -rf $glibc_home
 pushd $glibc_home
 curl -LO https://mirrors.tuna.tsinghua.edu.cn/gnu/glibc/glibc-2.32.tar.gz
 tar -xzvf glibc-2.32.tar.gz
