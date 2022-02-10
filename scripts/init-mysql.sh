@@ -13,7 +13,8 @@ mysql_sub_version="8.0.27-1"
 system_version="el7"
 mysql_home=/home/modules/mysql
 
-mysql_repo_url="https://cdn.mysql.com/Downloads"
+#mysql_repo_url="https://cdn.mysql.com/Downloads"
+mysql_repo_url="https://mirrors.tuna.tsinghua.edu.cn/mysql/downloads"
 
 mysql_server_rpm_name="mysql-server.rpm"
 mysql_common_rpm_name="mysql-common.rpm"
