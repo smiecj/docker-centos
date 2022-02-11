@@ -22,6 +22,7 @@ echo "alias rm='rm -f'" >> ~/.bashrc
 echo "export LC_CTYPE=en_US.UTF-8" >> /etc/profile
 echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
 echo "export BASHRCSOURCED=Y" >> /etc/profile
+echo "export HISTCONTROL=ignoreboth" >> /etc/profile
 
 ## locale
 localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
