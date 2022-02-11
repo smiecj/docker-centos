@@ -19,10 +19,10 @@ echo "alias ll='ls -l'" >> ~/.bashrc
 echo "alias rm='rm -f'" >> ~/.bashrc
 
 ## profile
-echo "export LC_CTYPE=en_US.UTF-8" >> /etc/profile
-echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
-echo "export BASHRCSOURCED=Y" >> /etc/profile
-echo "export HISTCONTROL=ignoreboth" >> /etc/profile
+echo "export LC_CTYPE=en_US.UTF-8" >> ~/.bashrc
+echo "export LC_ALL=en_US.UTF-8" >> ~/.bashrc
+echo "export BASHRCSOURCED=Y" >> ~/.bashrc
+echo "export HISTCONTROL=ignoreboth" >> ~/.bashrc
 
 ## locale
 localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
