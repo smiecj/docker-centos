@@ -11,6 +11,6 @@ RUN yum -y install wget zip unzip && cd /tmp \
     && rm -f main.zip && rm -rf docker-centos-main && curl -LO https://github.com/smiecj/docker-centos/archive/refs/heads/main.zip && unzip main.zip \
     && cd docker-centos-main/scripts && sh init-system.sh ${ROOT_PWD} && sh init-mysql.sh
 
-ENTRYPOINT ["service mysqld restart"]
+#ENTRYPOINT ["service mysqld restart"]
 
 EXPOSE 22 3306

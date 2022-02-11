@@ -3,6 +3,10 @@ set -euxo pipefail
 
 #. ./env_mysql.sh
 
+script_full_path=$(realpath $0)
+home_path=$(dirname $script_full_path)
+pushd $home_path
+
 ## env init
 system_arch=`uname -p`
 
@@ -12,6 +16,7 @@ mysql_sub_version="8.0.27-1"
 #mysql_sub_version="5.7.36-1"
 system_version="el7"
 mysql_home=/home/modules/mysql
+mysql_repo_home=/home/modules/mysql/repo
 
 #mysql_repo_url="https://cdn.mysql.com/Downloads"
 mysql_repo_url="https://mirrors.tuna.tsinghua.edu.cn/mysql/downloads"
@@ -40,9 +45,9 @@ else
 fi
 
 ## install mysql
-rm -rf $mysql_home
-mkdir -p $mysql_home
-cd $mysql_home
+rm -rf $mysql_repo_home
+mkdir -p $mysql_repo_home
+pushd $mysql_repo_home
 curl -Lo $mysql_server_rpm_name $mysql_server_rpm_download_link
 curl -Lo $mysql_common_rpm_name $mysql_common_rpm_download_link
 curl -Lo $mysql_client_rpm_name $mysql_client_rpm_download_link
@@ -55,16 +60,17 @@ rpm -ivh $mysql_libs_rpm_name
 rpm -ivh $mysql_client_rpm_name
 rpm -ivh $mysql_server_rpm_name
 
-## set mysql config
-#### 当前: 在当前仓库提供一个默认的配置
-#### 默认配置: mysql_default.cnf
-#### 后续需要特别定制化的操作才进行配置替换
-#cp /etc/my.cnf /etc/my.cnf_bak
-#cp ../mysql_default.cnf /etc/my.cnf
-#mkdir -p $mysql_home
-#mv -f /var/lib/mysql/* $mysql_home
-#mkdir -p $mysql_home/log
-#mv /var/lib/mysql/binlog.index $mysql_home/log
-#chown -R mysql:mysql $mysql_home
+## enable mysql auto start
+systemctl enable mysqld.service
 
 ## if need: uninstall mysql
+
+popd
+rm -rf $mysql_repo_home
+
+## copy mysql password reset script
+mysql_reset_password_bin=/usr/local/bin/mysqlresetpassword
+cp ./mysql-reset-password.sh $mysql_reset_password_bin
+chmod +x $mysql_reset_password_bin
+
+popd
