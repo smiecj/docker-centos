@@ -23,6 +23,10 @@ echo "export LC_CTYPE=en_US.UTF-8" >> /etc/profile
 echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
 echo "export BASHRCSOURCED=Y" >> /etc/profile
 
+## locale
+localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
+source /etc/profile
+
 ## set login password
 echo root:$root_pwd | chpasswd
 
