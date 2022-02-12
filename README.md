@@ -2,7 +2,17 @@
 提供一个centos开发镜像
 
 ## 使用方式
+### 构建开发镜像
 docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_dev -t centos_dev .
+
+### 构建存储镜像
+docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_storage -t centos_dev .
+
+### 构建 jupyter 镜像
+docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_jupyter -t centos_dev .
+
+### 构建 hue 镜像
+docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_hue -t centos_dev .
 
 ### 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 ### --privileged 是必选项，因为系统需要初始化root 账户相关服务和权限

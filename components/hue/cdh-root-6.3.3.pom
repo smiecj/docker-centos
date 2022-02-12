@@ -1,0 +1,843 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+TODO: need license header
+--><project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cloudera.cdh</groupId>
+  <artifactId>cdh-root</artifactId>
+  <version>6.3.3</version>
+  <packaging>pom</packaging>
+
+  <name>CDH root</name>
+  <description>CDH root</description>
+
+  <modules>
+    <module>testing/tests/smokes</module>
+  </modules>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Cloudera</name>
+    <url>http://www.cloudera.com</url>
+  </organization>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- Used for MVN+ANT integration via maven-antrun-plugin -->
+    <mvn.cmd>mvn</mvn.cmd>
+    <ant.cmd>ant</ant.cmd>
+
+    <!-- Default location of the toolchain -->
+    <cdh.toolchain.home>/opt/toolchain</cdh.toolchain.home>
+
+    <!-- Hudson builds must set this to a new temporary directory to ensure no old versions of JARs are -->
+    <!-- picked up for any of the components being build                                                -->
+    <ivy.cache.dir>${user.home}/.ivy2</ivy.cache.dir>
+
+    <!-- Used by Hadoop build -->
+    <java5.home>${env.JAVA5_HOME}</java5.home>
+    <forrest.home>${env.FORREST_HOME}</forrest.home>
+
+    <!-- Used to make sure we've got a value for this - overridden when specified on command-line. -->
+    <maven.repo.local>${user.home}/.m2/repository</maven.repo.local>
+
+    <!-- Binary version of Scala to use in the projects we build/use -->
+    <!-- Should be used to set the correct artifactId for Scala components -->
+    <!-- Example: <artifactId>spark-core_${cdh.scala.binary.version}</artifactId> -->
+    <cdh.scala.binary.version>2.11</cdh.scala.binary.version>
+    <!-- Complete version of Scala to use in the projects we build/use -->
+    <cdh.scala.version>2.11.12</cdh.scala.version>
+
+    <!--
+        Versions of the projects we build/use
+        When versions here, ensure corresponding versions in cdh.mk are correct
+    -->
+    <cdh.parent.version>${project.version}</cdh.parent.version>
+    <cdh.hadoop.version>3.0.0-cdh6.3.3</cdh.hadoop.version>
+    <cdh.zookeeper.version>3.4.5-cdh6.3.3</cdh.zookeeper.version>
+    <cdh.hbase.version>2.1.0-cdh6.3.3</cdh.hbase.version>
+    <cdh.pig.version>0.17.0-cdh6.3.3</cdh.pig.version>
+    <cdh.sqoop.version>1.4.7-cdh6.3.3</cdh.sqoop.version>
+    <cdh.hive.version>2.1.1-cdh6.3.3</cdh.hive.version>
+    <cdh.oozie.version>5.1.0-cdh6.3.3</cdh.oozie.version>
+    <cdh.flume.version>0.9.4-cdh6.3.3</cdh.flume.version>
+    <cdh.flume-ng.version>1.9.0-cdh6.3.3</cdh.flume-ng.version>
+    <cdh.hue.version>4.2.0-cdh6.3.3</cdh.hue.version>
+
+    <cdh.lucene-solr.version>7.4.0-cdh6.3.3</cdh.lucene-solr.version>
+    <cdh.solr.version>${cdh.lucene-solr.version}</cdh.solr.version>
+
+    <cdh.search.version>1.0.0-cdh6.3.3</cdh.search.version>
+
+    <cdh.hbase-indexer.version>1.5-cdh6.3.3</cdh.hbase-indexer.version>
+    <!-- TODO: Remove after updating the sentry project to use hbase-indexer -->
+    <cdh.hbase-solr.version>${cdh.hbase-indexer.version}</cdh.hbase-solr.version>
+
+    <cdh.kite.version>1.0.0-cdh6.3.3</cdh.kite.version>
+    <cdh.impala.version>3.2.0-cdh6.3.3</cdh.impala.version>
+    <cdh.cdh-parcel.version>${project.version}</cdh.cdh-parcel.version>
+    <cdh.sentry.version>2.1.0-cdh6.3.3</cdh.sentry.version>
+
+    <cdh.parquet.version>1.9.0-cdh6.3.3</cdh.parquet.version>
+    <cdh.parquet-format.version>2.4.0-cdh6.3.3</cdh.parquet-format.version>
+
+    <!--
+     TODO: Remove after updating the parquet project to use cdh.parquet.version instead of
+     cdh.apache-parquet.version
+    -->
+    <cdh.apache-parquet.version>1.9.0-cdh6.3.3</cdh.apache-parquet.version>
+    <cdh.apache-parquet-format.version>2.4.0-cdh6.3.3</cdh.apache-parquet-format.version>
+    <cdh.spark.version>2.4.0-cdh6.3.3</cdh.spark.version>
+    <cdh.crunch.version>0.11.0-cdh6.3.3</cdh.crunch.version>
+    <cdh.avro.version>1.8.2-cdh6.3.3</cdh.avro.version>
+    <cdh.kafka.version>2.2.1-cdh6.3.3</cdh.kafka.version>
+    <cdh.kudu.version>1.10.0-cdh6.3.3</cdh.kudu.version>
+    <cdh.hadoop-lzo.version>0.4.15-cdh6.3.3</cdh.hadoop-lzo.version>
+    <cdh.impala-lzo.version>3.2.0-cdh6.3.3</cdh.impala-lzo.version>
+    <cdh.spark-netlib.version>1.1-cdh6.3.3</cdh.spark-netlib.version>
+    <cdh.gcs.version>1.9.10-cdh6.3.3</cdh.gcs.version>
+
+    <!--
+        Versions of the third-party libraries we use
+      -->
+    <cdh.activemq.version>5.15.3</cdh.activemq.version>
+    <cdh.antcontrib>${cdh.antcontrib.version}</cdh.antcontrib>
+    <cdh.antcontrib.version>1.0b3</cdh.antcontrib.version>
+    <cdh.antlr.version>3.4</cdh.antlr.version>
+    <cdh.aspectj.version>1.6.5</cdh.aspectj.version>
+    <cdh.automaton.version>1.11-8</cdh.automaton.version>
+    <cdh.checkstyle.version>4.2</cdh.checkstyle.version>
+    <cdh.commons-beanutils.version>1.9.4</cdh.commons-beanutils.version>
+    <cdh.commons-cli.version>1.4</cdh.commons-cli.version>
+    <cdh.commons-codec.version>1.9</cdh.commons-codec.version>
+    <cdh.commons-collections.version>3.2.2</cdh.commons-collections.version>
+    <commons-collections.version>${cdh.commons-collections.version}</commons-collections.version>
+    <cdh.commons-compress.version>1.19</cdh.commons-compress.version>
+    <cdh.commons-configuration.version>1.6</cdh.commons-configuration.version>
+    <cdh.commons-daemon.version>1.0.13</cdh.commons-daemon.version>
+    <cdh.commons-dbcp.version>1.4</cdh.commons-dbcp.version>
+    <cdh.commons-el.version>1.0</cdh.commons-el.version>
+    <cdh.datanucleus-core.version>4.1.6</cdh.datanucleus-core.version>
+    <!-- Obsolete: use cdh.httpcomponents.version -->
+    <cdh.commons-httpclient.version>3.1</cdh.commons-httpclient.version>
+    <cdh.commons-io.version>2.6</cdh.commons-io.version>
+    <cdh.commons-lang.version>2.6</cdh.commons-lang.version>
+    <cdh.commons-lang3.version>3.7</cdh.commons-lang3.version>
+    <commons-lang.version>${cdh.commons-lang.version}</commons-lang.version>
+    <cdh.commons-logging.version>1.1.3</cdh.commons-logging.version>
+    <cdh.commons-math.version>2.1</cdh.commons-math.version>
+    <cdh.commons-net.version>3.1</cdh.commons-net.version>
+    <cdh.curator.version>2.7.1</cdh.curator.version>
+    <!-- OWASP's dependency-check -->
+    <cdh.dependency-check-maven.version>1.4.3</cdh.dependency-check-maven.version>
+    <cdh.derby.version>10.14.1.0</cdh.derby.version>
+    <cdh.eclipse-jetty.version>7.6.0.v20120127</cdh.eclipse-jetty.version>
+    <cdh.fastutil.version>7.2.1</cdh.fastutil.version>
+    <cdh.findbugs.version>3.0.0</cdh.findbugs.version>
+    <cdh.guava.version>11.0.2</cdh.guava.version>
+    <cdh.hadoop-snappy.version>1.1.4</cdh.hadoop-snappy.version>
+    <cdh.hsqldb.version>1.8.0.10</cdh.hsqldb.version>
+    <cdh.htrace.version>4.1.0-incubating</cdh.htrace.version>
+    <cdh.postgresql.version>42.2.5</cdh.postgresql.version>
+    <!-- The httpcomponents-client version (the first below) is not necessarily
+         the same as the httpcomponents core version. -->
+    <cdh.httpcomponents.version>4.5.3</cdh.httpcomponents.version>
+    <cdh.httpcomponents.core.version>4.4.6</cdh.httpcomponents.core.version>
+    <cdh.io.netty-all.version>4.1.42.Final</cdh.io.netty-all.version>
+    <cdh.io.netty.version>3.10.6.Final</cdh.io.netty.version>
+    <cdh.jackson2.version>2.9.10</cdh.jackson2.version>
+    <cdh.jackson2-databind.version>2.9.10.1</cdh.jackson2-databind.version>
+    <cdh.jackson.version>1.9.13</cdh.jackson.version>
+    <cdh.jackson-mapper-asl.version>1.9.13-cloudera.1</cdh.jackson-mapper-asl.version>
+    <cdh.jansi.version>1.9</cdh.jansi.version>
+    <cdh.jasper.version>5.5.23</cdh.jasper.version>
+    <cdh.javacc.version>4.2</cdh.javacc.version>
+    <cdh.jaxb-api.version>2.2.11</cdh.jaxb-api.version>
+    <cdh.jdiff.version>1.0.9</cdh.jdiff.version>
+    <cdh.jersey.version>1.19</cdh.jersey.version>
+    <cdh.jets3t.version>0.9.0</cdh.jets3t.version>
+    <cdh.jetty-jsp.version>6.1.14</cdh.jetty-jsp.version>
+    <cdh.jetty.version>6.1.26.cloudera.4</cdh.jetty.version>
+    <cdh.jetty9.version>9.3.25.v20180904</cdh.jetty9.version>
+    <cdh.jline.version>2.12</cdh.jline.version>
+    <cdh.jmh.version>1.19</cdh.jmh.version>
+    <cdh.jms.version>1.1</cdh.jms.version>
+    <cdh.joda-time.version>2.9.9</cdh.joda-time.version>
+    <cdh.joda.version>${cdh.joda-time.version}</cdh.joda.version>
+    <cdh.jsch.version>0.1.42</cdh.jsch.version>
+    <cdh.json-simple.version>1.1</cdh.json-simple.version>
+    <cdh.jsp-api.version>2.1</cdh.jsp-api.version>
+    <cdh.junit.version>4.8.1</cdh.junit.version>
+    <cdh.jython.version>2.7.0</cdh.jython.version>
+    <cdh.kerby.version>1.0.0</cdh.kerby.version>
+    <cdh.kfs.version>0.3</cdh.kfs.version>
+    <cdh.log4j.version>1.2.17</cdh.log4j.version>
+    <!-- The logredactor implementation is currently only needed at
+         runtime, but managed as a third party lib proactively for when
+         it gets used directly by components in the future.  -->
+    <cdh.logredactor.version>2.0.7</cdh.logredactor.version>
+    <cdh.metrics-core.version>3.0.2</cdh.metrics-core.version>
+    <cdh.mina.version>2.0.0-M5</cdh.mina.version>
+    <cdh.mockito.version>1.10.19</cdh.mockito.version>
+    <cdh.oro.version>2.0.8</cdh.oro.version>
+    <cdh.poi.version>4.0.0</cdh.poi.version>
+    <cdh.rat.version>0.6</cdh.rat.version>
+    <cdh.re2j.version>1.1</cdh.re2j.version>
+    <cdh.servlet-api.version>2.5</cdh.servlet-api.version>
+    <cdh.slf4j.version>1.7.25</cdh.slf4j.version>
+    <cdh.surefire.version>2.20</cdh.surefire.version>
+    <cdh.testng.version>6.2</cdh.testng.version>
+    <cdh.thrift.version>0.9.3-1</cdh.thrift.version>
+    <cdh.thrift.executable.version>0.9.3</cdh.thrift.executable.version>
+    <cdh.libfb303.version>0.9.3</cdh.libfb303.version>
+    <cdh.tika.version>1.19.1</cdh.tika.version>
+    <!-- Dependency version reporting -->
+    <cdh.versions-maven-plugin.version>2.3</cdh.versions-maven-plugin.version>
+    <cdh.xerces.version>1.4.4</cdh.xerces.version>
+    <cdh.xmlenc.version>0.52</cdh.xmlenc.version>
+
+    <!-- Versions mixed with properties for some artifacts: -->
+
+    <!-- Clover properties -->
+    <cdh.clover.version>4.0.3</cdh.clover.version>
+    <cdh.clover.license.location>${cdh.toolchain.home}/clover-ant-4.0.3/lib/clover.license</cdh.clover.license.location>
+
+    <!-- Sonar properties -->
+    <sonar.core.codeCoveragePlugin>clover</sonar.core.codeCoveragePlugin>
+    <sonar.clover.reportPath>${project.build.directory}/site/clover/clover.xml</sonar.clover.reportPath>
+    <sonar.exclusions>**/clover/src-instrumented/**,**/target/**</sonar.exclusions>
+
+    <!-- Protobuf properties -->
+    <cdh.protobuf.version>2.5.0</cdh.protobuf.version>
+    <cdh.protobuf.home>${cdh.toolchain.home}/protobuf-${cdh.protobuf.version}</cdh.protobuf.home>
+    <cdh.protobuf.path>${cdh.protobuf.home}/bin/protoc</cdh.protobuf.path>
+
+    <!-- Maven Repository root
+
+         Can be configured to (e.g.) file:///${user.home}/maven/ for
+         local installation.
+    -->
+    <repository.root>http://maven.jenkins.cloudera.com:8081/artifactory</repository.root>
+    <repository.releases>http://maven.jenkins.cloudera.com:8081/artifactory/cdh-staging-local</repository.releases>
+    <repository.snapshots>http://maven.jenkins.cloudera.com:8081/artifactory/cdh-snapshot-local</repository.snapshots>
+
+
+  </properties>
+
+  <!-- crepo info -->
+  <scm>
+    <connection>scm:crepo:git@git.sf.cloudera.com:tucu.git</connection>
+    <url>git@git.sf.cloudera.com:tucu.git</url>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>cdh.releases.repo</id>
+      <url>${repository.releases}</url>
+      <name>CDH Releases Repository</name>
+    </repository>
+    <snapshotRepository>
+      <id>cdh.snapshots.repo</id>
+      <url>${repository.snapshots}</url>
+      <name>CDH Snapshots Repository</name>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
+    <repository>
+      <id>cdh.releases.repo</id>
+      <url>https://repository.cloudera.com/content/groups/cdh-releases-rcs</url>
+      <name>CDH Releases Repository</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>cdh.snapshots.repo</id>
+      <url>https://repository.cloudera.com/content/repositories/snapshots</url>
+      <name>CDH Snapshots Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>datanucleus</id>
+      <url>http://www.datanucleus.org/downloads/maven2</url>
+      <name>Datanucleus</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>java.net repository</id>
+      <url>http://download.java.net/maven/2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>cdh.thirdparty.repo</id>
+      <url>https://repository.cloudera.com/content/repositories/third-party</url>
+      <name>Cloudera Third Party Repository</name>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>cdh.releases.repo</id>
+      <url>https://repository.cloudera.com/content/repositories/cdh-releases-rcs</url>
+      <name>CDH Releases Repository</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>cdh.snapshots.repo</id>
+      <url>https://repository.cloudera.com/content/repositories/snapshots</url>
+      <name>CDH Snapshots Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.5.1</version>
+        </plugin>
+
+        <!-- crepo provider setup -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.1</version>
+          <configuration>
+            <commitByProject>true</commitByProject>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>com.cloudera.kitchen</groupId>
+              <artifactId>maven-scm-provider-crepo</artifactId>
+              <version>1.2</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <plugin>
+          <groupId>com.cloudera.kitchen</groupId>
+          <artifactId>maven-deps-to-props-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>com.cloudera.kitchen</groupId>
+          <artifactId>maven-build-repo-setup-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>com.cloudera.kitchen</groupId>
+          <artifactId>maven-build-repo-addto-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${cdh.surefire.version}</version>
+          <configuration combine.children="override">
+            <excludesFile>${test.excludes.file}</excludesFile>
+            <includesFile>${test.includes.file}</includesFile>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>findbugs-maven-plugin</artifactId>
+          <version>3.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.8</version>
+          <configuration>
+            <excludes>**/src-instrumented/**</excludes>
+            <excludes>**/generated/**</excludes>
+            <includes>src/**/*.java</includes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>native-maven-plugin</artifactId>
+          <version>1.0-alpha-7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>make-maven-plugin</artifactId>
+          <version>1.0-beta-1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.avro</groupId>
+          <artifactId>avro-maven-plugin</artifactId>
+          <version>${cdh.avro.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo.jspc</groupId>
+          <artifactId>jspc-maven-plugin</artifactId>
+          <version>2.0-alpha-3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+
+        <!-- other plugins we'd like to pin down versions of -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <version>0.6</version>
+          <configuration>
+            <!--
+                Cauldron puts some extra files under the source directory during
+                builds. These have to be excluded from the licence checks,
+                otherwise the build would fail.
+            -->
+            <excludes combine.children="append">
+              <exclude>cloudera/build.properties</exclude>
+              <exclude>cloudera/cdh_version.properties</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pdf-plugin</artifactId>
+          <version>1.1</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-module-confluence</artifactId>
+              <version>1.1.3</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>2.18.1</version>
+          <configuration>
+            <excludesFile>${test.excludes.file}</excludesFile>
+            <includesFile>${test.includes.file}</includesFile>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>${cdh.dependency-check-maven.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${cdh.versions-maven-plugin.version}</version>
+        </plugin>
+      </plugins>
+
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+          <rules>
+            <requireMavenVersion>
+              <version>[3.0.0,)</version>
+            </requireMavenVersion>
+            <requireJavaVersion>
+              <version>1.6</version>
+            </requireJavaVersion>
+            <requireOS>
+              <family>unix</family>
+            </requireOS>
+          </rules>
+        </configuration>
+        <executions>
+          <execution>
+            <id>clean</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>pre-clean</phase>
+          </execution>
+          <execution>
+            <id>default</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>validate</phase>
+          </execution>
+          <execution>
+            <id>site</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>pre-site</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>remove-old-installers</id>
+            <goals>
+              <goal>remove-project-artifact</goal>
+            </goals>
+            <phase>initialize</phase>
+            <configuration>
+              <removeAll>true</removeAll>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-maven-plugin</artifactId>
+        <version>1.6</version>
+        <configuration>
+          <nexusUrl>https://repository.cloudera.com</nexusUrl>
+          <description>Closing initial staging repository</description>
+          <serverAuthId>cdh.releases.repo</serverAuthId>
+          <automatic>true</automatic>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
+        <version>${cdh.clover.version}</version>
+        <configuration>
+          <licenseLocation>${cdh.clover.license.location}</licenseLocation>
+        </configuration>
+      </plugin>
+
+      <!-- maven-remote-resources-plugin copied from org.apache:apache:13 -->
+      <!-- We want to package up license resources in the JARs produced -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process</goal>
+            </goals>
+            <configuration>
+              <resourceBundles>
+                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+              </resourceBundles>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <!-- OWASP's dependency-check plugin will scan the third party
+             dependencies of this project for known CVEs (security
+             vulnerabilities against them). It will produce a report
+             in target/dependency-check-report.html. To invoke, run
+             'mvn dependency-check:aggregate'
+        -->
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>${cdh.dependency-check-maven.version}</version>
+      </plugin>
+      <plugin>
+        <!-- The Versions Plugin is used when you want to manage the
+             versions of artifacts in a project's POM.
+             "versions:display-dependency-updates" Displays all
+             dependencies that have newer versions available.
+        -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${cdh.versions-maven-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>cauldron</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <!-- Generate a properties file with the versions used in this build -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>write-project-properties</goal>
+                </goals>
+                <configuration>
+                  <outputFile>
+                    local-output/cdh-properties/cdh.properties
+                  </outputFile>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>cloudera-clover</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.atlassian.clover</groupId>
+          <artifactId>clover</artifactId>
+          <version>${cdh.clover.version}</version>
+        </dependency>
+      </dependencies>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <version>${cdh.clover.version}</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+
+          <plugin>
+            <groupId>com.atlassian.maven.plugins</groupId>
+            <artifactId>maven-clover2-plugin</artifactId>
+            <version>${cdh.clover.version}</version>
+            <configuration>
+              <includesAllSourceRoots>true</includesAllSourceRoots>
+              <includesTestSourceRoots>true</includesTestSourceRoots>
+              <excludes>
+                <exclude>**/generated/**</exclude>
+                <exclude>**/generated-sources/**</exclude>
+                <exclude>**/src-instrumented/**</exclude>
+              </excludes>
+              <licenseLocation>${cdh.clover.license.location}</licenseLocation>
+            </configuration>
+
+            <executions>
+              <execution>
+                <id>clover-setup</id>
+                <phase>process-sources</phase>
+                <goals>
+                  <goal>setup</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>clover</id>
+                <phase>site</phase>
+                <goals>
+                  <goal>clover</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>cloudera-unittest</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${cdh.surefire.version}</version>
+            <configuration combine.children="override">
+              <forkCount>${test.fork.count}</forkCount>
+              <reuseForks>${test.fork.reuse}</reuseForks>
+              <argLine>${test.args.line}</argLine>
+              <excludesFile>${test.excludes.file}</excludesFile>
+              <includesFile>${test.includes.file}</includesFile>
+            </configuration>
+
+            <executions>
+              <execution>
+                <id>test</id>
+                <phase>test</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+
+      <properties>
+        <test.fork.count>8</test.fork.count>
+        <test.fork.reuse>true</test.fork.reuse>
+        <test.args.line>-Xmx2g -XX:MaxPermSize=512m</test.args.line>
+        <test.excludes.file>${user.dir}/cloudera/excludes.txt</test.excludes.file>
+        <test.includes.file/>
+      </properties>
+    </profile>
+    <!--
+          Disable Zinc Server if a property to do so is set.
+          Spark uses a Zinc server to cache compilation,
+          but this can be troublesome in certain multi-processing
+          contexts.
+    -->
+    <profile>
+      <id>disable-zinc-server</id>
+      <activation>
+        <property>
+          <name>disable.zinc.server</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <version>3.2.2</version>
+            <configuration>
+              <recompileMode>all</recompileMode>
+              <useZincServer>false</useZincServer>
+              <fork>true</fork>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <!--gi
+    In JDK1.8, doclint errors started failing the build.
+    This disables that behavior, but only works in JDK1.8,
+    so the profile is dependant on JDK1.8. Most components
+    will inherit this configuration from the CDH root
+    pom parent.
+    -->
+    <profile>
+      <id>doclint-java8-disable</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.2</version>
+            <configuration>
+              <additionalparam>-Xdoclint:none</additionalparam>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

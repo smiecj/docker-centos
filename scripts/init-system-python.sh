@@ -1,28 +1,23 @@
 #!/bin/bash
-#set -euxo pipefail
 
 script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
 pushd $home_path
 
-## install python
-sh ./init-system-python.sh
-source /etc/profile
-
-## install jupyter
-jupyter_home=/home/modules/jupyter
-rm -rf $jupyter_home
-mkdir -p $jupyter_home
-pushd $jupyter_home
-
+pushd /tmp
+rm -f main.zip
+rm -rf python-tools-main
 curl -LO https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
 unzip main.zip
 pushd python-tools-main
-make install_jupyter
+make install_conda
+popd
+rm -rf python-tools-main
+rm -f main.zip
 popd
 
-rm -f main.zip
-rm -rf python-tools-main
-popd
+### python environment
+echo 'export PYTHON3_HOME=/usr/local/miniconda/envs/py3' >> /etc/profile
+echo 'export PATH=$PATH:$PYTHON3_HOME/bin' >> /etc/profile
 
 popd
