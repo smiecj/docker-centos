@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euxo pipefail
 
 script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
