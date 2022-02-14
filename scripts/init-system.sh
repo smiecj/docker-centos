@@ -7,7 +7,20 @@ if [[ $# -gt 0 ]]; then
     root_pwd=$1
 fi
 
+script_full_path=$(realpath $0)
+home_path=$(dirname $script_full_path)
+pushd $home_path
+
 . ./common.sh
+
+## 保留: centos8 需要先解决 yum 安装依赖失败的问题, 暂未验证
+centos_version=`cat /etc/redhat-release | sed 's/.*release //g' | sed 's/ .*//g'`
+if [[ $centos_version =~ 8.* ]]; then
+    mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.bak_repo
+    cp ../components/yum/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+    mv /etc/yum.repos.d/CentOS-Linux-BaseOS.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.bak_repo
+    curl -Lo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo http://mirrors.cloud.tencent.com/repo/centos8_base.repo
+fi
 
 ## install centos basic tools
 install_basic_tools
@@ -32,3 +45,5 @@ source /etc/profile
 echo root:$root_pwd | chpasswd
 
 #exec /usr/sbin/init
+
+popd
