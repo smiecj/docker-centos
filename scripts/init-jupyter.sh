@@ -25,4 +25,7 @@ rm -f main.zip
 rm -rf python-tools-main
 popd
 
+## set jupyter auto start
+systemctl enable jupyter
+
 popd
