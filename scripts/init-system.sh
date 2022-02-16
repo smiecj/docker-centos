@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -euxo pipefail
+set -euxo pipefail
 
 # 获取镜像初始化参数
 root_pwd="root!centos123"
@@ -52,6 +52,6 @@ echo "alias rm='rm -f'" >> ~/.bashrc
 ## set login password
 echo root:$root_pwd | chpasswd
 
-#exec /usr/sbin/init
+exec /usr/sbin/init
 
 popd
