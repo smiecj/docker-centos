@@ -14,6 +14,7 @@ pushd $home_path
 . ./common.sh
 
 ## yum 替换成国内源
+yum -y install epel-release
 centos_version=`cat /etc/redhat-release | sed 's/.*release //g' | sed 's/ .*//g'`
 if [[ $centos_version =~ 8.* ]]; then
     mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.bak_repo

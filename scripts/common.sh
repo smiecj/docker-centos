@@ -17,5 +17,5 @@ install_basic_tools() {
 
     ### other useful tools
     yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd cronie
-    yum -y install expect epel-release jq telnet
+    yum -y install expect jq telnet
 }
