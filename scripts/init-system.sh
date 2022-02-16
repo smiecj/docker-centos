@@ -28,7 +28,7 @@ elif [[ $centos_version =~ 7.* ]]; then
         mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
         curl -Lo /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
     elif [ "aarch64" == "$system_arch" ]; then
-        mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
+        mv -f /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
         cp -f ../components/yum/CentOS-7-epel.repo /etc/yum.repos.d/epel.repo
         cp -f ../components/yum/CentOS-7-Base.repo /etc/yum.repos.d/CentOS-Base.repo
         cp -f ../components/yum/RPM-GPG-KEY-CentOS-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
@@ -53,9 +53,13 @@ echo "alias rm='rm -f'" >> ~/.bashrc
 echo "export LC_CTYPE=en_US.UTF-8" >> /etc/profile
 echo "export LC_ALL=en_US.UTF-8" >> /etc/profile
 echo "export BASHRCSOURCED=Y" >> /etc/profile
+echo "LANG=en_US.utf-8" >> /etc/environment
+echo "LC_ALL=" >> /etc/environment
 sed -i "s/HISTSIZE=1000/HISTSIZE=1000\nHISTCONTROL=ignoreboth/g" /etc/profile
 
 ## locale
+source /etc/environment
+source /etc/profile
 localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
 source /etc/profile
 

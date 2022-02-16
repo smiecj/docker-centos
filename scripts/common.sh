@@ -11,10 +11,11 @@ install_basic_tools() {
     systemctl enable sshd
 
     ### gcc
+    yum -y install make
     yum -y install gcc
     yum -y install gcc-c++
 
     ### other useful tools
-    yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget make sudo passwd cronie
+    yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd cronie
     yum -y install expect epel-release jq telnet
 }
