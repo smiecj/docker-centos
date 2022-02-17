@@ -10,7 +10,6 @@ install_basic_tools() {
     yum -y install libncurses* libaio numactl
 
     ### sshd
-    yum -y install 
     yum -y install openssh-server openssh-clients openssl openssl-devel compat-openssl10
     systemctl enable sshd
 
