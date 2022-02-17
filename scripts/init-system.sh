@@ -13,14 +13,17 @@ pushd $home_path
 
 . ./common.sh
 
-## yum 替换成国内源
-yum -y install epel-release
+## yum 源修复或加速
 centos_version=`cat /etc/redhat-release | sed 's/.*release //g' | sed 's/ .*//g'`
 if [[ $centos_version =~ 8.* ]]; then
-    mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.bak_repo
-    cp ../components/yum/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo
-    mv /etc/yum.repos.d/CentOS-Linux-BaseOS.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.bak_repo
-    curl -Lo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo http://mirrors.cloud.tencent.com/repo/centos8_base.repo
+    ### centos8 参考: https://programmerah.com/centos-8-no-urls-in-mirrorlist-error-how-to-solve-48945/
+    #### 国内源有无法访问 或者 依赖补全（比如腾讯源没有 gcc），先注释
+    # mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.bak_repo
+    # cp ../components/yum/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+    # mv /etc/yum.repos.d/CentOS-Linux-BaseOS.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.bak_repo
+    # curl -Lo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo http://mirrors.cloud.tencent.com/repo/centos8_base.repo
+    sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
+    sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
 elif [[ $centos_version =~ 7.* ]]; then
     ### centos7 需要区分不同的操作系统
     ### 参考: https://blog.csdn.net/smart9527_zc/article/details/84976097
@@ -53,6 +56,6 @@ echo "alias rm='rm -f'" >> ~/.bashrc
 ## set login password
 echo root:$root_pwd | chpasswd
 
-exec /usr/sbin/init
+#exec /usr/sbin/init
 
 popd
