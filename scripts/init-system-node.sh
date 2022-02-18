@@ -1,5 +1,9 @@
 #!/bin/bash
 
+script_full_path=$(realpath $0)
+home_path=$(dirname $script_full_path)
+pushd $home_path
+
 . ./env_system.sh
 
 npm_download_url=https://nodejs.org/dist/v14.17.0/node-v14.17.0-linux-x64.tar.gz
