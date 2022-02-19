@@ -8,7 +8,6 @@ pushd $home_path
 
 system_arch=`uname -p`
 ### default pkg download url is base on X86_64
-## 当前: 更改逻辑，需要先确认当前仓库最新的 JDK 版本，并设置 folder 这些信息
 jdk_11_repo="https://mirrors.tuna.tsinghua.edu.cn/AdoptOpenJDK/11/jdk/x64/linux"
 jdk_11_pkg=`curl -L $jdk_11_repo | grep OpenJDK11U | grep hotspot | sed 's/.*title="//g' | sed 's/".*//g'`
 jdk_11_download_url=$jdk_11_repo/$jdk_11_pkg

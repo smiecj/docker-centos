@@ -11,6 +11,8 @@ docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/ce
 ### 构建 jupyter 镜像
 docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_jupyter -t centos_jupyter .
 
+### 构建 lab 镜像
+
 ### 构建 hue 镜像
 docker build --build-arg ROOT_PWD=root!centos123 -f docker-centos/Dockerfiles/centos_hue -t centos_hue .
 

@@ -1,6 +1,11 @@
 #!/bin/bash
 #set -euxo pipefail
 
+jupyter_compoment="notebook"
+if [ -n $1 ]; then
+    jupyter_compoment=$1
+fi
+
 script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
 pushd $home_path
@@ -18,7 +23,10 @@ pushd $jupyter_home
 curl -LO https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
 unzip main.zip
 pushd python-tools-main
-make install_jupyter
+if [ "notebook" == $jupyter_compoment ]; then
+    make install_jupyterhub
+elif [ "lab" == $jupyter_compoment ]; then
+    make install_jupyterlab
 popd
 
 rm -f main.zip
