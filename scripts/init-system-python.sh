@@ -14,7 +14,7 @@ pushd python-tools-main
 ## 因此暂时使用 yum 方法安装 python, 详细代码参考 python-tools install_python3.sh
 centos_version=`cat /etc/redhat-release | sed 's/.*release //g' | sed 's/ .*//g'`
 system_arch=`uname -p`
-if [[ $centos_version =~ 8.* ]]
+if [[ $centos_version =~ 8.* ]]; then
     make install_python3
 else
     make install_conda
