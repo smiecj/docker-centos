@@ -27,6 +27,7 @@ if [ "notebook" == $jupyter_compoment ]; then
     make install_jupyterhub
 elif [ "lab" == $jupyter_compoment ]; then
     make install_jupyterlab
+fi
 popd
 
 rm -f main.zip
