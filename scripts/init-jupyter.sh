@@ -23,9 +23,9 @@ pushd $jupyter_home
 curl -LO https://github.com/smiecj/python-tools/archive/refs/heads/main.zip
 unzip main.zip
 pushd python-tools-main
-if [ "notebook" == $jupyter_compoment ]; then
+if [ "notebook" == "$jupyter_compoment" ]; then
     make install_jupyterhub
-elif [ "lab" == $jupyter_compoment ]; then
+elif [ "lab" == "$jupyter_compoment" ]; then
     make install_jupyterlab
 fi
 popd
