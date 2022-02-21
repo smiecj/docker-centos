@@ -14,6 +14,10 @@ if [ $# -eq 4 ]; then
     mysql_db=$4
 fi
 
+## 版本号
+### 所有版本: https://cn.wordpress.org/download/releases/
+wordpress_version=5.0.4
+
 script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
 pushd $home_path
@@ -33,9 +37,10 @@ sed -i 's/listen.mode.*/listen.mode = 0777/g' /etc/php-fpm.d/www.conf
 
 ## wordpress
 pushd /tmp
-curl -LO https://cn.wordpress.org/wordpress-5.0.4-zh_CN.tar.gz
-tar xzvf wordpress-5.0.4-zh_CN.tar.gz
-rsync -avP /tmp/wordpress/ /var/www/html/
+wordpress_pkg=wordpress-$wordpress_version-zh_CN.tar.gz
+curl -LO https://cn.wordpress.org/$wordpress_pkg
+tar -xzvf $wordpress_pkg
+rsync -avP ./wordpress/ /var/www/html/
 mkdir -p /var/www/html/wp-content/uploads
 chown -R apache:apache /var/www/html/*
 popd
