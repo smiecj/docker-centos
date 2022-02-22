@@ -54,6 +54,24 @@ sed -i "s/alias mv/#alias mv/g" ~/.bashrc
 echo "alias ll='ls -l'" >> ~/.bashrc
 echo "alias rm='rm -f'" >> ~/.bashrc
 
+## zsh
+rm -rf /root/.oh-my-zsh
+yum -y install zsh \
+    && echo Y | sh -c "$(curl -fsSL https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh)"
+
+yum -y install util-linux-user
+chsh -s /bin/zsh
+
+### plugin: autosuggestions
+git clone https://gitee.com/atamagaii/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+
+### plugin: syntax highlighting
+git clone https://gitee.com/atamagaii/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+sed -i 's/$plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' ~/.zshrc
+echo '' >> ~/.zshrc
+echo 'source /etc/profile' >> ~/.zshrc
+
 ## set login password
 echo root:$root_pwd | chpasswd
 
