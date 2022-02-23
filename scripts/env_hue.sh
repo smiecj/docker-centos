@@ -1,0 +1,2 @@
+hue_install_prefix=/usr/local
+hue_install_path=$hue_install_prefix/hue

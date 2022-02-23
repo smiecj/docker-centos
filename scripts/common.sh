@@ -11,7 +11,7 @@ install_basic_tools() {
 
     ### sshd
     yum -y install openssh-server openssh-clients openssl openssl-devel compat-openssl10
-    systemctl enable sshd
+    #systemctl enable sshd
 
     ### gcc
     yum -y install make

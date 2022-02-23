@@ -23,7 +23,9 @@ jdk_8_folder="jdk$jdk_8_detail_version"
 maven_download_url=https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
 maven_pkg=`echo $maven_download_url | sed 's/.*\///g'`
 maven_version=3.8.4
-gradle_download_url=https://services.gradle.org/distributions/gradle-7.0.2-bin.zip
+#gradle_download_url=https://services.gradle.org/distributions/gradle-7.0.2-bin.zip
+#gradle_download_url=https://mirrors.aliyun.com/macports/distfiles/gradle/gradle-7.0.2-bin.zip
+gradle_download_url=https://downloads.gradle-dn.com/distributions/gradle-7.0.2-bin.zip
 gradle_pkg=`echo $gradle_download_url | sed 's/.*\///g'`
 gradle_version=7.0.2
 if [ "x86_64" == "$system_arch" ]; then

@@ -27,9 +27,6 @@ sh ./init-system-python.sh
 ### check all develop environment have installed
 source /etc/profile && go version && java -version && npm -v && node -v && $PYTHON3_HOME/bin/python3 -V
 
-## vim support utf-8
-echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc
-
 ## ulimit: max open files
 echo -e "* soft nofile 100001\n* hard nofile 100002" >> /etc/security/limits.conf
 
