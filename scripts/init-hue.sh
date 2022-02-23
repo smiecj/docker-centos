@@ -32,8 +32,8 @@ rm -rf $hue_code_home
 mkdir -p $hue_code_home
 pushd $hue_code_home
 
-#curl -LO https://github.com/smiecj/hue/archive/refs/heads/dev_bugfix.zip
-curl -LO https://gitee.com/atamagaii/hue/repository/archive/dev_bugfix.zip
+curl -LO https://github.com/smiecj/hue/archive/refs/heads/dev_bugfix.zip
+# curl -LO https://gitee.com/atamagaii/hue/repository/archive/dev_bugfix.zip
 unzip dev_bugfix.zip
 pushd hue-dev_bugfix
 

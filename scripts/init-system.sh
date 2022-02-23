@@ -13,6 +13,12 @@ pushd $home_path
 
 . ./common.sh
 
+## bashrc
+sed -i "s/alias cp/#alias cp/g" ~/.bashrc
+sed -i "s/alias mv/#alias mv/g" ~/.bashrc
+echo "alias ll='ls -l'" >> ~/.bashrc
+echo "alias rm='rm -f'" >> ~/.bashrc
+
 ## yum 源修复或加速
 centos_version=`cat /etc/redhat-release | sed 's/.*release //g' | sed 's/ .*//g'`
 if [[ $centos_version =~ 8.* ]]; then
@@ -33,9 +39,14 @@ elif [[ $centos_version =~ 7.* ]]; then
         mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
         curl -Lo /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
     elif [ "aarch64" == "$system_arch" ]; then
-        ### vault 源统一使用 清华源
-        sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
-        sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://mirrors.tuna.tsinghua.edu.cn/centos-vault|g" /etc/yum.repos.d/CentOS-*
+        mv -f /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
+        cp -f ../components/yum/CentOS-7-epel.repo /etc/yum.repos.d/epel.repo
+        cp -f ../components/yum/CentOS-7-Base.repo /etc/yum.repos.d/CentOS-Base.repo
+        cp -f ../components/yum/RPM-GPG-KEY-CentOS-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+        cp -f ../components/yum/RPM-GPG-KEY-CentOS-7-aarch64 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
+        cp -f ../components/yum/RPM-GPG-KEY-EPEL-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+        rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
+        rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
     fi
 fi
 yum clean all
@@ -43,12 +54,6 @@ yum makecache
 
 ## install centos basic tools
 install_basic_tools
-
-## bashrc
-sed -i "s/alias cp/#alias cp/g" ~/.bashrc
-sed -i "s/alias mv/#alias mv/g" ~/.bashrc
-echo "alias ll='ls -l'" >> ~/.bashrc
-echo "alias rm='rm -f'" >> ~/.bashrc
 
 ## zsh
 rm -rf /root/.oh-my-zsh
