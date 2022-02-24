@@ -57,8 +57,12 @@ yes | cp -r $hue_install_path/desktop/core/src/desktop/static/desktop/js $hue_in
 
 pushd $hue_install_path/desktop/conf
 mv pseudo-distributed.ini.tmpl hue.ini
+### basic config
+sed -i "s/http_port=.*/http_port=$hue_http_port/g" hue.ini
+### hue connect db
 sed -i "s/\[\[database\]\]/\[\[database\]\]\nname=$mysql_db\nengine=mysql\nhost=$mysql_host\nport=$mysql_port\nuser=$mysql_user\npassword=$mysql_password\n/g" hue.ini
-sed -i 's/http_port=.*/http_port=8281/g' hue.ini
+### hue interpreter
+sed -i "s/\[\[interpreters\]\]/\[\[interpreters\]\]\n\[\[\[mysql\]\]\]\nname = MySQL\ninterface=jdbc\noptions='{\"url\": \"jdbc:mysql:\/\/$mysql_host:$mysql_port\/$mysql_db\", \"driver\": \"$mysql_jdbc_class\", \"user\": \"$mysql_user\", \"password\": \"$mysql_password\"}'\n/g" hue.ini
 popd
 
 ### cp hue sync db and restart script, need user execute manaully
@@ -71,9 +75,15 @@ chmod +x /usr/local/bin/huestop
 cp -f $home_path/../components/hue/hue-syncdb.sh /usr/local/bin/huesyncdb
 chmod +x /usr/local/bin/huesyncdb
 
-### create hue user and pid path
+### create hue user
 useradd hue || true
-mkdir -p /var/run/hue/
+
+### mysql8 jdbc connector jar
+mkdir -p $hue_install_path/jars
+pushd $hue_install_path/jars
+curl -LO $mysql_jdbc_url
+echo "export CLASSPATH=\$CLASSPATH:$hue_install_path/jars/$mysql_jdbc_file_name" >> /etc/profile
+popd
 
 popd
 

@@ -23,7 +23,9 @@ docker build -f docker-centos/Dockerfiles/centos_jupyterlab -t centos_jupyterlab
 docker run -d --privileged=true -p 8000:80 centos_jupyterlab /usr/sbin/init
 
 ### 构建 hue 镜像
-docker build -f docker-centos/Dockerfiles/centos_hue -t centos_hue .
+docker build -f Dockerfiles/centos_hue --build-arg MYSQL_HOST=mysql_host --build-arg MYSQL_PORT=mysql_port --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --build-arg MYSQL_DB=mysql_db -t centos_dev_hue .
+
+docker run -d --privileged=true -p 38281:8281 centos_dev_hue /usr/sbin/init
 
 ### 构建 wordpress 镜像
 docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --no-cache -f Dockerfiles/centos_wordpress -t centos_wordpress .

@@ -81,7 +81,7 @@ rm -f $gradle_pkg
 echo -e '\n# java' >> /etc/profile
 echo "export JAVA_HOME=$java_home/$jdk_8_folder" >> /etc/profile
 echo 'export JRE_HOME=$JAVA_HOME/jre' >> /etc/profile
-echo 'export CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib' >> /etc/profile
+echo 'export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib' >> /etc/profile
 echo "export MAVEN_HOME=$maven_home" >> /etc/profile
 echo "export GRADLE_HOME=/usr/java/gradle-$gradle_version" >> /etc/profile
 echo "export GRADLE_USER_HOME=$repo_home/java/gradle" >> /etc/profile
