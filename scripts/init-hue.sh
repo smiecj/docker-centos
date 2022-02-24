@@ -71,8 +71,13 @@ chmod +x /usr/local/bin/huestop
 cp -f $home_path/../components/hue/hue-syncdb.sh /usr/local/bin/huesyncdb
 chmod +x /usr/local/bin/huesyncdb
 
+### create hue user and pid path
+useradd hue || true
+mkdir -p /var/run/hue/
+
 popd
 
-## 登录后，需要手动启动hue
+## 登录后，需要手动添加管理员用户、同步 DB 并 启动 hue
+### /usr/local/hue/build/env/bin/hue createsuperuser --username hive --email hive@test.com
 ### huesyncdb
 ### huerestart
