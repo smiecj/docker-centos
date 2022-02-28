@@ -1,0 +1,25 @@
+global:
+  resolve_timeout: 5m
+route:
+  group_by: ['severity']
+  group_wait: 1m # 告警发送的延迟时间（再次发送的延迟时间，避免出现服务崩溃，告警突然大量发送的问题）
+  group_interval: 1m # 同一个分组，不同告警发送的延迟时间
+  routes:
+    - match_re:
+        severity: error
+      group_interval: 10m # 错误信息，10分钟就发送一次
+    - match_re:
+        severity: warning
+      group_interval: 30m # 警告等级30分钟发送一次
+    - match_re:
+        severity: info
+      group_interval: 240m # 提示信息，一小时发送一次
+    - match_re:
+        severity: critical
+      group_interval: 10m # 系统致命信息，需要立即处理并恢复，10分钟发送一次
+  repeat_interval: 10m # 同一个分组，相同告警再次发送的收敛时间
+  receiver: 'webhook'
+receivers:
+- name: 'webhook'
+  webhook_configs:
+    - url: 'http://localhost:2114/receive'

@@ -69,7 +69,7 @@ git clone https://gitee.com/atamagaii/zsh-autosuggestions.git ~/.oh-my-zsh/custo
 ### plugin: syntax highlighting
 git clone https://gitee.com/atamagaii/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
-sed -i 's/$plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' ~/.zshrc
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' ~/.zshrc
 echo '' >> ~/.zshrc
 echo 'source /etc/profile' >> ~/.zshrc
 
@@ -79,6 +79,7 @@ echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc
 ## set login password
 echo root:$root_pwd | chpasswd
 
-#exec /usr/sbin/init
+## auto start service
+ln -s /usr/lib/systemd/system/crond.service /etc/systemd/system/multi-user.target.wants/crond.service
 
 popd

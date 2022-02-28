@@ -12,15 +12,20 @@ docker build -f docker-centos/Dockerfiles/centos_storage -t centos_storage .
 
 docker run -d --privileged=true -p 3306:3306 centos_storage /usr/sbin/init
 
-### 构建 jupyter 镜像
+### 构建 jupyter notebook 镜像
 docker build -f docker-centos/Dockerfiles/centos_jupyter -t centos_jupyter .
 
 docker run -d --privileged=true -p 8000:8000 centos_jupyter /usr/sbin/init
 
-### 构建 lab 镜像
+### 构建 jupyter lab 镜像
 docker build -f docker-centos/Dockerfiles/centos_jupyterlab -t centos_jupyterlab .
 
 docker run -d --privileged=true -p 8000:80 centos_jupyterlab /usr/sbin/init
+
+### 构建 prometheus + grafana 镜像
+docker build -f docker-centos/Dockerfiles/centos_prometheus -t centos_prometheus .
+
+docker run -d --privileged=true -p 3000:3000 -p 3001:3001 centos_prometheus /usr/sbin/init
 
 ### 构建 hue 镜像
 docker build -f Dockerfiles/centos_hue --build-arg MYSQL_HOST=mysql_host --build-arg MYSQL_PORT=mysql_port --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --build-arg MYSQL_DB=mysql_db -t centos_dev_hue .
@@ -53,6 +58,9 @@ Dockerfiles: 存放各个开发用到的 DockerFile
 
 ### zookeeper 集群的本地部署
 通过 K8S 搭建zk 集群
+
+### 各组件搭建的版本配置化
+这里的配置化指的是在构建镜像 (docker build) 的时候可指定，升级版本不需要修改脚本代码
 
 ## 最后，欢迎大家一起交流一起学习！
 如果你对镜像或者这个仓库有任何疑问，都欢迎直接通过 issue 直接提问题和建议

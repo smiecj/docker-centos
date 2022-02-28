@@ -40,4 +40,10 @@ echo "export GOROOT=$go_home/go" >> /etc/profile
 echo "export GOPATH=$go_repo_home" >> /etc/profile
 echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> /etc/profile
 
+## go config
+source /etc/profile
+
+### go proxy: 加速下载
+go env -w GOPROXY=https://goproxy.cn,direct
+
 popd
