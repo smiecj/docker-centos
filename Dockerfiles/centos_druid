@@ -12,6 +12,7 @@ RUN mkdir -p /home/coding && cd /home/coding && curl -L https://github.com/smiec
     && cd scripts && sh init-system.sh ${ROOT_PWD} \
     && sh init-system-java.sh \
     && sh init-system-python.sh \
+    && sh init-system-node.sh \
     && sh init-druid.sh
 
 EXPOSE 22 8888

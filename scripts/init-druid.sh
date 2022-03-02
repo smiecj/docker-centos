@@ -40,6 +40,13 @@ tar -xzvf $druid_bin_pkg_name
 rm -f $druid_bin_pkg_name
 popd
 
+### download bin pkg
+# pushd $druid_module_home
+# curl -LO $druid_bin_pkg_download_url
+# tar -xzvf $druid_bin_pkg_name
+# rm -f $druid_bin_pkg_name
+# popd
+
 ### start and stop script
 cp -f ./env_druid.sh /usr/local/bin
 cp -f $home_path/../components/druid/druid-restart.sh /usr/local/bin/druidrestart
