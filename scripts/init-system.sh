@@ -56,6 +56,18 @@ yum makecache
 ## install centos basic tools
 install_basic_tools
 
+## check http proxy
+for proxy_port in ${proxy_port_array[@]}
+do
+    telnet_output="$({ sleep 1; echo $'\e'; } | telnet $proxy_host $proxy_port 2>&1)" || true 
+    telnet_fail_msg=`echo $telnet_output | grep "Connection refused" || true`
+    if [ "" == "$telnet_fail_msg" ]; then
+        echo "export http_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
+        echo "export https_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
+        break
+    fi
+done
+
 ## zsh
 rm -rf /root/.oh-my-zsh
 yum -y install zsh \
@@ -83,16 +95,7 @@ echo root:$root_pwd | chpasswd
 ## auto start service
 ln -s /usr/lib/systemd/system/crond.service /etc/systemd/system/multi-user.target.wants/crond.service || true
 
-## check http proxy
-for proxy_port in ${proxy_port_array[@]}
-do
-    telnet_output="$({ sleep 1; echo $'\e'; } | telnet $proxy_host $proxy_port 2>&1)" || true 
-    telnet_fail_msg=`echo $telnet_output | grep "Connection refused" || true`
-    if [ "" == "$telnet_fail_msg" ]; then
-        echo "export http_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
-        echo "export https_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
-        break
-    fi
-done
+## history
+echo "export HISTCONTROL=ignoredups" >> /etc/profile
 
 popd

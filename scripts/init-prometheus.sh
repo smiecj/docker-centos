@@ -1,9 +1,11 @@
 #!/bin/bash
-set -euxo pipefail
 
 script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
 pushd $home_path
+
+source /etc/profile
+set -euxo pipefail
 
 ## env init
 . ./env_prometheus.sh
