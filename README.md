@@ -20,7 +20,7 @@ docker run -d --privileged=true -p 8000:8000 centos_jupyter /usr/sbin/init
 ### 构建 jupyter lab 镜像
 docker build -f docker-centos/Dockerfiles/centos_jupyterlab -t centos_jupyterlab .
 
-docker run -d --privileged=true -p 8000:80 centos_jupyterlab /usr/sbin/init
+docker run -d --privileged=true -p 8000:8000 centos_jupyterlab /usr/sbin/init
 
 ### 构建 prometheus + grafana 镜像
 docker build -f docker-centos/Dockerfiles/centos_prometheus -t centos_prometheus .
