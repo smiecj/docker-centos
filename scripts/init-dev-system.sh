@@ -33,9 +33,6 @@ echo -e "* soft nofile 100001\n* hard nofile 100002" >> /etc/security/limits.con
 ## clean history
 history -c
 
-## timezone
-cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
 ## locale
 source /etc/profile
 localedef -v -c -i en_US -f UTF-8 en_US.UTF-8

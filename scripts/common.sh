@@ -24,4 +24,11 @@ install_basic_tools() {
 
     #### git config
     git config --global pull.rebase false
+
+    ### devel pkg
+    yum -y install cyrus-sasl cyrus-sasl-devel
+    yum -y install python3-devel
+    yum -y install libffi-devel
+    yum -y install freetds-devel
+    yum -y install mysql-devel unixODBC-devel
 }

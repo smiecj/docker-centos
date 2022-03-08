@@ -103,4 +103,7 @@ ln -s /usr/lib/systemd/system/crond.service /etc/systemd/system/multi-user.targe
 ## history
 echo "export HISTCONTROL=ignoredups" >> /etc/profile
 
+## timezone
+cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
 popd

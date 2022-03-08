@@ -4,6 +4,9 @@ script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
 pushd $home_path
 
+## install java, python and node
+sh init-system-java.sh && sh init-system-python.sh && sh init-system-node.sh
+
 ## env init
 . ./env_druid.sh
 

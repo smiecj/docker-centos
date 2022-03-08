@@ -10,6 +10,9 @@ ARG ROOT_PWD=root!centos123
 RUN mkdir -p /home/coding && cd /home/coding && curl -L https://github.com/smiecj/docker-centos/tarball/master | tar xz \
     && code_folder=`ls -l | grep docker-centos | sed 's/.* //g'` && cd $code_folder \
     && cd scripts && sh init-system.sh ${ROOT_PWD} \
-    && sh init-druid.sh
+    && sh init-system-node.sh \
+    && sh init-airflow.sh
 
-EXPOSE 22 8888
+#ENTRYPOINT ["service jupyter start"]
+
+EXPOSE 22 8101 8081 8000

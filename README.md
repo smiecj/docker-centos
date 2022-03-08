@@ -22,6 +22,11 @@ docker build -f docker-centos/Dockerfiles/centos_jupyterlab -t centos_jupyterlab
 
 docker run -d --privileged=true -p 8000:8000 centos_jupyterlab /usr/sbin/init
 
+### 构建 airflow 镜像
+docker build -f docker-centos/Dockerfiles/centos_airflow -t centos_airflow .
+
+docker run -d --privileged=true -p 8072:8072 centos_airflow /usr/sbin/init
+
 ### 构建 prometheus + grafana 镜像
 docker build -f docker-centos/Dockerfiles/centos_prometheus -t centos_prometheus .
 
