@@ -32,3 +32,33 @@ install_basic_tools() {
     yum -y install freetds-devel
     yum -y install mysql-devel unixODBC-devel
 }
+
+## add systemd service (use nohup to start)
+add_systemd_service() {
+    local service=$1
+    local path=$2
+    local env=$3
+    local start_script=$4
+    local stop_script=$5
+    
+    cat > /etc/systemd/system/$service.service << EOF
+# $service systemd
+## /etc/systemd/system/$service.service
+
+[Unit]
+Description=$service
+After=
+Wants=
+
+[Service]
+Environment="PATH=$path"
+Environment="$env"
+Type=oneshot
+ExecStart=$start_script
+ExecStop=$stop_script
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+}
