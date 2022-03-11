@@ -62,7 +62,7 @@ do
     telnet_output="$({ sleep 1; echo $'\e'; } | telnet $proxy_host $proxy_port 2>&1)" || true 
     telnet_refused_msg=`echo $telnet_output | grep "Connection refused" || true`
     telnet_host_unknown_msg=`echo $telnet_output | grep "Unknown host" || true`
-    if [ "" == "$telnet_fail_msg" ] && [ "" == "$telnet_host_unknown_msg" ]; then
+    if [ "" == "$telnet_refused_msg" ] && [ "" == "$telnet_host_unknown_msg" ]; then
         echo "export http_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
         echo "export https_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
         break
