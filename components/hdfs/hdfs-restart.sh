@@ -8,7 +8,7 @@ pushd $home_path
 
 sh hdfs-stop.sh
 
-nohup $hdfs_module_home/sbin/start-dfs.sh > /dev/null 2>&1 &
-nohup $hdfs_module_home/sbin/start-yarn.sh > /dev/null 2>&1 &
+nohup $hdfs_module_home/sbin/start-dfs.sh > $dfs_log_path 2>&1 &
+nohup $hdfs_module_home/sbin/start-yarn.sh > $yarn_log_path 2>&1 &
 
 popd

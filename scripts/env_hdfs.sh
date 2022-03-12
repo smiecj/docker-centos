@@ -8,3 +8,7 @@ hdfs_module_folder=hadoop-$hdfs_version
 
 hdfs_module_home=$hadoop_module_home/$hdfs_module_folder
 hdfs_scripts_home=$hdfs_module_home/scripts
+
+hadoop_log_home=/var/log/hadoop
+dfs_log_path=$hadoop_log_home/dfs.log
+yarn_log_path=$hadoop_log_home/yarn.log

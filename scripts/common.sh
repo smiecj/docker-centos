@@ -40,10 +40,15 @@ add_systemd_service() {
     local env=$3
     local start_script=$4
     local stop_script=$5
+    local need_enable="false"
+    if [ $# -eq 6 ]; then
+        need_enable=$6
+    fi
     
-    cat > /etc/systemd/system/$service.service << EOF
+    systemd_file_path=/etc/systemd/system/$service.service
+    cat > $systemd_file_path << EOF
 # $service systemd
-## /etc/systemd/system/$service.service
+## $systemd_file_path
 
 [Unit]
 Description=$service
@@ -61,4 +66,23 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 EOF
+
+    if [ "true" == $need_enable ]; then
+        ln -s /usr/lib/systemd/system/$service.service /etc/systemd/system/multi-user.target.wants/$service.service || true
+    fi
+}
+
+## write logrotate file
+add_logrorate_task() {
+    local log_path=$1
+    local log_name=$2
+    local rotate_conf=/etc/logrotate.d/$log_name
+    echo "$log_path{" > $rotate_conf
+    echo "    copytruncate" >> $rotate_conf
+    echo "    daily" >> $rotate_conf
+    echo "    rotate 7" >> $rotate_conf
+    echo "    missingok" >> $rotate_conf
+    echo "    compress" >> $rotate_conf
+    echo "    size 200M" >> $rotate_conf
+    echo "}" >> $rotate_conf
 }
