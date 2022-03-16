@@ -13,10 +13,11 @@ install_basic_tools() {
     yum -y install openssh-server openssh-clients openssl openssl-devel compat-openssl10
     #systemctl enable sshd
 
-    ### gcc
+    ### gcc & make
     yum -y install make
     yum -y install gcc
     yum -y install gcc-c++
+    yum -y install cmake
 
     ### other useful tools
     yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd cronie
@@ -31,6 +32,8 @@ install_basic_tools() {
     yum -y install libffi-devel
     yum -y install freetds-devel
     yum -y install mysql-devel unixODBC-devel
+    yum -y install libxml2 libxml2-devel
+    yum -y install libxslt libxslt-devel
 }
 
 ## add systemd service (use nohup to start)

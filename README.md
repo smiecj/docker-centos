@@ -47,10 +47,15 @@ docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user
 
 docker run -d --privileged=true -p 8000:80 centos_wordpress /usr/sbin/init
 
-### docker build: 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
+### 构建 pip2pi 服务器
+docker build -f docker-centos/Dockerfiles/centos_pip2pi -t centos_pip .
+
+docker run -d --privileged=true -p 80:80 centos_pip /usr/sbin/init
+
+### 备注: docker build: 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 示例: docker build --build-arg ROOT_PWD=root_Test123 --no-cache -f Dockerfiles/centos_dev -t centos_dev .
 
-### docker run: --privileged 和 /usr/sbin/init 是必选项，因为系统需要初始化 root 账户相关服务和权限
+### 备注: docker run: --privileged 和 /usr/sbin/init 是必选项，因为系统需要初始化 root 账户相关服务和权限
 docker run -d --privileged=true -p 2222:22 centos_dev /usr/sbin/init
 
 然后 本地就可以直接连接到centos 镜像了:
@@ -62,6 +67,9 @@ scripts: 放到开发镜像中的脚本
 Dockerfiles: 存放各个开发用到的 DockerFile
 
 ## 待规划需求
+### 支持 docker-compose
+完全通过 配置文件 声明的方式，构建镜像
+
 ### centos_dev DockerFile 支持自定义需要安装的环境/组件
 可以在 docker run 中输入组件名，自动安装对应组件
 如: docker run --env "INSTALL_PLUGINS=zookeeper,mysql"
