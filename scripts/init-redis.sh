@@ -39,6 +39,10 @@ sed -i "s/^port 6379/port $redis_port/g" redis.conf
 redis_log_replace_path=$(echo "$redis_log_path" | sed 's/\//\\\//g')
 sed -i "s/logfile \"\"/logfile $redis_log_replace_path/g" redis.conf
 
+#### set default bind (allow all host) and protected mode (no)
+sed -i "s/^protected-mode .*/protected-mode no/g" redis.conf
+sed -i "s/^bind .*/bind * -::*/g" redis.conf
+
 ### remove source code
 
 rm -rf $redis_folder
