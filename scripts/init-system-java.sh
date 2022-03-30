@@ -20,7 +20,7 @@ jdk_8_download_url=$jdk_8_repo/$jdk_8_pkg
 jdk_8_detail_version=`echo $jdk_8_pkg | sed 's/.*hotspot_8/8/g' | sed 's/.tar.*//g' | sed 's/b/-b/g'`
 jdk_8_folder="jdk$jdk_8_detail_version"
 
-maven_download_url=https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
+maven_download_url=https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
 maven_pkg=`echo $maven_download_url | sed 's/.*\///g'`
 maven_version=3.8.4
 #gradle_download_url=https://services.gradle.org/distributions/gradle-7.0.2-bin.zip
