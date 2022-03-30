@@ -30,7 +30,6 @@ rm -f $npm_pkg
 
 ### npm environment
 echo -e '\n# nodejs' >> /etc/profile
-#echo 'export NODE_HOME=/usr/nodejs/node-v14.17.0-linux-arm64' >> /etc/profile
 echo "export NODE_HOME=$npm_home" >> /etc/profile
 echo "export NODE_REPO=$npm_repo_home/global_modules" >> /etc/profile
 echo 'export PATH=$PATH:$NODE_HOME/bin:$NODE_REPO/bin' >> /etc/profile

@@ -71,7 +71,7 @@ WantedBy=multi-user.target
 EOF
 
     if [ "true" == $need_enable ]; then
-        ln -s /usr/lib/systemd/system/$service.service /etc/systemd/system/multi-user.target.wants/$service.service || true
+        ln -s $systemd_file_path /etc/systemd/system/multi-user.target.wants/$service.service || true
     fi
 }
 

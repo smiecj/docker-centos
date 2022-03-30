@@ -7,10 +7,15 @@ docker build -f docker-centos/Dockerfiles/centos_dev -t centos_dev .
 
 docker run -d --privileged=true -p 2222:22 centos_dev /usr/sbin/init
 
-### 构建存储镜像
+### 构建存储镜像 (目前只包括 mysql)
 docker build -f docker-centos/Dockerfiles/centos_storage -t centos_storage .
 
 docker run -d --privileged=true -p 3306:3306 centos_storage /usr/sbin/init
+
+### 构建 redis 镜像
+docker build -f docker-centos/Dockerfiles/centos_redis -t centos_redis .
+
+docker run -d --privileged=true -p 6379:6379 centos_redis /usr/sbin/init
 
 ### 构建 jupyter notebook 镜像
 docker build -f docker-centos/Dockerfiles/centos_jupyter -t centos_jupyter .

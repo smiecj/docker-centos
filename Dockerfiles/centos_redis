@@ -1,0 +1,15 @@
+FROM centos:centos7.9.2009
+
+WORKDIR /home/coding
+
+MAINTAINER smiecj smiecj@github.com
+
+ARG ROOT_PWD=root!centos123
+
+# RUN
+RUN mkdir -p /home/coding && cd /home/coding && curl -L https://github.com/smiecj/docker-centos/tarball/master | tar xz \
+    && code_folder=`ls -l | grep docker-centos | sed 's/.* //g'` && cd $code_folder \
+    && cd scripts && sh init-system.sh ${ROOT_PWD} \
+    && sh init-redis.sh
+
+EXPOSE 22 6379

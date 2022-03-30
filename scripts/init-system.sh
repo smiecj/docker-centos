@@ -39,7 +39,7 @@ elif [[ $centos_version =~ 7.* ]]; then
     if [ "x86_64" == "$system_arch" ]; then
         mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
         curl -Lo /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-    elif [ "aarch64" == "$system_arch" ]; then
+    elif [[ "aarch64" == "$system_arch" ]]; then
         mv -f /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
         cp -f ../components/yum/CentOS-7-epel.repo /etc/yum.repos.d/epel.repo
         cp -f ../components/yum/CentOS-7-Base.repo /etc/yum.repos.d/CentOS-Base.repo
