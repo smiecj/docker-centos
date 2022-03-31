@@ -34,7 +34,9 @@ echo -e "* soft nofile 100001\n* hard nofile 100002" >> /etc/security/limits.con
 history -c
 
 ## locale
+### https://stackoverflow.com/a/59137616
 source /etc/profile
+yum -y install glibc-locale-source glibc-langpack-en
 localedef -v -c -i en_US -f UTF-8 en_US.UTF-8
 source /etc/profile
 
