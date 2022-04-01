@@ -70,7 +70,11 @@ maven_repo_replace_str=$(echo "$maven_repo" | sed 's/\//\\\//g')
 cp -f $home_path/../components/maven/settings.xml $maven_home/conf
 sed -i "s/maven_local_repo/$maven_repo_replace_str/g" $maven_home/conf/settings.xml
 default_maven_repo_path=~/.m2/repository
-rm -rf $default_maven_repo_path && mkdir -p $default_maven_repo_path && ln -s $maven_repo $default_maven_repo_path
+default_maven_repo_home=~/.m2
+#### vscode maven plugin will use default user ~/.m2 path as repo home
+#### https://github.com/microsoft/vscode-maven/issues/46#issuecomment-500271983
+rm -rf $default_maven_repo_path && mkdir -p $maven_repo && mkdir -p $default_maven_repo_home && ln -s $maven_repo $default_maven_repo_path
+rm -f $default_maven_repo_home/settings.xml && ln -s $maven_home/conf/settings.xml $default_maven_repo_home/settings.xml
 
 ### gradle
 curl -LO $gradle_download_url
