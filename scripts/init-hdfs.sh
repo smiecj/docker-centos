@@ -84,10 +84,19 @@ chsh -s /bin/bash
 
 ### copy hdfs start script
 mkdir -p $hdfs_scripts_home
-cp -f ./env_hdfs.sh $hdfs_scripts_home
+cp -f $home_path/env_hdfs.sh $hdfs_scripts_home
 cp -f $home_path/../components/hdfs/hdfs-restart.sh $hdfs_scripts_home
 cp -f $home_path/../components/hdfs/hdfs-stop.sh $hdfs_scripts_home
 chmod -R 744 $hdfs_scripts_home
+
+### set hdfs profile (hive will use)
+echo """
+# hdfs
+export HADOOP_HOME=$hdfs_module_home
+export HADOOP_HDFS_HOME=\$HADOOP_HOME
+export HADOOP_YARN_HOME=\$HADOOP_HOME
+export HADOOP_MAPRED_HOME=\$HADOOP_HOME
+""" >> /etc/profile
 
 ### add and enable hdfs service
 add_systemd_service hdfs $PATH "" $hdfs_scripts_home/hdfs-restart.sh $hdfs_scripts_home/hdfs-stop.sh "true"

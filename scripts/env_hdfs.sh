@@ -1,6 +1,7 @@
 hdfs_version=3.3.2
 
-hdfs_pkg_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/core/hadoop-$hdfs_version/hadoop-$hdfs_version.tar.gz
+#hdfs_pkg_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/core/hadoop-$hdfs_version/hadoop-$hdfs_version.tar.gz
+hdfs_pkg_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-$hdfs_version/hadoop-$hdfs_version.tar.gz
 hdfs_pkg=`echo $hdfs_pkg_url | sed 's/.*\///g'`
 
 hadoop_module_home=/home/modules/hadoop

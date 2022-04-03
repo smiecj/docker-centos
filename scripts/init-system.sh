@@ -84,13 +84,17 @@ git clone https://gitee.com/atamagaii/zsh-autosuggestions.git ~/.oh-my-zsh/custo
 git clone https://gitee.com/atamagaii/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' ~/.zshrc
-echo '' >> ~/.zshrc
-echo 'source /etc/profile' >> ~/.zshrc
+echo '''
+DISABLE_UPDATE_PROMPT=true
+
+source /etc/profile
+''' >> ~/.zshrc
 
 ### theme config
 #### prompt: show user and hostname
+#### https://askubuntu.com/a/483861
 sed -i 's/PROMPT=/#PROMPT=/g' ~/.oh-my-zsh/themes/robbyrussell.zsh-theme
-echo 'PROMPT="%(!.%{%F{yellow}%}.)$USER@%{$fg[white]%}%M %{$fg_bold[red]%}➜ %{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"' >> ~/.oh-my-zsh/themes/robbyrussell.zsh-theme
+echo 'PROMPT="%(!.%{%F{yellow}%}.)%n@%{$fg[white]%}%M %{$fg_bold[red]%}➜ %{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"' >> ~/.oh-my-zsh/themes/robbyrussell.zsh-theme
 
 ## vim support utf-8
 echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc

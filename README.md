@@ -47,6 +47,11 @@ docker build -f docker-centos/Dockerfiles/centos_hdfs -t centos_hdfs .
 
 docker run -d --privileged=true -p 8088:8088 -p 50070:50070 centos_hdfs /usr/sbin/init
 
+### 构建 hive 镜像
+docker build -f docker-centos/Dockerfiles/centos_hive --build-arg MYSQL_HOST=mysql_host --build-arg MYSQL_PORT=mysql_port --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --build-arg MYSQL_DB=mysql_db --build-arg MYSQL_VERSION=8.0.26 -t centos_hive .
+
+docker run -d --privileged=true -p 8088:8088 -p 50070:50070 -p 10000:10000 centos_hive /usr/sbin/init
+
 ### 构建 wordpress 镜像
 docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --no-cache -f Dockerfiles/centos_wordpress -t centos_wordpress .
 
@@ -72,6 +77,15 @@ scripts: 放到开发镜像中的脚本
 Dockerfiles: 存放各个开发用到的 DockerFile
 
 ## 待规划需求
+### 需要创建的 dockerfile
+- 定时任务调度, 可结合 docker-compose 测试集群功能
+https://github.com/ouqiang/gocron
+
+### 规范 Dockerfile
+减少脚本的使用，大部分组件安装的逻辑放到 Dockerfile 中
+
+体现层级结构，比如 centos_hue -> centos_python -> centos_base
+
 ### 支持 docker-compose
 完全通过 配置文件 声明的方式，构建镜像
 

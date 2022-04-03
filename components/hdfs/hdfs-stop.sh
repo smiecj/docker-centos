@@ -6,6 +6,7 @@ pushd $home_path
 
 . ./env_hdfs.sh
 
-jps -ml | grep -v "sun.tools.jps.Jps" | awk '{print $1}' | xargs --no-run-if-empty kill -9
+jps -ml | grep "org.apache.hadoop.hdfs" | awk '{print $1}' | xargs --no-run-if-empty kill -9
+jps -ml | grep "org.apache.hadoop.yarn" | awk '{print $1}' | xargs --no-run-if-empty kill -9
 
 popd

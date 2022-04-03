@@ -1,0 +1,61 @@
+<configuration>
+    <property>
+      <name>javax.jdo.option.ConnectionURL</name>
+      <value>jdbc:mysql://$mysql_host:$mysql_port/$mysql_db?createDatabaseIfNotExist=true</value>
+    </property>
+  
+    <property>
+      <name>javax.jdo.option.ConnectionDriverName</name>
+      <value>com.mysql.jdbc.Driver</value>
+    </property>
+  
+    <property>
+      <name>javax.jdo.option.ConnectionUserName</name>
+      <value>$mysql_user</value>
+    </property>
+  
+    <property>
+      <name>javax.jdo.option.ConnectionPassword</name>
+      <value>$mysql_pwd</value>
+    </property>
+  
+    <property>
+        <name>datanucleus.schema.autoCreateAll</name>
+        <value>true</value>
+    </property>
+    
+    <property>
+        <name>hive.metastore.schema.verification</name>
+        <value>false</value>
+     </property>
+  
+     <property>
+        <name>hive.server2.transport.mode</name>
+        <value>binary</value>
+     </property>
+  
+     <property>
+        <name>hive.server2.thrift.bind.host</name>
+        <value>0.0.0.0</value>
+     </property>
+  
+     <property>
+        <name>hive.server2.thrift.port</name>
+        <value>10000</value>
+     </property>
+  
+     <property>
+        <name>hive.server2.thrift.http.port</name>
+        <value>10001</value>
+     </property>
+  
+     <property>
+        <name>hive.server2.webui.port</name>
+        <value>10002</value>
+     </property>
+  
+      <property>
+          <name>hive.server2.active.passive.ha.enable</name>
+          <value>true</value>
+      </property>
+  </configuration>

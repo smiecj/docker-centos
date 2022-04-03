@@ -1,0 +1,22 @@
+FROM centos:centos8.4.2105
+
+WORKDIR /home/coding
+
+MAINTAINER smiecj smiecj@github.com
+
+ARG ROOT_PWD=root!centos123
+
+ARG MYSQL_HOST=localhost
+ARG MYSQL_PORT=3306
+ARG MYSQL_USER=hive
+ARG MYSQL_PASSWORD=hive
+ARG MYSQL_DB=hive
+ARG MYSQL_VERSION=8.0.26
+
+# RUN
+RUN mkdir -p /home/coding && cd /home/coding && curl -L https://github.com/smiecj/docker-centos/tarball/master | tar xz \
+    && code_folder=`ls -l | grep docker-centos | sed 's/.* //g'` && cd $code_folder \
+    && cd scripts && sh init-system.sh ${ROOT_PWD} \
+    && sh init-hive.sh $MYSQL_VERSION $MYSQL_HOST $MYSQL_PORT $MYSQL_DB $MYSQL_USER $MYSQL_PASSWORD
+
+EXPOSE 22 8088 50070 10000
