@@ -6,6 +6,6 @@ pushd $home_path
 
 . ./env_hive.sh
 
-jps -ml | grep -v "$hive_module_home" | awk '{print $1}' | xargs --no-run-if-empty kill -9
+jps -ml | grep "$hive_module_home" | awk '{print $1}' | xargs --no-run-if-empty kill -9
 
 popd

@@ -6,6 +6,8 @@ pushd $home_path
 
 . ./env_hive.sh
 
+sh hive-stop.sh
+
 nohup $hive_module_home/bin/hive --service metastore > $hive_metastore_log_path 2>&1 &
 
 sleep 2
