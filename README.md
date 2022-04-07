@@ -52,6 +52,11 @@ docker build -f docker-centos/Dockerfiles/centos_hive --build-arg MYSQL_HOST=mys
 
 docker run -d --privileged=true -p 8088:8088 -p 50070:50070 -p 10000:10000 centos_hive /usr/sbin/init
 
+### 构建 hudi 镜像
+docker build -f docker-centos/Dockerfiles/centos_hudi -t centos_hive .
+
+docker run -d --privileged=true -p 8088:8088 -p 50070:50070 -p 10000:10000 centos_hive /usr/sbin/init
+
 ### 构建 wordpress 镜像
 docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --no-cache -f Dockerfiles/centos_wordpress -t centos_wordpress .
 
@@ -98,6 +103,9 @@ https://github.com/ouqiang/gocron
 
 ### 各组件搭建的版本配置化
 这里的配置化指的是在构建镜像 (docker build) 的时候可指定，升级版本不需要修改脚本代码
+
+### java工程, 支持在 dockerfile 中指定依赖下载路径
+节省空间
 
 ## 最后，欢迎大家一起交流一起学习！
 如果你对镜像或者这个仓库有任何疑问，都欢迎直接通过 issue 直接提问题和建议
