@@ -6,4 +6,4 @@ pushd $home_path
 
 . ./env_redis.sh
 
-nohup $redis_module_path/redis-server $redis_module_path/redis.conf > /dev/null 2>&1 &
+nohup $redis_bin_path/redis-server $redis_module_path/redis.conf > /dev/null 2>&1 &

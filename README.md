@@ -53,9 +53,9 @@ docker build -f docker-centos/Dockerfiles/centos_hive --build-arg MYSQL_HOST=mys
 docker run -d --privileged=true -p 8088:8088 -p 50070:50070 -p 10000:10000 centos_hive /usr/sbin/init
 
 ### 构建 hudi 镜像
-docker build -f docker-centos/Dockerfiles/centos_hudi -t centos_hive .
+docker build -f docker-centos/Dockerfiles/centos_hudi -t centos_hudi .
 
-docker run -d --privileged=true -p 8088:8088 -p 50070:50070 -p 10000:10000 centos_hive /usr/sbin/init
+docker run -d --privileged=true centos_hudi /usr/sbin/init
 
 ### 构建 wordpress 镜像
 docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --no-cache -f Dockerfiles/centos_wordpress -t centos_wordpress .

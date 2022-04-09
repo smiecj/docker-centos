@@ -19,6 +19,7 @@ pushd $redis_module_path
 
 curl -LO $redis_download_url
 tar -xzvf $redis_pkg
+rm -f $redis_pkg
 pushd $redis_folder
 
 ### compile
@@ -26,11 +27,11 @@ make
 
 ### copy bin and config file
 
-cp src/redis-cli ../
-cp src/redis-server ../
-cp src/redis-sentinel ../
-cp src/redis-benchmark ../
-cp redis.conf ../
+cp src/redis-cli $redis_bin_path
+cp src/redis-server $redis_bin_path
+cp src/redis-sentinel $redis_bin_path
+cp src/redis-benchmark $redis_bin_path
+cp redis.conf $redis_module_path
 
 popd
 
@@ -44,10 +45,14 @@ sed -i "s/^protected-mode .*/protected-mode no/g" redis.conf
 sed -i "s/^bind .*/bind * -::*/g" redis.conf
 
 ### remove source code
-
 rm -rf $redis_folder
 
 popd
+
+### profile
+echo """
+export PATH=\$PATH:$redis_bin_path
+""" >> /etc/profile
 
 ### start and stop script
 mkdir -p $redis_scripts_path
@@ -56,7 +61,7 @@ cp -f $home_path/../components/redis/redis-restart.sh $redis_scripts_path
 cp -f $home_path/../components/redis/redis-stop.sh $redis_scripts_path
 chmod -R 755 $redis_scripts_path
 
-### add and enable hdfs service
+### add and enable redis service
 add_systemd_service redis $PATH "" $redis_scripts_path/redis-restart.sh $redis_scripts_path/redis-stop.sh "true"
 
 add_logrorate_task $redis_log_path redis
