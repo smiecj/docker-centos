@@ -12,7 +12,7 @@ system_arch=`uname -p`
 
 mysql_version="8.0"
 #mysql_version="5.7"
-mysql_sub_version="8.0.27-1"
+mysql_sub_version="8.0.26-1"
 #mysql_sub_version="5.7.36-1"
 system_version="el7"
 mysql_home=/home/modules/mysql
