@@ -12,7 +12,7 @@ system_arch=`uname -p`
 
 mysql_version="8.0"
 #mysql_version="5.7"
-mysql_sub_version="8.0.26-1"
+mysql_sub_version="8.0.27-1"
 #mysql_sub_version="5.7.36-1"
 system_version="el7"
 mysql_home=/home/modules/mysql
@@ -54,6 +54,11 @@ curl -Lo $mysql_client_rpm_name $mysql_client_rpm_download_link
 curl -Lo $mysql_client_plugins_rpm_name $mysql_client_plugins_rpm_download_link
 curl -Lo $mysql_libs_rpm_name $mysql_libs_rpm_download_link
 
+### remove installed mysql and mariadb repo
+rpm -qa | grep mysql | xargs -I {} rpm -e --nodeps {}
+rpm -qa | grep mariadb | xargs -I {} rpm -e --nodeps {}
+
+### install downloaded rpm
 rpm -ivh $mysql_client_plugins_rpm_name
 rpm -ivh $mysql_common_rpm_name
 rpm -ivh $mysql_libs_rpm_name
