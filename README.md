@@ -62,6 +62,11 @@ docker build -f docker-centos/Dockerfiles/centos_hudi -t centos_hudi .
 
 docker run -d --privileged=true centos_hudi /usr/sbin/init
 
+### 构建 superset 镜像
+docker build -f docker-centos/Dockerfiles/centos_superset -t centos_superset .
+
+docker run -d --privileged=true centos_superset /usr/sbin/init
+
 ### 构建 wordpress 镜像
 docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --no-cache -f Dockerfiles/centos_wordpress -t centos_wordpress .
 
