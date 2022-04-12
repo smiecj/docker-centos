@@ -47,7 +47,7 @@ fi
 ## java install (openjdk)
 java_home=/usr/java
 mkdir -p $java_home
-mkdir -p $repo_home/java
+mkdir -p $java_repo_home
 pushd $java_home
 rm -rf *
 
@@ -65,7 +65,7 @@ tar -xzvf $maven_pkg
 rm -f $maven_pkg
 
 maven_home=/usr/java/apache-maven-$maven_version
-maven_repo=$repo_home/java/maven
+maven_repo=$java_repo_home/maven
 maven_repo_replace_str=$(echo "$maven_repo" | sed 's/\//\\\//g')
 cp -f $home_path/../components/maven/settings.xml $maven_home/conf
 sed -i "s/maven_local_repo/$maven_repo_replace_str/g" $maven_home/conf/settings.xml
@@ -88,7 +88,7 @@ echo 'export JRE_HOME=$JAVA_HOME/jre' >> /etc/profile
 echo 'export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib' >> /etc/profile
 echo "export MAVEN_HOME=$maven_home" >> /etc/profile
 echo "export GRADLE_HOME=/usr/java/gradle-$gradle_version" >> /etc/profile
-echo "export GRADLE_USER_HOME=$repo_home/java/gradle" >> /etc/profile
+echo "export GRADLE_USER_HOME=$java_repo_home/gradle" >> /etc/profile
 echo "export JDK_HOME=$java_home/$jdk_11_folder" >> /etc/profile
 echo 'export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin' >> /etc/profile
 

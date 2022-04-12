@@ -1,27 +1,48 @@
 #!/bin/bash
 set -euxo pipefail
 
-DEPLOY_MODE_SINGLETON="singleton"
-DEPLOY_MODE_CLUSTER="cluster"
+script_full_path=$(realpath $0)
+home_path=$(dirname $script_full_path)
+pushd $home_path
 
-# zk config init
+. ./common.sh
+. ./env_zookeeper.sh
+
+# zk config
 deploy_mode="singleton"
-if [ "" != "$DEPLOY_MODE" ]; then
-    deploy_mode=$DEPLOY_MODE
+port=2181
+if [ $# -eq 2 ]; then
+    deploy_mode=$1
+    port=$2
 fi
 
-if [ $deploy_mode == $DEPLOY_MODE_SINGLETON ]; then
-    echo "singleton deploy mode"
-    cp -f /home/modules/zookeeper/conf/zoo_singleton.cfg /home/modules/zookeeper/conf/zoo.cfg
-else
-    ## todo: support more than 3 nodes 
-    echo "cluster deploy mode"
-    sed -i "s/{zoo_node_1}/$ZK_NODE_1/g" $ZK_NODE_1
-    sed -i "s/{zoo_node_2}/$ZK_NODE_2/g" $ZK_NODE_2
-    sed -i "s/{zoo_node_3}/$ZK_NODE_3/g" $ZK_NODE_3
-    cp -f /home/modules/zookeeper/conf/zoo_cluster.cfg /home/modules/zookeeper/conf/zoo.cfg
-fi
+# download zk source code and compile
+curl -LO $zookeeper_source_url
+tar -xzvf $zookeeper_source_pkg
+rm -f $zookeeper_source_pkg
 
-exec /usr/sbin/init
+pushd $zookeeper_source_folder
 
-service zookeeper restart
+mvn clean install -DskipTests
+mkdir -p $zookeeper_module_home
+
+mv zookeeper-assembly/target/$zookeeper_pkg $zookeeper_module_home/
+
+popd
+rm -rf $zookeeper_source_folder
+
+pushd $zookeeper_module_home
+tar -xzvf $zookeeper_pkg
+rm -f $zookeeper_pkg
+pushd $zookeeper_folder
+
+# todo: init zookeeper config
+
+popd
+
+# clean java dependency download path
+
+#mvn dependency:purge-local-repository -DreResolve=false
+rm -rf $java_repo_home/*
+
+# todo: set zookeeper service with start and stop script
