@@ -57,4 +57,6 @@ chmod +x /usr/local/bin/druidrestart
 cp -f $home_path/../components/druid/druid-stop.sh /usr/local/bin/druidstop
 chmod +x /usr/local/bin/druidstop
 
+## todo: 结合 kafka 完成基本测试用例的部署和验证
+
 popd

@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euxo pipefail
 
 script_full_path=$(realpath $0)
 home_path=$(dirname $script_full_path)
@@ -16,6 +15,11 @@ if [ $# -eq 2 ]; then
     deploy_mode=$1
     zk_port=$2
 fi
+
+# install java
+sh ./init-system-java.sh
+source /etc/profile
+set -euxo pipefail
 
 # download zk source code and compile
 curl -LO $zookeeper_source_url
