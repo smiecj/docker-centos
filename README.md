@@ -7,6 +7,11 @@ docker build -f docker-centos/Dockerfiles/centos_dev -t centos_dev .
 
 docker run -d --privileged=true -p 2222:22 centos_dev /usr/sbin/init
 
+### 构建 zookeeper 镜像
+docker build -f docker-centos/Dockerfiles/centos_zookeeper -t centos_zookeeper .
+
+docker run -d --privileged=true -p 2181:2181 centos_zookeeper /usr/sbin/init
+
 ### 构建存储镜像 (目前只包括 mysql)
 docker build -f docker-centos/Dockerfiles/centos_storage -t centos_storage .
 

@@ -49,6 +49,7 @@ add_systemd_service() {
     fi
     
     systemd_file_path=/etc/systemd/system/$service.service
+    target_systemd_file_path=/etc/systemd/system/multi-user.target.wants/$service.service
     cat > $systemd_file_path << EOF
 # $service systemd
 ## $systemd_file_path
@@ -70,8 +71,8 @@ RemainAfterExit=yes
 WantedBy=multi-user.target
 EOF
 
-    if [ "true" == $need_enable ]; then
-        ln -s $systemd_file_path /etc/systemd/system/multi-user.target.wants/$service.service || true
+    if [ "true" == $need_enable ] && [ ! -f $target_systemd_file_path ]; then
+        ln -s $systemd_file_path $target_systemd_file_path || true
     fi
 }
 
