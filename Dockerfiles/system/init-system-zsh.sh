@@ -41,3 +41,6 @@ source /etc/profile
 #### https://askubuntu.com/a/483861
 sed -i 's/PROMPT=/#PROMPT=/g' ~/.oh-my-zsh/themes/robbyrussell.zsh-theme
 echo 'PROMPT="%(!.%{%F{yellow}%}.)%n@%{$fg[white]%}%M %{$fg_bold[red]%}➜ %{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}"' >> ~/.oh-my-zsh/themes/robbyrussell.zsh-theme
+
+### match *
+echo "setopt nonomatch" >> ~/.zshrc
