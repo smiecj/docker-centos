@@ -1,12 +1,8 @@
 FROM centos:centos8.4.2105
 
-WORKDIR /home/coding
-
 MAINTAINER smiecj smiecj@github.com
 
 ARG ROOT_PWD=root!centos123
-
-## 当前: 测试 centos_base
 
 # init system
 USER root

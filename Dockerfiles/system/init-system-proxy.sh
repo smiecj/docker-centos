@@ -13,10 +13,10 @@ for proxy_host in ${proxy_host_array[@]}
 do
     for proxy_port in ${proxy_port_array[@]}
     do
-        telnet_output="$({ sleep 1; echo $'\e'; } | telnet $proxy_host $proxy_port 2>&1)" || true 
+        telnet_output=`timeout 1 telnet $proxy_host $proxy_port 2>&1` || true
         telnet_refused_msg=`echo $telnet_output | grep "Connection refused" || true`
         telnet_host_unknown_msg=`echo $telnet_output | grep "Unknown host" || true`
-        if [ -z "$telnet_refused_msg" ] && [ -z "$telnet_host_unknown_msg" ]; then
+        if [ -n "$telnet_output" ] && [ -z "$telnet_refused_msg" ] && [ -z "$telnet_host_unknown_msg" ]; then
             echo "export http_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
             echo "export https_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
             break

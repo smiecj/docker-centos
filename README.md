@@ -101,6 +101,15 @@ https://github.com/ouqiang/gocron
 
 体现层级结构，比如 centos_hue -> centos_python -> centos_base
 
+实现顺序
+- dev 镜像
+
+- 后台中间件
+zookeeper、redis、mysql 等
+
+- 大数据组件
+hive、hue 等
+
 ### 支持 docker-compose
 完全通过 配置文件 声明的方式，构建镜像
 
