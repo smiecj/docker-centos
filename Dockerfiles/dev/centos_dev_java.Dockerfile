@@ -12,7 +12,6 @@ USER root
 ARG java_home=/usr/java
 ARG repo_home=/home/repo
 ARG java_repo_home=${repo_home}/java
-ARG java_home=/usr/java
 
 COPY env_java.sh /tmp/
 
@@ -51,9 +50,8 @@ ARG gradle_version=7.0.2
 ARG gradle_download_url=https://downloads.gradle-dn.com/distributions/gradle-$gradle_version-bin.zip
 ARG gradle_pkg=gradle-${gradle_version}-bin.zip
 
-RUN curl -L ${gradle_download_url} -o ${gradle_pkg}
-RUN unzip ${gradle_pkg}
-RUN rm -f ${gradle_pkg}
+RUN cd ${java_home} && curl -L ${gradle_download_url} -o ${gradle_pkg} && \
+    unzip ${gradle_pkg} && rm -f ${gradle_pkg}
 
 ## profile
 RUN . /tmp/env_java.sh && echo -e '\n# java' >> /etc/profile && \
