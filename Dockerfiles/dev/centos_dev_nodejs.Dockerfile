@@ -7,11 +7,11 @@ ARG ROOT_PWD=root!centos123
 USER root
 
 # install nodejs
-
 ARG node_version=v14.17.0
 ARG repo_home=/home/repo
 ARG npm_home=/usr/nodejs
 ARG npm_repo_home=${repo_home}/nodejs
+ARG npm_remote_repo="https://registry.npm.taobao.org"
 
 COPY env_nodejs.sh /tmp/
 
@@ -24,8 +24,9 @@ RUN . /tmp/env_nodejs.sh && echo -e '\n# nodejs' >> /etc/profile && \
     echo "export NODE_REPO=$npm_repo_home/global_modules" >> /etc/profile  && \
     echo 'export PATH=$PATH:$NODE_HOME/bin:$NODE_REPO/bin' >> /etc/profile
 
-RUN . /tmp/env_nodejs.sh && \
-    echo "prefix = $npm_repo_home/global_modules" >> ${npm_home}/$npm_folder/lib/node_modules/npm/.npmrc && \
-    echo "cache = $npm_repo_home/cache" >> ${npm_home}/$npm_folder/lib/node_modules/npm/.npmrc
+RUN . /tmp/env_nodejs.sh && npm_config=${npm_home}/$npm_folder/lib/node_modules/npm/.npmrc && \
+    echo "prefix = $npm_repo_home/global_modules" >> $npm_config && \
+    echo "cache = $npm_repo_home/cache" >> $npm_config && \
+    echo "registry = ${npm_remote_repo}" >> $npm_config
 
 RUN rm -f /tmp/env_nodejs.sh

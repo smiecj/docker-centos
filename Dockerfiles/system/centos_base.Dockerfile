@@ -43,7 +43,7 @@ RUN yum -y install cmake
 
 ### other useful tools
 RUN yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd cronie
-RUN yum -y install expect jq telnet net-tools rsync
+RUN yum -y install expect jq telnet net-tools rsync logrotate
 
 #### git config
 RUN git config --global pull.rebase false
@@ -69,9 +69,6 @@ RUN echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc
 ## set login password
 RUN echo root:${ROOT_PWD} | chpasswd
 
-## auto start service
-RUN ln -s /usr/lib/systemd/system/crond.service /etc/systemd/system/multi-user.target.wants/crond.service || true
-
 ## history
 RUN echo "export HISTCONTROL=ignoredups" >> /etc/profile
 
@@ -79,3 +76,20 @@ RUN echo "export HISTCONTROL=ignoredups" >> /etc/profile
 RUN cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 RUN rm -f /tmp/init-*.sh && rm -f /tmp/env_*.sh
+
+## s6
+ARG s6_version=v2.2.0.3
+COPY init-system-s6.sh /tmp/
+RUN sh /tmp/init-system-s6.sh
+RUN rm /tmp/init-system-s6.sh
+
+### s6 with crontab
+RUN yum -y install crontabs
+COPY s6/ /etc
+
+## add logrotate task command
+mkdir -p /tmp/bin
+COPY command/ /tmp/bin/
+RUN chmod -R 755 /tmp/bin && mv /tmp/bin/* /usr/local/bin && rm -rf /tmp/bin
+
+ENTRYPOINT ["/init"]

@@ -2,80 +2,28 @@
 提供一个centos开发镜像
 
 ## 使用方式
+### 构建系统镜像
+docker build --no-cache -f centos_base.Dockerfile -t centos_base .
+
 ### 构建开发镜像
-docker build -f docker-centos/Dockerfiles/centos_dev -t centos_dev .
+注意: 需要先构建好 centos_base 镜像
 
-docker run -d --privileged=true -p 2222:22 centos_dev /usr/sbin/init
+#### java
+docker build --no-cache -f centos_dev_java.Dockerfile -t centos_java .
 
-### 构建 zookeeper 镜像
-docker build -f docker-centos/Dockerfiles/centos_zookeeper -t centos_zookeeper .
+#### golang
+docker build --no-cache -f centos_dev_golang.Dockerfile -t centos_golang .
 
-docker run -d --privileged=true -p 2181:2181 centos_zookeeper /usr/sbin/init
+#### nodejs
+docker build --no-cache -f centos_dev_nodejs.Dockerfile -t centos_nodejs .
 
-### 构建存储镜像 (目前只包括 mysql)
-docker build -f docker-centos/Dockerfiles/centos_storage -t centos_storage .
+#### python
+docker build --no-cache -f centos_dev_python.Dockerfile -t centos_python .
 
-docker run -d --privileged=true -p 3306:3306 centos_storage /usr/sbin/init
+#### full
+注意: 需要先构建好 以上四个镜像
 
-### 构建 redis 镜像
-docker build -f docker-centos/Dockerfiles/centos_redis -t centos_redis .
-
-docker run -d --privileged=true -p 6379:6379 centos_redis /usr/sbin/init
-
-### 构建 jupyter notebook 镜像
-docker build -f docker-centos/Dockerfiles/centos_jupyter -t centos_jupyter .
-
-docker run -d --privileged=true -p 8000:8000 centos_jupyter /usr/sbin/init
-
-### 构建 jupyter lab 镜像
-docker build -f docker-centos/Dockerfiles/centos_jupyterlab -t centos_jupyterlab .
-
-docker run -d --privileged=true -p 8000:8000 centos_jupyterlab /usr/sbin/init
-
-### 构建 airflow 镜像
-docker build -f docker-centos/Dockerfiles/centos_airflow -t centos_airflow .
-
-docker run -d --privileged=true -p 8072:8072 centos_airflow /usr/sbin/init
-
-### 构建 prometheus + grafana 镜像
-docker build -f docker-centos/Dockerfiles/centos_prometheus -t centos_prometheus .
-
-docker run -d --privileged=true -p 3000:3000 -p 3001:3001 centos_prometheus /usr/sbin/init
-
-### 构建 hue 镜像
-docker build -f Dockerfiles/centos_hue --build-arg MYSQL_HOST=mysql_host --build-arg MYSQL_PORT=mysql_port --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --build-arg MYSQL_DB=mysql_db -t centos_dev_hue .
-
-docker run -d --privileged=true -p 38281:8281 centos_dev_hue /usr/sbin/init
-
-### 构建 hdfs 镜像
-docker build -f docker-centos/Dockerfiles/centos_hdfs -t centos_hdfs .
-
-docker run -d --privileged=true -p 8088:8088 -p 50070:50070 centos_hdfs /usr/sbin/init
-
-### 构建 hive 镜像
-docker build -f docker-centos/Dockerfiles/centos_hive --build-arg MYSQL_HOST=mysql_host --build-arg MYSQL_PORT=mysql_port --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --build-arg MYSQL_DB=mysql_db --build-arg MYSQL_VERSION=8.0.26 -t centos_hive .
-
-docker run -d --privileged=true -p 8088:8088 -p 50070:50070 -p 10000:10000 centos_hive /usr/sbin/init
-
-### 构建 hudi 镜像
-docker build -f docker-centos/Dockerfiles/centos_hudi -t centos_hudi .
-
-docker run -d --privileged=true centos_hudi /usr/sbin/init
-
-### 构建 superset 镜像
-docker build -f docker-centos/Dockerfiles/centos_superset -t centos_superset .
-
-docker run -d --privileged=true centos_superset /usr/sbin/init
-
-### 构建 wordpress 镜像
-docker build --build-arg MYSQL_ADDR=mysql_addr --build-arg MYSQL_USER=mysql_user --build-arg MYSQL_PASSWORD=mysql_password --no-cache -f Dockerfiles/centos_wordpress -t centos_wordpress .
-
-docker run -d --privileged=true -p 8000:80 centos_wordpress /usr/sbin/init
-
-### 构建 pip2pi 服务器
-docker build -f docker-centos/Dockerfiles/centos_pip2pi -t centos_pip .
-
-docker run -d --privileged=true -p 80:80 centos_pip /usr/sbin/init
+docker build --no-cache -f centos_dev_full.Dockerfile -t centos_dev_full .
 
 ### 备注: docker build: 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 示例: docker build --build-arg ROOT_PWD=root_Test123 --no-cache -f Dockerfiles/centos_dev -t centos_dev .
@@ -105,7 +53,7 @@ https://github.com/ouqiang/gocron
 - dev 镜像
 
 - 后台中间件
-zookeeper、redis、mysql 等
+nacos、zookeeper、redis、mysql 等
 
 - 大数据组件
 hive、hue 等
