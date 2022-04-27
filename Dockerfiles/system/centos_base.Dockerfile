@@ -15,6 +15,7 @@ RUN sed -i "s/alias cp/#alias cp/g" ~/.bashrc
 RUN sed -i "s/alias mv/#alias mv/g" ~/.bashrc
 RUN echo "alias ll='ls -l'" >> ~/.bashrc
 RUN echo "alias rm='rm -f'" >> ~/.bashrc
+RUN echo "source /etc/profile" >> ~/.bashrc
 
 ## yum
 COPY yum /tmp/yum
@@ -42,7 +43,7 @@ RUN yum -y install gcc-c++
 RUN yum -y install cmake
 
 ### other useful tools
-RUN yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd cronie
+RUN yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd
 RUN yum -y install expect jq telnet net-tools rsync logrotate
 
 #### git config
@@ -87,9 +88,24 @@ RUN rm /tmp/init-system-s6.sh
 RUN yum -y install crontabs
 COPY s6/ /etc
 
-## add logrotate task command
-mkdir -p /tmp/bin
+## add `add logrotate task` command
+RUN mkdir -p /tmp/bin
 COPY command/ /tmp/bin/
 RUN chmod -R 755 /tmp/bin && mv /tmp/bin/* /usr/local/bin && rm -rf /tmp/bin
+
+## init and child dockerfile endpoint
+### child dockerfile service init can add to /init_service script (append)
+### https://stackoverflow.com/questions/2518127/how-to-reload-bashrc-settings-without-logging-out-and-back-in-again
+RUN echo -e """#!/bin/bash\n\
+sh /init_service\n\
+exec /init\n\
+""" > /init_system && chmod +x /init_system
+
+RUN echo -e """#!/bin/bash\n\
+echo 'hello docker centos'\n\
+. ~/.bashrc\n\
+\n\
+## child dockerfile init append after this\n\
+""" > /init_service && chmod +x /init_service
 
 ENTRYPOINT ["/init"]
