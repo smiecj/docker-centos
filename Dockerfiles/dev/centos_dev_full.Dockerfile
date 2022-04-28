@@ -1,5 +1,3 @@
-## todo: 实现完整 dev 开发镜像的构建
-
 # common env
 ARG repo_home=/home/repo
 ARG go_repo_home=$repo_home/go

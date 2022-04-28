@@ -44,3 +44,10 @@ RUN cd ${nacos_module_home}/conf && sed -i "s/# db.num.*/db.num=1/g" $nacos_conf
 # COPY s6/ /etc/
 
 RUN echo "${nacos_module_home}/bin/startup.sh -m standalone" >> /init_service
+
+### nacos restart script
+RUN echo -e """#!/bin/bash\n\
+jps -ml | grep 'nacos' | awk '{print \$1}' | xargs --no-run-if-empty kill -9\n\
+sleep 3\n\
+${nacos_module_home}/bin/startup.sh -m standalone\n\
+""" > /usr/local/bin/nacosrestart && chmod +x /usr/local/bin/nacosrestart
