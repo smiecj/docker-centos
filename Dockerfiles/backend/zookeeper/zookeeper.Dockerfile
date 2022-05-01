@@ -16,6 +16,7 @@ ENV MODE=singleton
 ENV MYID=1
 ENV PORT=2181
 ENV zookeeper_data_home=${zookeeper_home}/${zookeeper_folder}/data
+ENV SERVER_INFO={zk_host_1}:2888:3888,{zk_host_2}:2888:3888,{zk_host_3}:2888:3888
 
 ARG repo_home=/home/repo
 ARG java_repo_home=${repo_home}/java
