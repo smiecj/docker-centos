@@ -44,3 +44,6 @@ echo 'PROMPT="%(!.%{%F{yellow}%}.)%n@%{$fg[white]%}%M %{$fg_bold[red]%}➜ %{$fg
 
 ### match *
 echo "setopt nonomatch" >> ~/.zshrc
+
+### not share history between session
+echo "unsetopt share_history" >> ~/.zshrc

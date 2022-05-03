@@ -9,7 +9,7 @@ origin_mysql_password=`cat /var/log/mysqld.log | grep 'temporary password' | sed
 mysql_version=`mysql -V`
 if [[ "$mysql_version" =~ .*8.[0-9]+.[0-9]+ ]]; then
     mysql -uroot -p"$origin_mysql_password" -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$default_mysql_root_password';" --connect-expired-password
-    systemctl restart mysqld.service
+    #systemctl restart mysqld.service
     mysql -uroot -p"$default_mysql_root_password" -e "UPDATE mysql.user SET host = '%' WHERE user = 'root'";
-    systemctl restart mysqld.service
+    #systemctl restart mysqld.service
 fi

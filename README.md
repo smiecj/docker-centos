@@ -26,19 +26,24 @@ docker build --no-cache -f centos_dev_python.Dockerfile -t centos_python .
 docker build --no-cache -f centos_dev_full.Dockerfile -t centos_dev_full .
 
 ### 构建组件镜像
+#### 后台 - mysql
+docker build -f mysql.Dockerfile -t centos_mysql .
+
+docker run -d -it centos_mysql
+
 #### 后台 - nacos
 docker build -f nacos.Dockerfile -t centos_nacos .
 
-docker run -d -p 8848:8848 --env MYSQL_HOST=mysql_host --env MYSQL_PORT=mysql_port --env MYSQL_USER=mysql_user --env MYSQL_PASSWORD=mysql_password --env MYSQL_DB=mysql_db centos_nacos /usr/sbin/init
+docker run -d -it -p 8848:8848 --env MYSQL_HOST=mysql_host --env MYSQL_PORT=mysql_port --env MYSQL_USER=mysql_user --env MYSQL_PASSWORD=mysql_password --env MYSQL_DB=mysql_db centos_nacos
 
 #### 后台 - zookeeper
 docker build --no-cache -f zookeeper.Dockerfile -t centos_zookeeper .
 
 单机模式
-docker run -d -p 2181:2181 centos_zookeeper /usr/sbin/init
+docker run -d -it -p 2181:2181 centos_zookeeper
 
 集群模式（完整配置参考后续提供的 docker-compose 部署方式）
-docker run -d --env MODE=cluster --env MYID=1 --env SERVER_INFO=zk_host1:2888:3888,zk_host2:2888:3888,zk_host3:2888:3888 -p 2181:2181 centos_zookeeper /usr/sbin/init
+docker run -it -d --env MODE=cluster --env MYID=1 --env SERVER_INFO=zk_host1:2888:3888,zk_host2:2888:3888,zk_host3:2888:3888 -p 2181:2181 centos_zookeeper
 
 ### 备注: docker build: 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 示例: docker build --build-arg ROOT_PWD=root_Test123 --no-cache -f Dockerfiles/centos_dev -t centos_dev .

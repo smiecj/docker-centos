@@ -1,12 +1,3 @@
-#!/bin/bash
-set -euxo pipefail
-
-#. ./env_mysql.sh
-
-script_full_path=$(realpath $0)
-home_path=$(dirname $script_full_path)
-pushd $home_path
-
 ## env init
 system_arch=`uname -p`
 
@@ -43,39 +34,3 @@ else
     mysql_client_plugins_rpm_download_link="$mysql_repo_url/MySQL-$mysql_version/mysql-community-client-plugins-$mysql_sub_version.$system_version.aarch64.rpm"
     mysql_libs_rpm_download_link="$mysql_repo_url/MySQL-$mysql_version/mysql-community-libs-$mysql_sub_version.$system_version.aarch64.rpm"
 fi
-
-## install mysql
-rm -rf $mysql_repo_home
-mkdir -p $mysql_repo_home
-pushd $mysql_repo_home
-curl -Lo $mysql_server_rpm_name $mysql_server_rpm_download_link
-curl -Lo $mysql_common_rpm_name $mysql_common_rpm_download_link
-curl -Lo $mysql_client_rpm_name $mysql_client_rpm_download_link
-curl -Lo $mysql_client_plugins_rpm_name $mysql_client_plugins_rpm_download_link
-curl -Lo $mysql_libs_rpm_name $mysql_libs_rpm_download_link
-
-### remove installed mysql and mariadb repo
-rpm -qa | grep mysql | xargs -I {} rpm -e --nodeps {}
-rpm -qa | grep mariadb | xargs -I {} rpm -e --nodeps {}
-
-### install downloaded rpm
-rpm -ivh $mysql_client_plugins_rpm_name
-rpm -ivh $mysql_common_rpm_name
-rpm -ivh $mysql_libs_rpm_name
-rpm -ivh $mysql_client_rpm_name
-rpm -ivh $mysql_server_rpm_name
-
-## enable mysql auto start
-systemctl enable mysqld.service
-
-## if need: uninstall mysql
-
-popd
-rm -rf $mysql_repo_home
-
-## copy mysql password reset script
-mysql_reset_password_bin=/usr/local/bin/mysqlresetpassword
-cp ./mysql-reset-password.sh $mysql_reset_password_bin
-chmod +x $mysql_reset_password_bin
-
-popd
