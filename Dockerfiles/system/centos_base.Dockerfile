@@ -103,9 +103,9 @@ exec /init\n\
 
 RUN echo -e """#!/bin/bash\n\
 echo 'hello docker centos'\n\
-. ~/.bashrc\n\
+. /etc/profile\n\
 \n\
 ## child dockerfile init append after this\n\
 """ > /init_service && chmod +x /init_service
 
-ENTRYPOINT ["/init"]
+ENTRYPOINT ["/init_system"]
