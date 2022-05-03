@@ -11,4 +11,5 @@ ssh-keygen -t ed25519 -b 256 -f /etc/ssh/ssh_host_ed25519_key -N ""
 ## s6 script
 sshd_s6_home=/etc/services.d/sshd
 mkdir -p $sshd_s6_home
-. /etc/crypto-policies/back-ends/opensshserver.config && . /etc/sysconfig/sshd && echo "/usr/sbin/sshd -D $OPTIONS $CRYPTO_POLICY" > $sshd_s6_home/run
+echo '#!/bin/bash' > $sshd_s6_home/run
+. /etc/crypto-policies/back-ends/opensshserver.config && . /etc/sysconfig/sshd && echo "/usr/sbin/sshd -D $OPTIONS $CRYPTO_POLICY" >> $sshd_s6_home/run
