@@ -27,6 +27,8 @@ RUN . /tmp/env_nodejs.sh && echo -e '\n# nodejs' >> /etc/profile && \
 RUN . /tmp/env_nodejs.sh && npm_config=${npm_home}/$npm_folder/lib/node_modules/npm/.npmrc && \
     echo "prefix = $npm_repo_home/global_modules" >> $npm_config && \
     echo "cache = $npm_repo_home/cache" >> $npm_config && \
-    echo "registry = ${npm_remote_repo}" >> $npm_config
+    echo "registry = ${npm_remote_repo}" >> $npm_config && \
+    mkdir -p $npm_repo_home/global_modules && \
+    mkdir -p $npm_repo_home/cache
 
 RUN rm -f /tmp/env_nodejs.sh
