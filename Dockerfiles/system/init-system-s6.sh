@@ -16,7 +16,7 @@ pushd /tmp
 
 curl -LO $s6_installer_download_url
 chmod +x $s6_installer
-./$s6_installer
+./$s6_installer /
 rm -f $s6_installer
 
 popd
