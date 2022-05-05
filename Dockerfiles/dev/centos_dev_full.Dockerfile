@@ -3,6 +3,8 @@ ARG repo_home=/home/repo
 ARG go_repo_home=$repo_home/go
 ARG java_repo_home=${repo_home}/java
 ARG npm_repo_home=${repo_home}/nodejs
+ARG maven_version=3.8.4
+ARG maven_home=/usr/java/apache-maven-${maven_version}
 
 # java
 FROM centos_java AS base_java
@@ -29,7 +31,6 @@ FROM centos_base AS base
 ### 参考: https://stackoverflow.com/a/53682110
 ARG repo_home
 ARG java_repo_home
-ARG maven_home
 ARG java_home=/usr/java
 ARG maven_repo=${java_repo_home}/maven
 RUN mkdir -p ${java_home} && mkdir -p ${java_repo_home}

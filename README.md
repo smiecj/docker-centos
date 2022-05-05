@@ -45,6 +45,11 @@ docker run -d -it -p 2181:2181 centos_zookeeper
 集群模式（完整配置参考后续提供的 docker-compose 部署方式）
 docker run -it -d --env MODE=cluster --env MYID=1 --env SERVER_INFO=zk_host1:2888:3888,zk_host2:2888:3888,zk_host3:2888:3888 -p 2181:2181 centos_zookeeper
 
+#### 后台 - redis
+docker build -f redis.Dockerfile -t centos_redis .
+
+docker run -d -it centos_redis
+
 ### 备注: docker build: 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
 示例: docker build --build-arg ROOT_PWD=root_Test123 --no-cache -f Dockerfiles/centos_dev -t centos_dev .
 

@@ -24,6 +24,7 @@ RUN . /tmp/env_java.sh && cd ${java_home} && curl -LO $jdk_8_download_url && tar
 
 ## maven
 ARG maven_version=3.8.4
+# https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.8.5/source/apache-maven-3.8.5-src.zip
 ARG maven_download_url=https://archive.apache.org/dist/maven/maven-3/${maven_version}/binaries/apache-maven-${maven_version}-bin.tar.gz
 ARG maven_pkg=apache-maven-${maven_version}-bin.tar.gz
 

@@ -28,6 +28,7 @@ RUN cd ${zookeeper_home} && curl -L $zookeeper_source_url -o $zookeeper_source_p
 
 RUN source /etc/profile && cd ${zookeeper_home}/${zookeeper_source_folder} && \
     mvn clean install -DskipTests && mv zookeeper-assembly/target/$zookeeper_pkg ${zookeeper_home}/
+RUN cd ${zookeeper_home} && rm -rf ${zookeeper_source_folder}
 
 RUN cd ${zookeeper_home} && tar -xzvf $zookeeper_pkg && rm -f $zookeeper_pkg
 
