@@ -92,6 +92,17 @@ docker build -f pip2pi.Dockerfile -t centos_pip2pi
 docker run -d -it -p 8000:80 centos_pip2pi
 ```
 
+### docker-compose 实践
+#### zookeeper cluster
+```
+# todo
+```
+
+#### nacos+mysql
+```
+# todo
+```
+
 ### 备注: docker run: --privileged 和 /usr/sbin/init 是必选项，因为系统需要初始化 root 账户相关服务和权限
 docker run -d --privileged=true -p 2222:22 centos_dev /usr/sbin/init
 
