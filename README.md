@@ -78,6 +78,18 @@ docker build -f prometheus_compile.Dockerfile -t centos_prometheus
 
 # 直接安装可执行包构建
 docker build -f prometheus_pkg.Dockerfile -t centos_prometheus
+
+# 运行
+docker run -d -it -p 3000:3000 -p 3001:3001 centos_prometheus
+```
+
+#### 后台 - pip2pi
+```
+# 构建
+docker build -f pip2pi.Dockerfile -t centos_pip2pi
+
+# 运行
+docker run -d -it -p 8000:80 centos_pip2pi
 ```
 
 ### 备注: docker run: --privileged 和 /usr/sbin/init 是必选项，因为系统需要初始化 root 账户相关服务和权限
