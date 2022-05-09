@@ -2,8 +2,6 @@ FROM centos_base AS base
 
 MAINTAINER smiecj smiecj@github.com
 
-ARG ROOT_PWD=root!centos123
-
 USER root
 
 ARG go_version=1.18.1
@@ -25,5 +23,8 @@ RUN echo -e '\n# go' >> /etc/profile && \
     echo "export GOROOT=$go_home/go" >> /etc/profile && \
     echo "export GOPATH=$go_repo_home" >> /etc/profile && \
     echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> /etc/profile
+
+## config: goproxy (if needed)
+RUN source /etc/profile && go env -w GOPROXY=https://goproxy.cn,direct
 
 RUN rm -f /tmp/env_golang.sh

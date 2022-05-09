@@ -20,9 +20,8 @@ FROM centos_python AS base_python
 
 MAINTAINER smiecj smiecj@github.com
 
-ARG ROOT_PWD=root!centos123
-
 USER root
+ENV HOME /home
 
 # base
 FROM centos_base AS base
@@ -92,7 +91,8 @@ COPY --from=base_nodejs ${npm_home}/ ${npm_home}/
 ## mkdir npm repo folder
 RUN mkdir -p $npm_repo_home/global_modules && mkdir -p $npm_repo_home/cache
 
-## npm profile
+## npm config and profile
+COPY --from=base_nodejs $HOME/.npmrc $HOME/
 COPY --from=base_nodejs /etc/profile /tmp/profile_nodejs
 RUN sed -n '/# nodejs/,$p' /tmp/profile_nodejs >> /etc/profile
 RUN rm /tmp/profile_nodejs

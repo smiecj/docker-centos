@@ -1,3 +1,5 @@
+# a centos image smaller than centos_base only include yum repo fix and some basic component
+# for deploy simple service (such as wordpress)
 FROM centos:centos8.4.2105
 
 MAINTAINER smiecj smiecj@github.com
@@ -8,8 +10,8 @@ ARG ROOT_PWD=root!centos123
 USER root
 ENV HOME /root
 
-COPY init-*.sh /tmp/
-COPY env_*.sh /tmp/
+COPY init-system-yum.sh /tmp/
+COPY init-system-s6.sh /tmp/
 
 ## bashrc
 RUN sed -i "s/alias cp/#alias cp/g" ~/.bashrc
@@ -27,43 +29,12 @@ RUN rm -rf /tmp/yum
 ### epel refer: https://docs.fedoraproject.org/en-US/epel/
 RUN yum -y install epel-release
 
-### initscripts refer: https://yum-info.contradodigital.com/view-package/installed/initscripts/
-RUN yum -y install initscripts
-
-### some compile basic package
-RUN yum -y install libncurses* libaio numactl
-
-### sshd
-RUN yum -y install openssh-server openssh-clients openssl openssl-devel compat-openssl10
-#systemctl enable sshd
-
-### gcc & make
-RUN yum -y install make
-RUN yum -y install gcc
-RUN yum -y install gcc-c++
-RUN yum -y install cmake
-
 ### other useful tools
-RUN yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd
-RUN yum -y install expect jq telnet net-tools rsync logrotate
+RUN yum -y install lsof net-tools vim lrzsz zip unzip git wget
+RUN yum -y install telnet logrotate
 
 #### git config
 RUN git config --global pull.rebase false
-
-### devel pkg
-RUN yum -y install cyrus-sasl cyrus-sasl-devel
-RUN yum -y install python3-devel
-RUN yum -y install libffi-devel
-RUN yum -y install freetds-devel
-RUN yum -y install mysql-devel unixODBC-devel
-RUN yum -y install libxml2 libxml2-devel
-RUN yum -y install libxslt libxslt-devel
-
-## set docker inner proxy
-RUN sh /tmp/init-system-proxy.sh
-
-## zsh
-RUN sh /tmp/init-system-zsh.sh
 
 ## vim support utf-8
 RUN echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc
@@ -77,7 +48,7 @@ RUN echo "export HISTCONTROL=ignoredups" >> /etc/profile
 ## timezone
 RUN cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-RUN rm -f /tmp/init-*.sh && rm -f /tmp/env_*.sh
+RUN rm -f /tmp/init-*.sh
 
 ## s6
 ARG s6_version=v2.2.0.3

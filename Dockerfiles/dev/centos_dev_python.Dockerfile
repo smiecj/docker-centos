@@ -2,8 +2,6 @@ FROM centos_base AS base
 
 MAINTAINER smiecj smiecj@github.com
 
-ARG ROOT_PWD=root!centos123
-
 USER root
 
 # install python

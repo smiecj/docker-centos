@@ -1,4 +1,4 @@
-FROM centos_base
+FROM centos_minimal
 
 ## install mysql
 COPY ./env_mysql.sh /tmp/
@@ -12,6 +12,9 @@ RUN cd /tmp && . ./env_mysql.sh && \
 ### remove installed mysql and mariadb repo
 RUN rpm -qa | grep mysql | xargs -I {} rpm -e --nodeps {}
 RUN rpm -qa | grep mariadb | xargs -I {} rpm -e --nodeps {}
+
+### basic lib
+RUN yum -y install compat-openssl10 libncurses* ncurses libaio numactl
 
 ### install downloaded rpm
 RUN cd /tmp && . ./env_mysql.sh && \

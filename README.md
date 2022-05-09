@@ -3,40 +3,60 @@
 
 ## 使用方式
 ### 构建系统镜像
+```
+# centos 最小基础镜像（用于部署服务）
+docker build --no-cache -f centos_minimal.Dockerfile -t centos_minimal .
+
+# centos 基础开发镜像（包含基本开发依赖，用于构建开发镜像）
 docker build --no-cache -f centos_base.Dockerfile -t centos_base .
+```
 
 ### 构建开发镜像
 注意: 需要先构建好 centos_base 镜像
 
 #### java
+```
 docker build --no-cache -f centos_dev_java.Dockerfile -t centos_java .
+```
 
 #### golang
+```
 docker build --no-cache -f centos_dev_golang.Dockerfile -t centos_golang .
+```
 
 #### nodejs
+```
 docker build --no-cache -f centos_dev_nodejs.Dockerfile -t centos_nodejs .
+```
 
 #### python
+```
 docker build --no-cache -f centos_dev_python.Dockerfile -t centos_python .
+```
 
 #### full
 注意: 需要先构建好 以上四个镜像
-
+```
 docker build --no-cache -f centos_dev_full.Dockerfile -t centos_dev_full .
+```
 
 ### 构建组件镜像
 #### 后台 - mysql
+```
 docker build -f mysql.Dockerfile -t centos_mysql .
 
 docker run -d -it centos_mysql
+```
 
 #### 后台 - nacos
+```
 docker build -f nacos.Dockerfile -t centos_nacos .
 
 docker run -d -it -p 8848:8848 --env MYSQL_HOST=mysql_host --env MYSQL_PORT=mysql_port --env MYSQL_USER=mysql_user --env MYSQL_PASSWORD=mysql_password --env MYSQL_DB=mysql_db centos_nacos
+```
 
 #### 后台 - zookeeper
+```
 docker build --no-cache -f zookeeper.Dockerfile -t centos_zookeeper .
 
 单机模式
@@ -44,14 +64,21 @@ docker run -d -it -p 2181:2181 centos_zookeeper
 
 集群模式（完整配置参考后续提供的 docker-compose 部署方式）
 docker run -it -d --env MODE=cluster --env MYID=1 --env SERVER_INFO=zk_host1:2888:3888,zk_host2:2888:3888,zk_host3:2888:3888 -p 2181:2181 centos_zookeeper
+```
 
 #### 后台 - redis
 docker build -f redis.Dockerfile -t centos_redis .
 
 docker run -d -it centos_redis
 
-### 备注: docker build: 可通过 ADMIN_PWD=pwd 设定 root 用户登录密码
-示例: docker build --build-arg ROOT_PWD=root_Test123 --no-cache -f Dockerfiles/centos_dev -t centos_dev .
+#### 后台 - prometheus (包含 alertmanager + grafana)
+```
+# 通过编译源码方式构建
+docker build -f prometheus_compile.Dockerfile -t centos_prometheus
+
+# 直接安装可执行包构建
+docker build -f prometheus_pkg.Dockerfile -t centos_prometheus
+```
 
 ### 备注: docker run: --privileged 和 /usr/sbin/init 是必选项，因为系统需要初始化 root 账户相关服务和权限
 docker run -d --privileged=true -p 2222:22 centos_dev /usr/sbin/init
