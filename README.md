@@ -1,6 +1,24 @@
 # docker-centos
 提供一个centos开发镜像
 
+## 项目背景
+[博客-通过 DockerFile 搭建开发镜像](https://smiecj.github.io/2021/12/19/dockerfile-centos-dev/)
+
+利用容器化技术，提升开发和学习效率
+
+## 项目目录
+├── deployments
+├──── 用于 k8s 的部署文件
+├── Dockerfiles
+│   ├── backend
+│   ├──── 后台服务 Dockerfile
+│   ├── dev
+│   ├──── 开发用 Dockerfile，如 golang 环境基础镜像
+│   ├── emr
+│   ├──── 大数据组件 Dockerfile
+│   └── system
+│   └──── 系统 Dockerfile，如 centos_base
+
 ## 使用方式
 ### 构建系统镜像
 ```
@@ -92,6 +110,36 @@ docker build -f pip2pi.Dockerfile -t centos_pip2pi
 docker run -d -it -p 8000:80 centos_pip2pi
 ```
 
+#### 大数据 - druid
+```
+# 构建编译基础镜像（需要包含 java, python 和 nodejs）
+docker build --no-cache -f druid_base.Dockerfile -t centos_druid_base .
+
+# 构建druid镜像
+docker build -f druid.Dockerfile -t centos_druid .
+
+# 运行
+docker run -it -d -p 8888:8888 centos_druid
+```
+
+#### 大数据 - hudi
+```
+# 构建hudi镜像
+docker build -f hudi.Dockerfile -t centos_hudi .
+
+# 运行
+docker run -it -d -p 8888:8888 centos_hudi
+```
+
+#### 大数据 - airflow
+```
+# 构建airflow镜像
+docker build -f airflow.Dockerfile -t centos_airflow .
+
+# 运行
+docker run -it -d -p 8072:8072 centos_airflow
+```
+
 ### docker-compose 实践
 #### zookeeper cluster
 ```
@@ -136,6 +184,12 @@ hive、hue 等
 ### 支持 docker-compose
 完全通过 配置文件 声明的方式，构建镜像
 
+### 基础环境（java、python 等）通过 脚本安装
+主要考虑目前代码中，安装基础环境已经有很多重复代码，封装到脚本中比较方便维护
+
+### docker build makefile
+参考: kubeflow
+
 ### centos_dev DockerFile 支持自定义需要安装的环境/组件
 可以在 docker run 中输入组件名，自动安装对应组件
 如: docker run --env "INSTALL_PLUGINS=zookeeper,mysql"
@@ -145,9 +199,6 @@ hive、hue 等
 
 ### 各组件搭建的版本配置化
 这里的配置化指的是在构建镜像 (docker build) 的时候可指定，升级版本不需要修改脚本代码
-
-### java工程, 支持在 dockerfile 中指定依赖下载路径
-节省空间
 
 ## 最后，欢迎大家一起交流一起学习！
 如果你对镜像或者这个仓库有任何疑问，都欢迎直接通过 issue 直接提问题和建议

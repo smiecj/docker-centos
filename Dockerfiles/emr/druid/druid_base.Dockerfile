@@ -1,3 +1,4 @@
+# base image for compile java
 # common env
 ARG repo_home=/home/repo
 ARG go_repo_home=$repo_home/go
@@ -9,27 +10,23 @@ ARG maven_home=/usr/java/apache-maven-${maven_version}
 # java
 FROM centos_java AS base_java
 
-# golang
-FROM centos_golang AS base_golang
-
 # nodejs
 FROM centos_nodejs AS base_nodejs
 
 # python
 FROM centos_python AS base_python
 
+# base
+FROM centos_base AS base
+
 MAINTAINER smiecj smiecj@github.com
 
 USER root
 ENV HOME /root
 
-# base
-FROM centos_base AS base
-
 # java
 
 ## copy java, maven, package
-### 参考: https://stackoverflow.com/a/53682110
 ARG repo_home
 ARG java_repo_home
 ARG java_home=/usr/java
@@ -48,18 +45,6 @@ RUN cd ~ && rm -f ${default_maven_repo_home}/settings.xml && ln -s ${maven_home}
 COPY --from=base_java /etc/profile /tmp/profile_java
 RUN sed -n '/# java/,$p' /tmp/profile_java >> /etc/profile
 RUN rm /tmp/profile_java
-
-## copy golang package
-ARG repo_home
-ARG go_repo_home
-ARG go_home=/usr/golang
-RUN mkdir -p {go_home} && mkdir -p ${go_repo_home}
-COPY --from=base_golang ${go_home}/ ${go_home}/
-
-## go profile
-COPY --from=base_golang /etc/profile /tmp/profile_golang
-RUN sed -n '/# go/,$p' /tmp/profile_golang >> /etc/profile
-RUN rm /tmp/profile_golang
 
 # python
 
