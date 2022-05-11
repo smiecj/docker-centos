@@ -23,10 +23,13 @@
 ### 构建系统镜像
 ```
 # centos 最小基础镜像（用于部署服务）
-docker build --no-cache -f centos_minimal.Dockerfile -t centos_minimal .
+docker build -f centos_minimal.Dockerfile -t centos_minimal .
+
+# 构建 centos7 版本 最小基础镜像
+docker build -f centos_minimal.Dockerfile --build-arg version=7.9.2009 -t centos_minimal_7 .
 
 # centos 基础开发镜像（包含基本开发依赖，用于构建开发镜像）
-docker build --no-cache -f centos_base.Dockerfile -t centos_base .
+docker build -f centos_base.Dockerfile -t centos_base .
 ```
 
 ### 构建开发镜像
@@ -34,28 +37,28 @@ docker build --no-cache -f centos_base.Dockerfile -t centos_base .
 
 #### java
 ```
-docker build --no-cache -f centos_dev_java.Dockerfile -t centos_java .
+docker build -f centos_dev_java.Dockerfile -t centos_java .
 ```
 
 #### golang
 ```
-docker build --no-cache -f centos_dev_golang.Dockerfile -t centos_golang .
+docker build -f centos_dev_golang.Dockerfile -t centos_golang .
 ```
 
 #### nodejs
 ```
-docker build --no-cache -f centos_dev_nodejs.Dockerfile -t centos_nodejs .
+docker build -f centos_dev_nodejs.Dockerfile -t centos_nodejs .
 ```
 
 #### python
 ```
-docker build --no-cache -f centos_dev_python.Dockerfile -t centos_python .
+docker build -f centos_dev_python.Dockerfile -t centos_python .
 ```
 
 #### full
-注意: 需要先构建好 以上四个镜像
+注意: 依赖以上四个镜像
 ```
-docker build --no-cache -f centos_dev_full.Dockerfile -t centos_dev_full .
+docker build -f centos_dev_full.Dockerfile -t centos_dev_full .
 ```
 
 ### 构建组件镜像
@@ -75,7 +78,7 @@ docker run -d -it -p 8848:8848 --env MYSQL_HOST=mysql_host --env MYSQL_PORT=mysq
 
 #### 后台 - zookeeper
 ```
-docker build --no-cache -f zookeeper.Dockerfile -t centos_zookeeper .
+docker build -f zookeeper.Dockerfile -t centos_zookeeper .
 
 单机模式
 docker run -d -it -p 2181:2181 centos_zookeeper
@@ -110,10 +113,41 @@ docker build -f pip2pi.Dockerfile -t centos_pip2pi
 docker run -d -it -p 8000:80 centos_pip2pi
 ```
 
+#### 大数据 - hdfs
+```
+# 构建
+docker build -f hdfs.Dockerfile -t centos_hdfs .
+
+# 运行
+docker run -d -it -p 8088:8088 -p 50070:50070 centos_hdfs
+```
+
+#### 大数据 - hive
+```
+# 构建（依赖 centos_hdfs）
+docker build -f hive.Dockerfile -t centos_hive .
+
+# 运行
+docker run -d -it -p 8088:8088 -p 50070:50070 -p 10000:10000 -e mysql_host=localhost -e mysql_port=3306 -e mysql_db=hive -e mysql_user=root -e mysql_pwd=root centos_hive
+```
+
+#### 大数据 - hue
+```
+# 构建编译基础镜像 (依赖 centos_minimal_7)
+docker build -f hue_base.Dockerfile -t centos_hue_base .
+
+# 构建 (依赖 centos_hue_base)
+docker build -f hue.Dockerfile -t centos_hue .
+
+# 运行
+docker run -d -it -p 8281:8281 -e mysql_host=localhost -e mysql_port=3306 -e mysql_db=hue -e mysql_user=root -e mysql_password=root centos_hue
+
+```
+
 #### 大数据 - druid
 ```
 # 构建编译基础镜像（需要包含 java, python 和 nodejs）
-docker build --no-cache -f druid_base.Dockerfile -t centos_druid_base .
+docker build -f druid_base.Dockerfile -t centos_druid_base .
 
 # 构建druid镜像
 docker build -f druid.Dockerfile -t centos_druid .
@@ -141,6 +175,7 @@ docker run -it -d -p 8072:8072 centos_airflow
 ```
 
 ### docker-compose 实践
+
 #### zookeeper cluster
 ```
 # todo

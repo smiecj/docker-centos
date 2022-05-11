@@ -1,6 +1,7 @@
 # a centos image smaller than centos_base only include yum repo fix and some basic component
 # for deploy simple service (such as wordpress)
-FROM centos:centos8.4.2105
+ARG version=8.4.2105
+FROM centos:centos${version}
 
 MAINTAINER smiecj smiecj@github.com
 

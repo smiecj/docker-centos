@@ -22,11 +22,11 @@ elif [[ $centos_version =~ 7.* ]]; then
         curl -Lo /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
     elif [[ "aarch64" == "$system_arch" ]]; then
         mv -f /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
-        cp -f ./yum/CentOS-7-epel.repo /etc/yum.repos.d/epel.repo
-        cp -f ./yum/CentOS-7-Base.repo /etc/yum.repos.d/CentOS-Base.repo
-        cp -f ./yum/RPM-GPG-KEY-CentOS-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-        cp -f ./yum/RPM-GPG-KEY-CentOS-7-aarch64 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
-        cp -f ./yum/RPM-GPG-KEY-EPEL-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+        cp -f /tmp/yum/CentOS-7-epel.repo /etc/yum.repos.d/epel.repo
+        cp -f /tmp/yum/CentOS-7-Base.repo /etc/yum.repos.d/CentOS-Base.repo
+        cp -f /tmp/yum/RPM-GPG-KEY-CentOS-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+        cp -f /tmp/yum/RPM-GPG-KEY-CentOS-7-aarch64 /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
+        cp -f /tmp/yum/RPM-GPG-KEY-EPEL-7 /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
         rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7-aarch64
         rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
     fi
