@@ -1,0 +1,5 @@
+#!/bin/bash
+
+prometheusstop
+
+prometheusstart

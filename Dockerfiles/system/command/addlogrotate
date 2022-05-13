@@ -1,0 +1,12 @@
+#!/bin/bash
+log_path=$1
+log_name=$2
+rotate_conf=/etc/logrotate.d/$log_name
+echo "$log_path{" > $rotate_conf
+echo "    copytruncate" >> $rotate_conf
+echo "    daily" >> $rotate_conf
+echo "    rotate 7" >> $rotate_conf
+echo "    missingok" >> $rotate_conf
+echo "    compress" >> $rotate_conf
+echo "    size 200M" >> $rotate_conf
+echo "}" >> $rotate_conf

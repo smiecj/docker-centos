@@ -1,0 +1,5 @@
+#!/bin/bash
+
+hudistop
+
+hudistart
