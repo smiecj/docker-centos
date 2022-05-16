@@ -8,15 +8,25 @@
 
 ## 项目目录
 ├── deployments
+
 ├──── 用于 k8s 的部署文件
+
 ├── Dockerfiles
+
 │   ├── backend
+
 │   ├──── 后台服务 Dockerfile
+
 │   ├── dev
+
 │   ├──── 开发用 Dockerfile，如 golang 环境基础镜像
+
 │   ├── emr
+
 │   ├──── 大数据组件 Dockerfile
+
 │   └── system
+
 │   └──── 系统 Dockerfile，如 centos_base
 
 ## 使用方式
@@ -215,9 +225,12 @@ Dockerfiles: 存放各个开发用到的 DockerFile
 ### readme 介绍
 项目背景 & makefile & vscode remote 开发 & compose 使用
 
-### 需要扩展的 dockerfile
-- 定时任务调度, 可结合 docker-compose 测试集群功能
-https://github.com/ouqiang/gocron
+### 需要扩展支持的组件 & dockerfile
+- backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能
+
+- backend - [TiDB](https://github.com/pingcap/tidb)
+
+- emr - [atlas](https://github.com/apache/atlas)
 
 ### centos_dev DockerFile 支持自定义需要安装的环境/组件
 可以在 docker run 中输入组件名，自动安装对应组件
