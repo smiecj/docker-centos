@@ -59,6 +59,9 @@ build_zookeeper:
 run_zookeeper_cluster:
 	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml up
 
+remove_zookeeper_cluster:
+	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml down --volumes
+
 ## nacos
 build_nacos:
 	docker build --no-cache -f ./Dockerfiles/backend/nacos/nacos.Dockerfile -t centos_nacos ./Dockerfiles/backend/nacos/
