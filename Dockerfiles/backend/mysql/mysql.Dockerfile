@@ -1,5 +1,15 @@
 FROM centos_minimal
 
+# ENV PORT=3306
+ENV ROOT_PASSWORD=root_Test1qaz
+ENV USER_DB=
+ARG mysql_scripts_path=/home/modules/mysql/scripts
+ARG mysql_init_sql_home=/home/modules/mysql/init_sql
+
+RUN mkdir -p ${mysql_scripts_path} && mkdir -p ${mysql_init_sql_home}
+COPY ./scripts/init-mysql.sh ${mysql_scripts_path}/
+RUN sed -i "s#{mysql_init_sql_home}#${mysql_init_sql_home}#g" ${mysql_scripts_path}/init-mysql.sh
+
 ## install mysql
 COPY ./env_mysql.sh /tmp/
 RUN cd /tmp && . ./env_mysql.sh && \
@@ -32,10 +42,11 @@ RUN /usr/bin/mysqld_pre_systemd
 COPY s6/ /etc/
 
 ## copy mysql password reset and connect script
-COPY ./scripts/mysql-reset-password.sh /usr/local/bin/mysqlresetpassword
-RUN chmod +x /usr/local/bin/mysqlresetpassword
 COPY ./scripts/mysql-connect.sh /usr/local/bin/mysqlconnect
 RUN chmod +x /usr/local/bin/mysqlconnect
 
 ## remove mysql rpm
 RUN cd /tmp && rm mysql-*.rpm && rm env_*.sh
+
+## init
+RUN echo "sh ${mysql_scripts_path}/init-mysql.sh" >> /init_service

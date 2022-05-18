@@ -1,2 +1,4 @@
 #!/bin/bash
+## wait mysql start and init mysql
+
 /usr/sbin/mysqld --user=root

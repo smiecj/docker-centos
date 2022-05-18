@@ -1,5 +1,4 @@
 system_arch=`uname -p`
-prometheus_version=2.33.4
 prometheus_download_url=https://github.com/prometheus/prometheus/releases/download/v${prometheus_version}/prometheus-${prometheus_version}.linux-armv7.tar.gz
 
 if [ "$system_arch" == "x86_64" ]; then

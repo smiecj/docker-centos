@@ -1,8 +1,8 @@
 #!/bin/bash
-set -euxo pipefail
 
+source /etc/profile
 rm -rf /root/.oh-my-zsh
-yum -y install zsh
+yum -y install zsh git
 
 ## online install
 # zsh_install_tmp_script=/tmp/install.sh
@@ -15,8 +15,9 @@ yum -y install zsh
 
 ## offline install
 pushd /tmp
-curl -L https://github.com/ohmyzsh/ohmyzsh/tarball/master | tar xz
-code_folder=`ls -l | grep ohmyzsh | sed 's/.* //g'` && mv $code_folder ~/.oh-my-zsh
+# curl -L https://github.com/ohmyzsh/ohmyzsh/tarball/master | tar xz
+# code_folder=`ls -l | grep ohmyzsh | sed 's/.* //g'` && mv $code_folder ~/.oh-my-zsh
+git clone https://github.com/ohmyzsh/ohmyzsh && mv ohmyzsh ~/.oh-my-zsh
 mv -f ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 popd
 
@@ -30,7 +31,11 @@ git clone https://gitee.com/atamagaii/zsh-autosuggestions.git ~/.oh-my-zsh/custo
 git clone https://gitee.com/atamagaii/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 
 sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' ~/.zshrc
+
+### don't auto update
+#### https://stackoverflow.com/questions/11378607/oh-my-zsh-disable-would-you-like-to-check-for-updates-prompt
 echo '''
+DISABLE_AUTO_UPDATE=true
 DISABLE_UPDATE_PROMPT=true
 
 source /etc/profile

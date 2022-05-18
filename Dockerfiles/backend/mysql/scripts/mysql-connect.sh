@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mysql -hlocalhost -p3306 -uroot -proot_Test1qaz
+mysql -hlocalhost -p3306 -uroot -p${ROOT_PASSWORD}

@@ -14,7 +14,7 @@ if [[ "singleton" == "${MODE}" ]]; then
 elif [[ "cluster" == "${MODE}" ]]; then
     cp -f zoo_cluster.cfg $zk_config_file
     ### split server info
-    node_list=($(echo $SERVER_INFO | tr "," "\n" | sort | uniq))
+    node_list=($(echo $SERVER_INFO | tr "," "\n"))
     index=1
     server_info=""
     for current_node in ${node_list[@]}

@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  nacos:
+    image: centos_nacos
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=d_nacos
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root_NACOS_123
+    ports:
+      - "8848:8848"
+    depends_on:
+      - mysql
+  mysql:
+    image: centos_mysql
+    environment:
+      - ROOT_PASSWORD=root_NACOS_123
+      - USER_DB=d_nacos
+    volumes:
+      - "./:/home/modules/mysql/init_sql"
+networks:
+  my-nacos:
