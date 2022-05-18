@@ -10,6 +10,7 @@ ARG go_version=1.18.1
 ARG repo_home=/home/repo
 ARG go_home=/usr/golang
 ARG go_repo_home=$repo_home/go
+ARG go_proxy=https://goproxy.cn,direct
 
 COPY env_golang.sh /tmp/
 
@@ -25,6 +26,6 @@ RUN echo -e '\n# go' >> /etc/profile && \
     echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> /etc/profile
 
 ## config: goproxy (if needed)
-RUN source /etc/profile && go env -w GOPROXY=https://goproxy.cn,direct
+RUN source /etc/profile && go env -w GOPROXY=${go_proxy}
 
 RUN rm -f /tmp/env_golang.sh

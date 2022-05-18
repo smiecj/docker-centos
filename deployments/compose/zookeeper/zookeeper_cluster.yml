@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  zookeeper1:
+    image: centos_zookeeper
+    # build:
+    #   context: .
+    #   dockerfile: zookeeper.Dockerfile
+    environment:
+      - MODE=cluster
+      - MYID=1
+      - SERVER_INFO=0.0.0.0:2888:3888,zookeeper2:2888:3888,zookeeper3:2888:3888
+    ports:
+      - "12181:2181"
+  zookeeper2:
+    image: centos_zookeeper
+    environment:
+      - MODE=cluster
+      - MYID=2
+      - SERVER_INFO=zookeeper1:2888:3888,0.0.0.0:2888:3888,zookeeper3:2888:3888
+  zookeeper3:
+    image: centos_zookeeper
+    environment:
+      - MODE=cluster
+      - MYID=3
+      - SERVER_INFO=zookeeper1:2888:3888,zookeeper2:2888:3888,0.0.0.0:2888:3888
+networks:
+  my-zookeeper-cluster:

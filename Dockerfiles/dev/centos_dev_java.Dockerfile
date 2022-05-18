@@ -17,8 +17,8 @@ COPY env_java.sh /tmp/
 RUN mkdir -p ${java_home}
 RUN mkdir -p ${java_repo_home}
 RUN cd ${java_home} && rm -rf *
-RUN  . /tmp/env_java.sh && cd ${java_home} && curl -LO $jdk_11_download_url && tar -xzvf $jdk_11_pkg && rm -f $jdk_11_pkg
-RUN . /tmp/env_java.sh && cd ${java_home} && curl -LO $jdk_8_download_url && tar -xzvf $jdk_8_pkg && rm -f $jdk_8_pkg
+RUN  . /tmp/env_java.sh && source /etc/profile && cd ${java_home} && curl -LO $jdk_11_download_url && tar -xzvf $jdk_11_pkg && rm -f $jdk_11_pkg
+RUN . /tmp/env_java.sh && source /etc/profile && cd ${java_home} && curl -LO $jdk_8_download_url && tar -xzvf $jdk_8_pkg && rm -f $jdk_8_pkg
 
 ## maven
 ARG maven_version=3.8.4
@@ -26,7 +26,7 @@ ARG maven_version=3.8.4
 ARG maven_download_url=https://archive.apache.org/dist/maven/maven-3/${maven_version}/binaries/apache-maven-${maven_version}-bin.tar.gz
 ARG maven_pkg=apache-maven-${maven_version}-bin.tar.gz
 
-RUN cd ${java_home} && curl -L ${maven_download_url} -o ${maven_pkg} && \
+RUN cd ${java_home} && source /etc/profile && curl -L ${maven_download_url} -o ${maven_pkg} && \
     tar -xzvf ${maven_pkg} && \
     rm -f ${maven_pkg}
 
@@ -49,7 +49,7 @@ ARG gradle_version=7.0.2
 ARG gradle_download_url=https://downloads.gradle-dn.com/distributions/gradle-$gradle_version-bin.zip
 ARG gradle_pkg=gradle-${gradle_version}-bin.zip
 
-RUN cd ${java_home} && curl -L ${gradle_download_url} -o ${gradle_pkg} && \
+RUN cd ${java_home} && source /etc/profile && curl -L ${gradle_download_url} -o ${gradle_pkg} && \
     unzip ${gradle_pkg} && rm -f ${gradle_pkg}
 
 ## profile
