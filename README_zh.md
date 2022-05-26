@@ -57,6 +57,7 @@
 |  开发周期   |  需求   | 功能  | 状态 |
 |  ----  | ---- | ---- | ---- |
 | 一期 |  规范 Dockerfile  | 安装脚本统一封装到 Dockerfile 中，通过 RUN 定义<br>体现层级结构，如: centos_hue -> centos_python -> centos_base | 已完成 |
+| 一期 |  dockerfile 支持更多大数据组件  | 支持 vm, tidb, atlas, superset | 实现中 |
 | 一期 |  compose 支持基本组件  | 支持 nacos、zk cluster | 实现中 |
 | 一期 |  readme 完善  | 项目背景 & makefile & vscode remote 开发 & compose 使用 | 实现中 |
 | 一期 |  makefile  | 所有镜像构建、启动服务指令都放在 makefile 中 | 实现中 |
