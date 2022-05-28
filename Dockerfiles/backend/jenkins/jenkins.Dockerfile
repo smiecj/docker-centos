@@ -32,8 +32,6 @@ RUN yum install -y docker-ce-cli
 
 ## user jenkins add to docker group (to access /var/run/docker.sock)
 RUN usermod -a -G docker jenkins
-## for docker in docker, must set 777 to sock
-RUN chmod 777 /var/run/docker.sock
 
 # scripts
 COPY ./scripts/jenkins-start.sh /usr/local/bin/jenkinsstart
