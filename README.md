@@ -31,6 +31,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | python | make build_dev_python | python develop env<br>miniforge: 4.12.0<br>python: 3.8 |
 |   | nodejs | make build_dev_nodejs | nodejs develop env<br>nodejs: v16.15.0 |
 |   | full | make build_dev_full | include all develop env above |
+| frontend  | vue admin | make build_vue_admin | vue-admin 4.4.0 |
 | middleware  | mysql | make build_mysql | mysql 8.0.27 |
 |   | redis | make build_redis | redis 7.0-rc2 |
 |   | prometheus | make build_prometheus | prometheus 2.33.4<br>grafana 8.4.2<br>alertmanager 0.23.0 |

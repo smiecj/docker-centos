@@ -27,6 +27,13 @@ build_dev_nodejs:
 build_dev_full:
 	docker build --no-cache -f ./Dockerfiles/dev/centos_dev_full.Dockerfile -t centos_dev_full ./Dockerfiles/dev
 
+# build frontend image
+build_vue_admin:
+	docker build --no-cache -f ./Dockerfiles/frontend/vue-admin/vue_admin.Dockerfile -t centos_vue ./Dockerfiles/frontend/vue-admin/
+
+run_vue_admin:
+	docker run -it -d --hostname test_vue --name dev_vue -p 9527:9527 centos_vue
+
 # build backend image
 ## mysql
 build_mysql:
