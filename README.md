@@ -48,6 +48,7 @@ note: build image & run container defail command refer: [Makefile](https://githu
 |  type   | service  | run command | feature
 |  ----  | ---- | ---- | ---- |
 |  middleware  | zookeeper | make run_zookeeper_cluster | zookeeper cluster(3 node)<br>connect on host: zkCli.sh -server localhost:12181<br>[refer](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
+|    | kafka | make run_kafka_cluster | kafka cluster(3 node) |
 |    | nacos | make run_nacos_mysql | nacos+mysql<br>address: http://localhost:8848 |
 |    | prometheus | **todo** | prometheus+grafana+alertmanager<br>[refer](https://github.com/docker/awesome-compose/tree/master/prometheus-grafana) |
 |  emr  | hadoop   | **todo** | hadoop cluster<br>[refer](https://zhuanlan.zhihu.com/p/421375012) |

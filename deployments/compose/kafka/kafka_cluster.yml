@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  # zk singleton
+  zookeeper:
+    image: centos_zookeeper
+    environment:
+      - MODE=singleton
+  # kafka cluster
+  kafka1:
+    image: centos_kafka
+    environment:
+      - zookeeper_server=zookeeper:2181
+      - MODE=cluster
+      - ID=0
+    depends_on:
+      - zookeeper
+  kafka2:
+    image: centos_kafka
+    environment:
+      - zookeeper_server=zookeeper:2181
+      - MODE=cluster
+      - ID=1
+    depends_on:
+      - zookeeper
+  kafka3:
+    image: centos_kafka
+    environment:
+      - zookeeper_server=zookeeper:2181
+      - MODE=cluster
+      - ID=2
+    depends_on:
+      - zookeeper
+networks:
+  my-kafka-cluster:

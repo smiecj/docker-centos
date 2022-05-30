@@ -6,7 +6,7 @@ build_minimal:
 	docker build --no-cache -f ./Dockerfiles/system/centos_minimal.Dockerfile -t centos_minimal ./Dockerfiles/system
 
 build_minimal_7:
-	docker build --no-cache -f ./Dockerfiles/system/centos_minimal.Dockerfile --build-arg version=7.9.2009 -t centos_minimal ./Dockerfiles/system
+	docker build --no-cache -f ./Dockerfiles/system/centos_minimal.Dockerfile --build-arg version=7.9.2009 -t centos_minimal_7 ./Dockerfiles/system
 
 # build dev image
 build_dev_golang:
@@ -56,11 +56,30 @@ run_prometheus:
 build_zookeeper:
 	docker build --no-cache -f ./Dockerfiles/backend/zookeeper/zookeeper.Dockerfile -t centos_zookeeper ./Dockerfiles/backend/zookeeper/
 
+run_zookeeper:
+	docker run -it -d --hostname test_zookeeper --name dev_zookeeper -p 12181:2181 centos_zookeeper
+
 run_zookeeper_cluster:
 	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml up
 
 remove_zookeeper_cluster:
 	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml down --volumes
+
+## kafka
+build_kafka:
+	docker build --network=host --no-cache -f ./Dockerfiles/backend/kafka/kafka_pkg.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
+
+build_kafka_compile:
+	docker build --no-cache -f ./Dockerfiles/backend/kafka/kafka_compile.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
+
+run_kafka:
+	docker run -it -d --hostname test_kafka --name dev_kafka -p 9092:9092 -e zookeeper_server=172.17.0.1:12181 centos_kafka
+
+run_kafka_cluster:
+	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml up
+
+remove_kafka_cluster:
+	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml down --volumes
 
 ## nacos
 build_nacos:
