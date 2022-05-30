@@ -30,6 +30,7 @@
 |   | python | make build_dev_python | python 开发镜像<br>miniforge: 4.12.0<br>python: 3.8 |
 |   | nodejs | make build_dev_nodejs | nodejs 开发镜像<br>nodejs: v16.15.0 |
 |   | full | make build_dev_full | 包含以上开发环境 |
+| 前端  | vue admin | make build_vue_admin | vue-admin 4.4.0 |
 | 中间件  | mysql | make build_mysql | mysql 8.0.27 |
 |   | redis | make build_redis | redis 7.0-rc2 |
 |   | prometheus | make build_prometheus | prometheus 2.33.4<br>grafana 8.4.2<br>alertmanager 0.23.0 |
