@@ -47,6 +47,7 @@
 |  类型   | 服务名  | 启动方式 | 功能
 |  ----  | ---- | ---- | ---- |
 |  中间件  | zookeeper | make run_zookeeper_cluster | zookeeper 三节点集群<br>开放地址: zkCli.sh -server localhost:12181<br>[参考资料](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
+|    | kafka | make run_kafka_cluster | kafka 三节点集群（zk 单点） |
 |    | nacos | make run_nacos_mysql | nacos+mysql<br>地址: http://localhost:8848 |
 |    | prometheus | todo | prometheus+grafana<br>[参考资料](https://github.com/docker/awesome-compose/tree/master/prometheus-grafana) |
 |  大数据  | hadoop   | todo | hadoop cluster<br>[参考资料](https://zhuanlan.zhihu.com/p/421375012) |

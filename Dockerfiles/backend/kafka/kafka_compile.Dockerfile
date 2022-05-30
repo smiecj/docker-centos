@@ -16,6 +16,8 @@ ARG kafka_pkg_folder=kafka_${scala_version}-${kafka_version}
 ENV zookeeper_server=127.0.0.1:2181
 ENV bootstrap_servers=localhost:9092
 ENV broker_port=9092
+ENV MODE=singleton
+ENV ID=0
 
 # compile kafka
 RUN mkdir -p ${kafka_module_home}

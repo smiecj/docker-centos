@@ -67,13 +67,19 @@ remove_zookeeper_cluster:
 
 ## kafka
 build_kafka:
-	docker build --network-host --no-cache -f ./Dockerfiles/backend/kafka/kafka_pkg.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
+	docker build --network=host --no-cache -f ./Dockerfiles/backend/kafka/kafka_pkg.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
 
 build_kafka_compile:
 	docker build --no-cache -f ./Dockerfiles/backend/kafka/kafka_compile.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
 
 run_kafka:
 	docker run -it -d --hostname test_kafka --name dev_kafka -p 9092:9092 -e zookeeper_server=172.17.0.1:12181 centos_kafka
+
+run_kafka_cluster:
+	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml up
+
+remove_kafka_cluster:
+	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml down --volumes
 
 ## nacos
 build_nacos:
