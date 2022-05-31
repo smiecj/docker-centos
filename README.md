@@ -13,7 +13,8 @@ Use dockerfile and compose file to build docker image and run develop environmen
   - compose: deployment on docker compose
 
 - Dockerfiles
-  - backend: service such as: zk, mysql, redis
+  - frontend: frontend service such as: vue admin, ant design
+  - backend: backend service such as: zk, mysql, redis
   - dev: development env such as golang, java, python, nodejs
   - emr: bigdata component, such as jupyter, hue
   - system: centos basic image
@@ -32,6 +33,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | nodejs | make build_dev_nodejs | nodejs develop env<br>nodejs: v16.15.0 |
 |   | full | make build_dev_full | include all develop env above |
 | frontend  | vue admin | make build_vue_admin | vue-admin 4.4.0 |
+|   | ant design | make build_ant_design | ant-design 5.2.0 |
 | middleware  | mysql | make build_mysql | mysql 8.0.27 |
 |   | redis | make build_redis | redis 7.0-rc2 |
 |   | prometheus | make build_prometheus | prometheus 2.33.4<br>grafana 8.4.2<br>alertmanager 0.23.0 |
