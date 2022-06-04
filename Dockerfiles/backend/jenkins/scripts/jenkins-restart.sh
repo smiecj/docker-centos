@@ -1,0 +1,5 @@
+#!/bin/bash
+
+jenkinsstop
+
+jenkinsstart

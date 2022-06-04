@@ -106,6 +106,20 @@ run_nacos_mysql:
 remove_nacos_mysql:
 	docker-compose -f ./deployments/compose/nacos/nacos_mysql.yml down --volumes
 
+## jenkins
+build_jenkins:
+	docker build --no-cache -f ./Dockerfiles/backend/jenkins/jenkins.Dockerfile -t centos_jenkins ./Dockerfiles/backend/jenkins/
+
+run_jenkins:
+	docker run -it -d --hostname test_jenkins --name dev_jenkins -p 8089:8089 -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.jenkins/workspace:/var/lib/jenkins/.jenkins/workspace centos_jenkins
+
+## git
+build_git:
+	docker build --no-cache -f ./Dockerfiles/backend/git/git.Dockerfile -t centos_git ./Dockerfiles/backend/git/
+
+run_git:
+	docker run -it -d --hostname test_git --name dev_git -p 2022:22 centos_git
+
 # build emr image
 ## airflow
 build_airflow:
