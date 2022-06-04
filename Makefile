@@ -27,6 +27,21 @@ build_dev_nodejs:
 build_dev_full:
 	docker build --no-cache -f ./Dockerfiles/dev/centos_dev_full.Dockerfile -t centos_dev_full ./Dockerfiles/dev
 
+# build frontend image
+## vue admin
+build_vue_admin:
+	docker build --no-cache -f ./Dockerfiles/frontend/vue-admin/vue_admin.Dockerfile -t centos_vue ./Dockerfiles/frontend/vue-admin/
+
+run_vue_admin:
+	docker run -it -d --hostname test_vue --name dev_vue -p 9527:9527 centos_vue
+
+## ant design
+build_ant_design:
+	docker build --no-cache -f ./Dockerfiles/frontend/ant-design/ant_design.Dockerfile -t centos_react ./Dockerfiles/frontend/ant-design/
+
+run_ant_design:
+	docker run -it -d --hostname test_react --name dev_react -p 8000:8000 centos_react
+
 # build backend image
 ## mysql
 build_mysql:
@@ -56,11 +71,30 @@ run_prometheus:
 build_zookeeper:
 	docker build --no-cache -f ./Dockerfiles/backend/zookeeper/zookeeper.Dockerfile -t centos_zookeeper ./Dockerfiles/backend/zookeeper/
 
+run_zookeeper:
+	docker run -it -d --hostname test_zookeeper --name dev_zookeeper -p 12181:2181 centos_zookeeper
+
 run_zookeeper_cluster:
 	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml up
 
 remove_zookeeper_cluster:
 	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml down --volumes
+
+## kafka
+build_kafka:
+	docker build --network=host --no-cache -f ./Dockerfiles/backend/kafka/kafka_pkg.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
+
+build_kafka_compile:
+	docker build --no-cache -f ./Dockerfiles/backend/kafka/kafka_compile.Dockerfile -t centos_kafka ./Dockerfiles/backend/kafka/
+
+run_kafka:
+	docker run -it -d --hostname test_kafka --name dev_kafka -p 9092:9092 -e zookeeper_server=172.17.0.1:12181 centos_kafka
+
+run_kafka_cluster:
+	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml up
+
+remove_kafka_cluster:
+	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml down --volumes
 
 ## nacos
 build_nacos:

@@ -13,7 +13,8 @@ Use dockerfile and compose file to build docker image and run develop environmen
   - compose: deployment on docker compose
 
 - Dockerfiles
-  - backend: service such as: zk, mysql, redis
+  - frontend: frontend service such as: vue admin, ant design
+  - backend: backend service such as: zk, mysql, redis
   - dev: development env such as golang, java, python, nodejs
   - emr: bigdata component, such as jupyter, hue
   - system: centos basic image
@@ -31,6 +32,8 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | python | make build_dev_python | python develop env<br>miniforge: 4.12.0<br>python: 3.8 |
 |   | nodejs | make build_dev_nodejs | nodejs develop env<br>nodejs: v16.15.0 |
 |   | full | make build_dev_full | include all develop env above |
+| frontend  | vue admin | make build_vue_admin | vue-admin 4.4.0 |
+|   | ant design | make build_ant_design | ant-design 5.2.0 |
 | middleware  | mysql | make build_mysql | mysql 8.0.27 |
 |   | redis | make build_redis | redis 7.0-rc2 |
 |   | prometheus | make build_prometheus | prometheus 2.33.4<br>grafana 8.4.2<br>alertmanager 0.23.0 |
@@ -48,6 +51,7 @@ note: build image & run container defail command refer: [Makefile](https://githu
 |  type   | service  | run command | feature
 |  ----  | ---- | ---- | ---- |
 |  middleware  | zookeeper | make run_zookeeper_cluster | zookeeper cluster(3 node)<br>connect on host: zkCli.sh -server localhost:12181<br>[refer](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
+|    | kafka | make run_kafka_cluster | kafka cluster(3 node) |
 |    | nacos | make run_nacos_mysql | nacos+mysql<br>address: http://localhost:8848 |
 |    | prometheus | **todo** | prometheus+grafana+alertmanager<br>[refer](https://github.com/docker/awesome-compose/tree/master/prometheus-grafana) |
 |  emr  | hadoop   | **todo** | hadoop cluster<br>[refer](https://zhuanlan.zhihu.com/p/421375012) |

@@ -12,10 +12,11 @@
   - compose: 用于 docker-compose 的部署文件
 
 - Dockerfiles
-  - backend: 中间件服务 Dockerfile
-  - dev: 开发用 Dockerfile，如 golang 环境基础镜像
-  - emr: 大数据组件 Dockerfile
-  - system: 系统 Dockerfile，如 centos_base
+  - frontend: 前端服务
+  - backend: 后台/中间件服务
+  - dev: 开发用基础镜像，如: golang 环境基础镜像
+  - emr: 大数据组件
+  - system: 系统基础镜像，如 centos_base
 
 ## 镜像整理和使用方式
 
@@ -30,6 +31,8 @@
 |   | python | make build_dev_python | python 开发镜像<br>miniforge: 4.12.0<br>python: 3.8 |
 |   | nodejs | make build_dev_nodejs | nodejs 开发镜像<br>nodejs: v16.15.0 |
 |   | full | make build_dev_full | 包含以上开发环境 |
+| 前端  | vue admin | make build_vue_admin | vue-admin 4.4.0 |
+|   | ant design | make build_ant_design | ant-design 5.2.0 |
 | 中间件  | mysql | make build_mysql | mysql 8.0.27 |
 |   | redis | make build_redis | redis 7.0-rc2 |
 |   | prometheus | make build_prometheus | prometheus 2.33.4<br>grafana 8.4.2<br>alertmanager 0.23.0 |
@@ -47,6 +50,7 @@
 |  类型   | 服务名  | 启动方式 | 功能
 |  ----  | ---- | ---- | ---- |
 |  中间件  | zookeeper | make run_zookeeper_cluster | zookeeper 三节点集群<br>开放地址: zkCli.sh -server localhost:12181<br>[参考资料](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
+|    | kafka | make run_kafka_cluster | kafka 三节点集群（zk 单点） |
 |    | nacos | make run_nacos_mysql | nacos+mysql<br>地址: http://localhost:8848 |
 |    | prometheus | todo | prometheus+grafana<br>[参考资料](https://github.com/docker/awesome-compose/tree/master/prometheus-grafana) |
 |  大数据  | hadoop   | todo | hadoop cluster<br>[参考资料](https://zhuanlan.zhihu.com/p/421375012) |
@@ -56,13 +60,12 @@
 
 |  开发周期   |  需求   | 功能  | 状态 |
 |  ----  | ---- | ---- | ---- |
-| 一期 |  规范 Dockerfile  | 安装脚本统一封装到 Dockerfile 中，通过 RUN 定义<br>体现层级结构，如: centos_hue -> centos_python -> centos_base | 已完成 |
-| 一期 |  dockerfile 支持更多大数据组件  | 支持 vm, tidb, atlas, superset | 实现中 |
-| 一期 |  compose 支持基本组件  | 支持 nacos、zk cluster | 实现中 |
-| 一期 |  readme 完善  | 项目背景 & makefile & vscode remote 开发 & compose 使用 | 实现中 |
-| 一期 |  makefile  | 所有镜像构建、启动服务指令都放在 makefile 中 | 实现中 |
-| 一期 |  readme 完善  | 项目背景 & makefile & vscode remote 开发 & compose 使用 | 实现中 |
-| 三期 |  通过 K8S 搭建zk 集群  | 声明 k8s 部署配置文件，一键启动 zk 集群 | |
+| 一期 |  规范 Dockerfile  | 安装脚本统一封装到 Dockerfile 中，通过 RUN 定义<br>体现层级结构，如: centos_hue -> centos_python -> centos_base | 完成 |
+| 一期 |  compose 支持基本组件  | 支持 nacos、zk cluster | 完成 |
+| 一期 |  readme 完善  | 项目背景 & makefile & vscode remote 开发 & compose 使用 | 完成 |
+| 一期 |  makefile  | 所有镜像构建、启动服务指令都放在 makefile 中 | 完成 |
+| 二期 |  compose  | 支持 hdfs cluster 本地搭建 | 实现中 |
+| 三期 |  通过 K8S 搭建zk 集群  | 声明 k8s 部署配置文件，一键启动 zk 集群 | 待实现 |
 | 持续迭代 |  需要扩展的 dockerfile  | backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能 | |
 |  |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb) | |
 |  |  需要扩展的 dockerfile  | emr - [atlas](https://github.com/apache/atlas) | |
