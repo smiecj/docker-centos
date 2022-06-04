@@ -77,7 +77,7 @@ build_jenkins:
 	docker build --no-cache -f ./Dockerfiles/backend/jenkins/jenkins.Dockerfile -t centos_jenkins ./Dockerfiles/backend/jenkins/
 
 run_jenkins:
-	docker run -it -d --hostname test_jenkins --name dev_jenkins -p 8089:8089 -v /var/run/docker.sock:/var/run/docker.sock centos_jenkins
+	docker run -it -d --hostname test_jenkins --name dev_jenkins -p 8089:8089 -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.jenkins/workspace:/var/lib/jenkins/.jenkins/workspace centos_jenkins
 
 ## git
 build_git:

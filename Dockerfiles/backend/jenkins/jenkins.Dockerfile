@@ -8,6 +8,8 @@ ENV PORT=8089
 
 ARG jenkins_module_home=/home/modules/jenkins
 ARG jenkins_log=${jenkins_module_home}/jenkins.log
+ARG jenkins_user_home=/var/lib/jenkins/.jenkins
+ARG jenkins_war_home=${jenkins_user_home}/war
 
 # install jenkins
 RUN cd /tmp && curl -L ${jenkins_download_url} -o ${jenkins_rpm_pkg} && rpm -ivh ${jenkins_rpm_pkg} && rm -f ${jenkins_rpm_pkg}
@@ -20,7 +22,7 @@ RUN yum -y install freetype freetype-devel
 ## https://github.com/AdoptOpenJDK/openjdk-docker/issues/75
 RUN yum -y install fontconfig && fc-cache --forc
 
-# install docker (for docker in docker)
+# install docker client (for docker in docker)
 RUN yum install -y yum-utils
 
 RUN yum-config-manager \
@@ -32,6 +34,11 @@ RUN yum install -y docker-ce-cli
 
 ## user jenkins add to docker group (to access /var/run/docker.sock)
 RUN usermod -a -G docker jenkins
+
+## init .jenkins/war folder (for docker in docker)
+RUN mkdir -p ${jenkins_war_home} && cp /usr/share/java/jenkins.war ${jenkins_war_home} && \
+    cd ${jenkins_war_home} && unzip jenkins.war && rm jenkins.war
+RUN chown -R jenkins:jenkins ${jenkins_user_home}
 
 # scripts
 COPY ./scripts/jenkins-start.sh /usr/local/bin/jenkinsstart

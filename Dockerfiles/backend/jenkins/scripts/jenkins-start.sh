@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## for docker in docker, must set 777 to sock
-sock_permission=`stat -c %a /var/run/docker.sock`
+sock_permission=`stat -c %a /var/run/docker.sock || true`
 if [ "777" != "$sock_permission" ]; then
     chmod 777 /var/run/docker.sock || true
 fi
