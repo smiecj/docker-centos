@@ -160,3 +160,11 @@ run_jupyter:
 
 run_jupyter_lab:
 	docker run -it -d --hostname test_jupyter --name dev_jupyter -e component=lab -p 8000:8000 centos_jupyter
+
+# build net image
+## xrdp
+build_xrdp:
+	docker build --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t centos_xrdp ./Dockerfiles/net/xrdp/
+
+run_xrdp:
+	docker run -it -d --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 3389:3389 centos_xrdp
