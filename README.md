@@ -45,6 +45,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | hue | make build_hue | hue 4.3.0 fix branch: [dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | jupyter | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
 | net  | xrdp | make build_xrdp | [xrdp](https://github.com/neutrinolabs/xrdp) |
+|   | easyconnect | make build_ec | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect)<br>clash<br>firefox |
 
 note: build image & run container defail command refer: [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 

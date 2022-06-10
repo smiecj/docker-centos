@@ -164,7 +164,14 @@ run_jupyter_lab:
 # build net image
 ## xrdp
 build_xrdp:
-	docker build --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t centos_xrdp ./Dockerfiles/net/xrdp/
+	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t centos_xrdp ./Dockerfiles/net/xrdp/
 
 run_xrdp:
-	docker run -it -d --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 3389:3389 centos_xrdp
+	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 3389:3389 -p 7881:7881 centos_xrdp /usr/sbin/init
+
+## easyconnect
+build_ec:
+	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/ec/easyconnect.Dockerfile -t centos_ec ./Dockerfiles/net/ec/
+
+run_ec:
+	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 3389:3389 -p 7881:7881 centos_ec /usr/sbin/init
