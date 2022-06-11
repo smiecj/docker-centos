@@ -12,11 +12,12 @@
   - compose: 用于 docker-compose 的部署文件
 
 - Dockerfiles
+  - system: 系统基础镜像，如 centos_base
+  - dev: 开发用基础镜像，如: golang 环境基础镜像
   - frontend: 前端服务
   - backend: 后台/中间件服务
-  - dev: 开发用基础镜像，如: golang 环境基础镜像
   - emr: 大数据组件
-  - system: 系统基础镜像，如 centos_base
+  - net: 用于调试网络的基础镜像
 
 ## 镜像整理和使用方式
 
@@ -42,6 +43,8 @@
 |   | hive | make build_hive | hive 3.1.2 |
 |   | hue | make build_hue | hue 4.3.0 修复版[dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | jupyter | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
+| net  | xrdp | make build_xrdp | [xrdp](https://github.com/neutrinolabs/xrdp) |
+|   | easyconnect | make build_ec | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect)<br>clash<br>firefox |
 
 注: 具体构建镜像 & 启动容器的指令可参考 [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 
@@ -69,6 +72,7 @@
 | 持续迭代 |  需要扩展的 dockerfile  | backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能 | |
 |  |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb) | |
 |  |  需要扩展的 dockerfile  | emr - [atlas](https://github.com/apache/atlas) | |
+|  |  需要扩展的 dockerfile  | emr - [presto](https://github.com/apache/atlas) | |
 
 ## 最后，欢迎大家一起交流一起学习！
 如果你对镜像或者这个仓库有任何疑问，都欢迎直接通过 issue 直接提问题和建议
