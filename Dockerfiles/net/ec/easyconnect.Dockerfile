@@ -39,4 +39,4 @@ RUN mkdir -p ${module_home} && cd ${module_home} && curl -LO ${firefox_pkg_url} 
     tar -jxvf ${firefox_pkg} && rm ${firefox_pkg}
 
 ## soft link to desktop
-RUN ln -s ${module_home}/${firefox_folder}/firefox ${HOME}/Desktop/firefox
+RUN mkdir -p ${HOME}/Desktop && ln -s ${module_home}/${firefox_folder}/firefox ${HOME}/Desktop/firefox
