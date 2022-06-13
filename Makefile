@@ -121,6 +121,12 @@ build_hdfs:
 run_hdfs:
 	docker run -d -it --hostname test_hdfs --name dev_hdfs -p 8088:8088 -p 50070:50070 centos_hdfs
 
+run_hdfs_cluster:
+	docker-compose -f ./deployments/compose/hdfs/hdfs_cluster.yml up
+
+remove_hdfs_cluster:
+	docker-compose -f ./deployments/compose/hdfs/hdfs_cluster.yml down --volumes
+
 ## hive
 build_hive:
 	docker build --no-cache -f ./Dockerfiles/emr/hive/hive.Dockerfile -t centos_hive ./Dockerfiles/emr/hive/

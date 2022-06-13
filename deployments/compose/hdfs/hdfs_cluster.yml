@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  hadoop1:
+    image: centos_hdfs
+    environment:
+      - DEFAULTFS=hdfs://hadoop1:8020
+      - DFS_REPLICATION=2
+      - RESOURCEMANAGER_HOSTNAME=hadoop1
+      - WORKERS=hadoop2,hadoop3
+      - HDFS_START=hdfsstartall
+    ports:
+      - "8088:8088"
+      - "50070:50070"
+    depends_on:
+      - hadoop2
+      - hadoop3
+  hadoop2:
+    image: centos_hdfs
+    environment:
+      - DEFAULTFS=hdfs://hadoop1:8020
+      - DFS_REPLICATION=2
+      - RESOURCEMANAGER_HOSTNAME=hadoop1
+      - WORKERS=hadoop2,hadoop3
+      - HDFS_START=hdfsnotstart
+  hadoop3:
+    image: centos_hdfs
+    environment:
+      - DEFAULTFS=hdfs://hadoop1:8020
+      - DFS_REPLICATION=2
+      - RESOURCEMANAGER_HOSTNAME=hadoop1
+      - WORKERS=hadoop2,hadoop3
+      - HDFS_START=hdfsnotstart
+networks:
+  my-hdfs-cluster:

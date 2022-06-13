@@ -30,6 +30,9 @@ RUN rm -rf /tmp/yum
 ### epel refer: https://docs.fedoraproject.org/en-US/epel/
 RUN yum -y install epel-release
 
+### make
+RUN yum -y install make
+
 ### other useful tools
 RUN yum -y install lsof net-tools vim lrzsz zip unzip git wget
 RUN yum -y install telnet logrotate

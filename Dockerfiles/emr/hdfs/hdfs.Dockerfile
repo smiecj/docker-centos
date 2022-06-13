@@ -6,9 +6,8 @@ ENV HOME /root
 # install hdfs
 ARG hdfs_version=3.3.2
 
-#hdfs_pkg_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/core/hadoop-$hdfs_version/hadoop-$hdfs_version.tar.gz
-#ARG hdfs_download_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-${hdfs_version}/hadoop-${hdfs_version}.tar.gz
-ARG hdfs_download_url=https://dlcdn.apache.org/hadoop/common/hadoop-${hdfs_version}/hadoop-${hdfs_version}.tar.gz
+ARG hdfs_download_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-${hdfs_version}/hadoop-${hdfs_version}.tar.gz
+# ARG hdfs_download_url=https://dlcdn.apache.org/hadoop/common/hadoop-${hdfs_version}/hadoop-${hdfs_version}.tar.gz
 ARG hdfs_pkg=hadoop-${hdfs_version}.tar.gz
 
 ARG hadoop_module_home=/home/modules/hadoop
@@ -43,6 +42,18 @@ RUN cd ${hadoop_module_home} && curl -LO ${hdfs_download_url} && tar -xzvf ${hdf
 ### copy config file
 COPY ./conf/* ${hdfs_module_home}/etc/hadoop/
 
+#### ENV
+ENV DEFAULTFS hdfs://localhost:8020
+ENV HADOOP_TMP_DIR /home/data/hdfs/tmp
+ENV DFS_REPLICATION 1
+ENV RESOURCEMANAGER_HOSTNAME localhost
+ENV WORKERS localhost
+
+#### init script
+RUN mkdir -p ${hdfs_scripts_home}
+COPY ./scripts/init-hdfs.sh ${hdfs_scripts_home}
+RUN sed -i "s#{hdfs_module_home}#${hdfs_module_home}#g" ${hdfs_scripts_home}/init-hdfs.sh
+
 ### link config path
 RUN mkdir -p /etc/hadoop
 RUN ln -s ${hdfs_module_home}/etc/hadoop /etc/hadoop/conf
@@ -67,7 +78,7 @@ RUN source /etc/profile && \
     sed -i "s@export JAVA_HOME.*@export JAVA_HOME=$JAVA_HOME@g" ${hdfs_module_home}/etc/hadoop/hadoop-env.sh
 
 ## namenode init
-RUN source /etc/profile && ${hdfs_module_home}/bin/hdfs namenode -format
+#RUN source /etc/profile && echo 'Y' | ${hdfs_module_home}/bin/hdfs namenode -format
 
 ## env init
 ### ssh
@@ -88,10 +99,15 @@ RUN chsh -s /bin/bash
 COPY ./scripts/hdfs-start.sh /usr/local/bin/hdfsstart
 COPY ./scripts/hdfs-stop.sh /usr/local/bin/hdfsstop
 COPY ./scripts/hdfs-restart.sh /usr/local/bin/hdfsrestart
+COPY ./scripts/hdfs-start-all.sh /usr/local/bin/hdfsstartall
+COPY ./scripts/hdfs-stop-all.sh /usr/local/bin/hdfsstopall
+COPY ./scripts/hdfs-not-start.sh /usr/local/bin/hdfsnotstart
 RUN sed -i "s#{hdfs_module_home}#${hdfs_module_home}#g" /usr/local/bin/hdfsstart && \
     sed -i "s#{dfs_log_path}#${dfs_log_path}#g" /usr/local/bin/hdfsstart && \
     sed -i "s#{yarn_log_path}#${yarn_log_path}#g" /usr/local/bin/hdfsstart && \
-    chmod +x /usr/local/bin/hdfsstart && chmod +x /usr/local/bin/hdfsstop && chmod +x /usr/local/bin/hdfsrestart
+    sed -i "s#{hdfs_module_home}#${hdfs_module_home}#g" /usr/local/bin/hdfsstartall && \
+    sed -i "s#{hdfs_module_home}#${hdfs_module_home}#g" /usr/local/bin/hdfsstopall && \
+    chmod +x /usr/local/bin/*
 
 ### set hdfs profile (hive will use)
 RUN echo -e """\n\
@@ -104,7 +120,8 @@ export HADOOP_MAPRED_HOME=\$HADOOP_HOME\n\
 
 ### add and enable hdfs service
 #### hdfs depend sshd service started, so need execute background
-RUN echo "nohup hdfsstart > /dev/null 2>&1 &" >> /init_service
+ENV HDFS_START hdfsstart
+RUN echo "source /etc/profile && sh ${hdfs_scripts_home}/init-hdfs.sh && nohup \${HDFS_START} > /dev/null 2>&1 &" >> /init_service
 
 ### add log rotate
 RUN addlogrotate ${dfs_log_path} hdfs-dfs
