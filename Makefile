@@ -118,6 +118,9 @@ run_airflow:
 build_hdfs:
 	docker build --no-cache -f ./Dockerfiles/emr/hdfs/hdfs.Dockerfile -t centos_hdfs ./Dockerfiles/emr/hdfs/
 
+build_hdfs_full:
+	docker build --no-cache -f ./Dockerfiles/emr/hdfs/hdfs_full.Dockerfile -t centos_hdfs_full ./Dockerfiles/emr/hdfs/
+
 run_hdfs:
 	docker run -d -it --hostname test_hdfs --name dev_hdfs -p 8088:8088 -p 50070:50070 centos_hdfs
 
@@ -146,6 +149,10 @@ run_hue:
 build_jupyter:
 	docker build --no-cache -f ./Dockerfiles/emr/jupyter/jupyter_base.Dockerfile -t centos_jupyter_base ./Dockerfiles/emr/jupyter/
 	docker build --no-cache -f ./Dockerfiles/emr/jupyter/jupyter.Dockerfile -t centos_jupyter ./Dockerfiles/emr/jupyter/
+
+build_jupyter_2:
+	docker build --no-cache -f ./Dockerfiles/emr/jupyter/jupyter_base.Dockerfile -t centos_jupyter_base ./Dockerfiles/emr/jupyter/
+	docker build --build-arg jupyter_version=2 --no-cache -f ./Dockerfiles/emr/jupyter/jupyter.Dockerfile -t centos_jupyter ./Dockerfiles/emr/jupyter/
 
 run_jupyter:
 	docker run -it -d --hostname test_jupyter --name dev_jupyter -p 8000:8000 centos_jupyter

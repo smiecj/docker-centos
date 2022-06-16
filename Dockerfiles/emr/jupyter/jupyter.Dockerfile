@@ -1,6 +1,8 @@
 # install jupyter (notebook or lab) on default conda env
 FROM centos_jupyter_base
 
+ARG jupyter_version=3
+
 # install jupyter
 ENV component=notebook
 ARG jupyter_home=/home/modules/jupyter
@@ -50,8 +52,9 @@ do\
 done
 
 ## install jupyter requirements
-COPY ./requirements_jupyter.txt /tmp/
-RUN python3 -m pip install -r /tmp/requirements_jupyter.txt --quiet --no-cache-dir -i ${pip_index} --trusted-host ${pip_index_host} -vvv
+COPY ./requirements_jupyter*.txt /tmp/
+RUN python3 -m pip install -r /tmp/requirements_jupyter_${jupyter_version}.txt --quiet --no-cache-dir -i ${pip_index} --trusted-host ${pip_index_host} -vvv
+RUN rm /tmp/requirements_jupyter*.txt
 
 ## config jupyter proxy
 RUN echo "export CONFIGPROXY_AUTH_TOKEN=${jupyter_proxy_token}" >> /etc/profile
