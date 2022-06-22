@@ -159,3 +159,11 @@ run_jupyter:
 
 run_jupyter_lab:
 	docker run -it -d --hostname test_jupyter --name dev_jupyter -e component=lab -p 8000:8000 centos_jupyter
+
+## presto
+build_presto:
+	docker build --no-cache -f ./Dockerfiles/emr/presto/presto_base.Dockerfile -t centos_presto_base ./Dockerfiles/emr/presto/
+	docker build --no-cache -f ./Dockerfiles/emr/presto/presto.Dockerfile -t centos_presto ./Dockerfiles/emr/presto/
+
+run_presto:
+	docker run -d -it --hostname test_presto --name dev_presto -p 8080:8080 -e HIVE_METASTORE_URL=hive_metastore_host:hive_metastore_port -e HADOOP_CONF_DIR=/etc/hadoop/conf -v /etc/hadoop/conf:/etc/hadoop/conf centos_presto

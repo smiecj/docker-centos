@@ -42,6 +42,7 @@
 |   | hive | make build_hive | hive 3.1.2 |
 |   | hue | make build_hue | hue 4.3.0 修复版[dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | jupyter | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
+|   | presto | make build_presto | presto 0.273.3 |
 
 注: 具体构建镜像 & 启动容器的指令可参考 [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 
@@ -53,7 +54,7 @@
 |    | kafka | make run_kafka_cluster | kafka 三节点集群（zk 单点） |
 |    | nacos | make run_nacos_mysql | nacos+mysql<br>地址: http://localhost:8848 |
 |    | prometheus | todo | prometheus+grafana<br>[参考资料](https://github.com/docker/awesome-compose/tree/master/prometheus-grafana) |
-|  大数据  | hadoop   | todo | hadoop cluster<br>[参考资料](https://zhuanlan.zhihu.com/p/421375012) |
+|  大数据  | hadoop   | make run_hdfs_cluster | hadoop cluster<br>[参考资料](https://zhuanlan.zhihu.com/p/421375012) |
 |  后台+前端  |  |  | |
 
 ## 待规划需求

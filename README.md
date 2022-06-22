@@ -43,6 +43,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | hive | make build_hive | hive 3.1.2 |
 |   | hue | make build_hue | hue 4.3.0 fix branch: [dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | jupyter | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
+|   | presto | make build_presto | presto 0.273.3 |
 
 note: build image & run container defail command refer: [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 
@@ -54,5 +55,5 @@ note: build image & run container defail command refer: [Makefile](https://githu
 |    | kafka | make run_kafka_cluster | kafka cluster(3 node) |
 |    | nacos | make run_nacos_mysql | nacos+mysql<br>address: http://localhost:8848 |
 |    | prometheus | **todo** | prometheus+grafana+alertmanager<br>[refer](https://github.com/docker/awesome-compose/tree/master/prometheus-grafana) |
-|  emr  | hadoop   | **todo** | hadoop cluster<br>[refer](https://zhuanlan.zhihu.com/p/421375012) |
+|  emr  | hadoop   | make run_hdfs_cluster | hadoop cluster<br>[refer](https://zhuanlan.zhihu.com/p/421375012) |
 |  web+backend  |  |  | |
