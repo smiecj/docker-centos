@@ -133,6 +133,14 @@ do\
     echo -e """{\n\
         \"continuousHinting\": true\n\
     }""" > ${lsp_user_conf_home}/completion.jupyterlab-settings && \
+
+    #### dark theme
+    apputils_conf_home=/home/${user_info_arr[0]}/.jupyter/lab/user-settings/@jupyterlab/apputils-extension && \
+    mkdir -p ${apputils_conf_home} && \
+    echo -e """{\n\
+        \"theme\": \"JupyterLab Dark\"\n\
+    }""" > ${apputils_conf_home}/themes.jupyterlab-settings && \
+
     chown -R jupyter:jupyter /home/${user_info_arr[0]}/.jupyter; \
 done
 
@@ -158,3 +166,8 @@ RUN echo "sh ${jupyter_scripts_home}/init-jupyter.sh && jupyterstart" >> /init_s
 
 ## jupyterhub log rotate
 RUN addlogrotate $jupyterhub_log jupyterhub
+
+## fix-jupyterhub start failed: load notebook.base.handlers.IPythonHandler on wrong package(jupyter_server)
+RUN site_package_path=`python3 -c "import sys; print(sys.path)" | sed "s/', '/\n/g" | sed "s#\['##g" | sed "s#'\]##g" | grep site-packages | sed -n '1p'` && \
+    sed -i "s/if they have been imported/if they have been imported\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py && \
+    sed -i "s/base_handlers.append(import_item(base_handler_name))/base_handlers.append(import_item(base_handler_name))\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py
