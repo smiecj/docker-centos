@@ -26,3 +26,6 @@ RUN echo -e """\n# rust\n\
 export CARGO_HOME=$CARGO_HOME\n\
 export PATH=\$PATH:\$CARGO_HOME/bin\n\
 """ >> /etc/profile
+
+## install toolchain
+RUN source /etc/profile && rustup default stable

@@ -1,12 +1,10 @@
 #!/bin/bash
 
-mysql_log_file=/var/log/mysqld.log
-
 # init mysql (only for first time)
 ## refer: mysql official entrypoint.sh: https://github.com/docker-library/mysql/blob/master/5.7/docker-entrypoint.sh
 
 ## get default password
-origin_mysql_password=`cat $mysql_log_file | grep 'temporary password' | sed 's/.*temporary password.* //g'`
+origin_mysql_password=`cat ${mysql_log_file} | grep 'temporary password' | sed 's/.*temporary password.* //g'`
 if [ -z "$origin_mysql_password" ]; then
     echo "origin mysql password not exist, will exit init"
     exit
@@ -42,4 +40,7 @@ fi
 /usr/bin/mysqladmin -uroot -p${ROOT_PASSWORD} shutdown
 
 ## remove origin mysql log
-rm -f $mysql_log_file
+echo "" > ${mysql_log_file}
+
+## todo: rotate mysql log
+### https://knowledge.broadcom.com/external/article/106971/varlog-full-because-of-very-large-mysqld.html

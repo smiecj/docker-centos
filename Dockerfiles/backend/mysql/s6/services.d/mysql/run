@@ -1,4 +1,4 @@
 #!/bin/bash
 ## wait mysql start and init mysql
 
-/usr/sbin/mysqld --user=root
+/usr/sbin/mysqld --user=root --datadir=${DATA_DIR}

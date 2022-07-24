@@ -12,7 +12,7 @@ echo $sftp_test_user_name:$sftp_test_user_pwd | chpasswd
 # add sshd config
 echo -e """\
 Match Group $sftp_group_name\n\
-ChrootDirectory $sftp_data_home\n\
+ChrootDirectory $sftp_data_home/%u\n\
 ForceCommand internal-sftp\n\
 """ >> /etc/ssh/sshd_config
 

@@ -34,12 +34,7 @@ sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/
 
 ### don't auto update
 #### https://stackoverflow.com/questions/11378607/oh-my-zsh-disable-would-you-like-to-check-for-updates-prompt
-echo '''
-DISABLE_AUTO_UPDATE=true
-DISABLE_UPDATE_PROMPT=true
-
-source /etc/profile
-''' >> ~/.zshrc
+sed -i '1s/^/DISABLE_AUTO_UPDATE=true\nDISABLE_UPDATE_PROMPT=true\n/' ~/.zshrc
 
 ### theme config
 #### prompt: show user and hostname
@@ -52,3 +47,11 @@ echo "setopt nonomatch" >> ~/.zshrc
 
 ### not share history between session
 echo "unsetopt share_history" >> ~/.zshrc
+
+### source profile
+echo "source /etc/profile" >> ~/.zshrc
+
+### set zsh ignore git status to avoid too slow
+#### https://stackoverflow.com/a/25864063
+git config --global --add oh-my-zsh.hide-status 1
+git config --global --add oh-my-zsh.hide-dirty 1
