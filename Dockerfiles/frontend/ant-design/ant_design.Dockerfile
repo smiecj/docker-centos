@@ -1,4 +1,4 @@
-FROM centos_nodejs
+FROM ${NODEJS_IMAGE}
 
 ARG ant_version=v5.2.0
 ARG ant_short_version=5.2.0

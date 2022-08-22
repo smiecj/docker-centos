@@ -1,29 +1,22 @@
 #!/bin/bash
-set -euxo pipefail
 
-script_full_path=$(realpath $0)
-home_path=$(dirname $script_full_path)
-pushd $home_path
+current_proxy=`cat /etc/profile | grep http_proxy`
+if [[ "$current_proxy" != "" ]]; then
+    exit 0
+fi
 
-. ./env_system.sh
+default_http_proxy=http://host.docker.internal:7890
+default_https_proxy=https://host.docker.internal:7890
 
-## 设置 docker 镜像内部接口
-## 一般在开启代理的时候需要设置
-for proxy_host in ${proxy_host_array[@]}
-do
-    for proxy_port in ${proxy_port_array[@]}
-    do
-        telnet_output=`timeout 1 telnet $proxy_host $proxy_port 2>&1` || true
-        telnet_refused_msg=`echo $telnet_output | grep "Connection refused" || true`
-        telnet_host_unknown_msg=`echo $telnet_output | grep "Unknown host" || true`
-        if [ -n "$telnet_output" ] && [ -z "$telnet_refused_msg" ] && [ -z "$telnet_host_unknown_msg" ]; then
-            echo "export http_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
-            echo "export https_proxy=http://$proxy_host:$proxy_port" >> /etc/profile
-            break
-        fi
-    done
-    current_proxy=`cat /etc/profile | grep http_proxy || true`
-    if [ -n "$current_proxy" ]; then
-        break
+if [[ "${HAS_PROXY}" == "true" ]]; then
+    # set default proxy or user proxy
+    http_proxy=default_http_proxy
+    https_proxy=default_https_proxy
+    if [[ "${HTTP_PROXY}" != "" ]]; then
+        echo "export http_proxy=${HTTP_PROXY}" >> /etc/profile
+        echo "export https_proxy=${HTTPS_PROXY}" >> /etc/profile
+    else
+        echo "export http_proxy=${default_http_proxy}" >> /etc/profile
+        echo "export https_proxy=${default_https_proxy}" >> /etc/profile
     fi
-done
+fi
