@@ -1,4 +1,4 @@
-FROM centos_base
+FROM ${BASE_IMAGE}
 
 ENV PORT=3306
 ENV ROOT_PASSWORD=root_Test1qaz
@@ -21,7 +21,8 @@ ARG mysql_source_pkg_url=${mysql_download_repo}/MySQL-${mysql_short_version}/mys
 ARG mysql_source_pkg=mysql-boost-${mysql_version}.tar.gz
 ARG mysql_source_folder=mysql-${mysql_version}
 
-ENV mysql_log_file=/var/log/mysqld.log
+ENV MYSQL_LOG=/var/log/mysqld.log
+ENV MYSQL_PID=/var/run/mysqld/mysqld.pid
 
 # env init
 ARG TARGETARCH
@@ -54,10 +55,11 @@ RUN mkdir -p ${mysql_module_home} && cd ${mysql_module_home} && curl -LO ${mysql
 
 # link mysql to bin path
 RUN ln -s ${mysql_module_home}/bin/mysql /usr/sbin/mysql && \
-    ln -s ${mysql_module_home}/bin/mysqld /usr/sbin/mysqld
+    ln -s ${mysql_module_home}/bin/mysqld /usr/sbin/mysqld && \
+    ln -s ${mysql_module_home}/bin/mysqladmin /usr/sbin/mysqladmin
 
-# init mysql data dir
-RUN ${mysql_module_home}/bin/mysqld --initialize --console > ${mysql_log_file} 2>&1
+# copy cnf template file
+COPY ./config/my.cnf_template /etc/
 
 # s6
 COPY s6/ /etc/

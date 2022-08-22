@@ -1,4 +1,5 @@
-FROM centos_minimal
+ARG MINIMAL_IMAGE
+FROM ${MINIMAL_IMAGE}
 
 # ENV PORT=3306
 ENV ROOT_PASSWORD=root_Test1qaz
@@ -11,7 +12,8 @@ ARG mysql_short_version="8.0"
 ARG mysql_version="8.0.27-1"
 ARG system_version="el7"
 
-ENV mysql_log=/var/log/mysqld.log
+ENV MYSQL_LOG=/var/log/mysqld.log
+ENV MYSQL_PID=/var/run/mysqld/mysqld.pid
 
 # ARG mysql_repo_url="https://cdn.mysql.com/Downloads"
 ARG mysql_repo_url="https://mirrors.tuna.tsinghua.edu.cn/mysql/downloads"
@@ -58,9 +60,8 @@ rpm -ivh $mysql_client_rpm_name && \
 rpm -ivh $mysql_server_rpm_name && \
 rm *.rpm
 
-## init mysql data dir
-# RUN mysqld --initialize
-RUN /usr/bin/mysqld_pre_systemd
+# copy cnf template file
+COPY ./config/my.cnf_template /etc/
 
 ## s6
 COPY s6/ /etc/
