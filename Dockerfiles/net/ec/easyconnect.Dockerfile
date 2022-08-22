@@ -1,4 +1,5 @@
-FROM centos_xrdp
+ARG XRDP_IMAGE
+FROM ${XRDP_IMAGE}
 
 ARG module_home=/home/modules
 
