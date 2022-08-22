@@ -38,7 +38,7 @@
 |   | [mongodb](https://www.mongodb.com) | make build_mongo | mongo 6.0.0 |
 |   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>[grafana](https://grafana.com) 8.4.2<br>alertmanager 0.23.0 |
 |   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.6.3 |
-| emr  | airflow | make build_airflow | airflow 2.1.2 |
+| emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.1.2 |
 |   | [hdfs](https://hadoop.apache.org) | make build_hdfs | hdfs 3.3.2 |
 |   | [hive](https://hive.apache.org) | make build_hive | hive 3.1.2 |
 |   | [knox](https://knox.apache.org) | make build_knox | knox 1.6.1 |
@@ -67,15 +67,15 @@ REPO=mzsmieli make run_nacos_mysql
 # 将下载: mzsmieli/centos_mysql:v1.0.0 and mzsmieli/centos_nacos:v1.0.0
 ```
 
-### docker-compose
+### 服务
 
 |  类型   | 服务名  | 启动方式 | 功能
 |  ----  | ---- | ---- | ---- |
-|  中间件  | zookeeper | make run_zookeeper_cluster | zookeeper 三节点集群<br>开放地址: zkCli.sh -server localhost:12181<br>[参考资料](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
-|    | kafka | make run_kafka_cluster | kafka 三节点集群（zk 单点） |
-|    | nacos | make run_nacos_mysql | nacos+mysql<br>地址: http://localhost:8848 |
-|    | prometheus | todo | prometheus+grafana<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
-|  大数据  | hadoop   | make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
+|  中间件  | zookeeper | REPO=mzsmieli make run_zookeeper_cluster | zookeeper 三节点集群<br>开放地址: zkCli.sh -server localhost:12181<br>[参考资料](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
+|    | kafka | REPO=mzsmieli make run_kafka_cluster | kafka 三节点集群（zk 单点） |
+|    | nacos | REPO=mzsmieli make run_nacos_mysql | nacos+mysql<br>地址: http://localhost:8848 |
+|    | prometheus | REPO=mzsmieli make run_prometheus | prometheus+grafana<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
+|  大数据  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
 |  后台+前端  |  |  | |
 
 ## 待规划需求

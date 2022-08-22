@@ -39,7 +39,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | [mongodb](https://www.mongodb.com) | make build_mongo | mongo 6.0.0 |
 |   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>[grafana](https://grafana.com) 8.4.2<br>alertmanager 0.23.0 |
 |   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.6.3 |
-| emr  | airflow | make build_airflow | airflow 2.1.2 |
+| emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.1.2 |
 |   | [hdfs](https://hadoop.apache.org) | make build_hdfs | hdfs 3.3.2 |
 |   | [hive](https://hive.apache.org) | make build_hive | hive 3.1.2 |
 |   | [knox](https://knox.apache.org) | make build_knox | knox 1.6.1 |
@@ -71,13 +71,13 @@ REPO=mzsmieli make run_nacos_mysql
 # will pull mzsmieli/centos_mysql:v1.0.0 and mzsmieli/centos_nacos:v1.0.0
 ```
 
-### docker-compose
+### services
 
 |  type   | service  | run command | feature
 |  ----  | ---- | ---- | ---- |
-|  middleware  | zookeeper | make run_zookeeper_cluster | zookeeper cluster(3 node)<br>connect on host: zkCli.sh -server localhost:12181<br>[refer](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
-|    | kafka | make run_kafka_cluster | kafka cluster(3 node) |
-|    | nacos | make run_nacos_mysql | nacos+mysql<br>address: http://localhost:8848 |
-|    | prometheus | **todo** | prometheus+grafana+alertmanager<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
-|  emr  | hadoop   | make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
+|  middleware  | zookeeper | REPO=mzsmieli make run_zookeeper_cluster | zookeeper cluster(3 node)<br>connect on host: zkCli.sh -server localhost:12181<br>[refer](https://github.com/acntech/docker-zookeeper/blob/develop/docker-compose.cluster.yml) |
+|    | kafka | REPO=mzsmieli make run_kafka_cluster | kafka cluster(3 node) |
+|    | nacos | REPO=mzsmieli make run_nacos_mysql | nacos+mysql<br>address: http://localhost:8848 |
+|    | prometheus | REPO=mzsmieli make run_prometheus | prometheus+grafana+alertmanager<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
+|  emr  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
 |  web+backend  | |  | |
