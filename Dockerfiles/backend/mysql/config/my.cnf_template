@@ -1,0 +1,7 @@
+[mysqld]
+
+datadir={DATA_DIR}
+socket={DATA_DIR}/mysql.sock
+
+log-error={MYSQL_LOG}
+pid-file={MYSQL_PID}

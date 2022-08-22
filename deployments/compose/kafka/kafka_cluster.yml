@@ -2,12 +2,12 @@ version: "3.9"
 services:
   # zk singleton
   zookeeper:
-    image: centos_zookeeper
+    image: ${ZOOKEEPER_IMAGE}
     environment:
       - MODE=singleton
   # kafka cluster
   kafka1:
-    image: centos_kafka
+    image: ${KAFKA_IMAGE}
     environment:
       - zookeeper_server=zookeeper:2181
       - MODE=cluster
@@ -15,7 +15,7 @@ services:
     depends_on:
       - zookeeper
   kafka2:
-    image: centos_kafka
+    image: ${KAFKA_IMAGE}
     environment:
       - zookeeper_server=zookeeper:2181
       - MODE=cluster
@@ -23,7 +23,7 @@ services:
     depends_on:
       - zookeeper
   kafka3:
-    image: centos_kafka
+    image: ${KAFKA_IMAGE}
     environment:
       - zookeeper_server=zookeeper:2181
       - MODE=cluster

@@ -1,4 +1,5 @@
-FROM centos_java AS java_base
+ARG JAVA_IMAGE
+FROM ${JAVA_IMAGE} AS java_base
 
 # zookeeper config
 ARG zookeeper_home=/home/modules/zookeeper

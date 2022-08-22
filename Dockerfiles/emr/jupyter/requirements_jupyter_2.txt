@@ -1,0 +1,37 @@
+# python base
+attrs==19.3.0
+jedi==0.17.2
+packaging==20.9
+python-dateutil==2.8.2
+python-dotenv==0.20.0
+pytz==2021.1
+requests==2.25.1
+wheel==0.36.2
+zope.interface==5.1.0
+pandas==1.2.4
+numpy==1.20.3
+
+# jupyter base
+jupyter-contrib-core==0.3.3
+jupyter-contrib-nbextensions==0.5.1
+jupyter-client==7.3.4
+jupyter-core==4.10.0
+jupyter-telemetry==0.1.0
+jupyterhub==2.3.1
+jupyterhub-idle-culler==1.2.1
+jupyterlab==2.3.2
+jupyterlab-pygments==0.2.2
+jupyterlab-server==1.2.0
+
+## notebook
+notebook==6.4.12
+
+## kernel
+ipykernel==6.12.1
+ipython==8.2.0
+ipython-genutils==0.2.0
+
+# plugins
+## lsp
+jupyter-lsp==0.9.3
+python-lsp-server==1.4.1

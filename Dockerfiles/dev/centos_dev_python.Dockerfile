@@ -1,4 +1,5 @@
-FROM centos_base AS base
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS base
 
 MAINTAINER smiecj smiecj@github.com
 
@@ -6,7 +7,8 @@ USER root
 
 # install python
 
-ARG conda_forge_version=4.12.0-0
+## fix: conda version from repo
+## ARG conda_forge_version=4.12.0-0
 ARG conda_install_script=miniforge_install.sh
 
 ARG miniconda_install_path="/usr/local/miniconda"

@@ -1,4 +1,5 @@
-FROM centos_base AS base
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS base
 
 MAINTAINER smiecj smiecj@github.com
 
@@ -23,6 +24,7 @@ RUN . /tmp/env_golang.sh && cd ${go_home} && curl -LO $go_download_url && tar -x
 RUN echo -e '\n# go' >> /etc/profile && \
     echo "export GOROOT=$go_home/go" >> /etc/profile && \
     echo "export GOPATH=$go_repo_home" >> /etc/profile && \
+    echo "export GOPROXY=$go_proxy" >> /etc/profile && \
     echo 'export PATH=$PATH:$GOROOT/bin:$GOPATH/bin' >> /etc/profile
 
 ## config: goproxy (if needed)

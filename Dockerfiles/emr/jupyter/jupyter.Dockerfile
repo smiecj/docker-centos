@@ -1,5 +1,8 @@
 # install jupyter (notebook or lab) on default conda env
-FROM centos_jupyter_base
+ARG JUPYTER_BASE_IMAGE
+FROM ${JUPYTER_BASE_IMAGE}
+
+ARG jupyter_version=3
 
 # install jupyter
 ENV component=notebook
@@ -50,8 +53,9 @@ do\
 done
 
 ## install jupyter requirements
-COPY ./requirements_jupyter.txt /tmp/
-RUN python3 -m pip install -r /tmp/requirements_jupyter.txt --quiet --no-cache-dir -i ${pip_index} --trusted-host ${pip_index_host} -vvv
+COPY ./requirements_jupyter*.txt /tmp/
+RUN python3 -m pip install -r /tmp/requirements_jupyter_${jupyter_version}.txt --quiet --no-cache-dir -i ${pip_index} --trusted-host ${pip_index_host} -vvv
+RUN rm /tmp/requirements_jupyter*.txt
 
 ## config jupyter proxy
 RUN echo "export CONFIGPROXY_AUTH_TOKEN=${jupyter_proxy_token}" >> /etc/profile
@@ -115,21 +119,41 @@ RUN source /etc/profile && jupyter contrib nbextension install --sys-prefix && \
     jupyter nbextension enable snippets/main --sys-prefix 
 
 ### lsp
+RUN source /etc/profile && if [ "2" == "${jupyter_version}" ]; \
+then\
+    jupyter labextension install @krassowski/jupyterlab-lsp@2.1.4;\
+fi
 RUN pip3 install git+https://github.com/krassowski/python-language-server.git@main
 
-## add at least two local account
+## add local account and set default extension config
 RUN for user_info in ${jupyter_local_user_arr[@]}; \
 do\
     user_info_arr=($(echo $user_info | tr ":" "\n")) && \
     useradd ${user_info_arr[0]} && \
     echo "${user_info_arr[0]}:${user_info_arr[1]}" | chpasswd && \
     ### add extension default config
+    user_settings_path_prefix=/home/${user_info_arr[0]}/.jupyter/lab/user-settings && \
     #### lsp: auto hint
-    lsp_user_conf_home=/home/${user_info_arr[0]}/.jupyter/lab/user-settings/@krassowski/jupyterlab-lsp && \
+    lsp_user_conf_home=${user_settings_path_prefix}/@krassowski/jupyterlab-lsp && \
     mkdir -p ${lsp_user_conf_home} && \
     echo -e """{\n\
         \"continuousHinting\": true\n\
     }""" > ${lsp_user_conf_home}/completion.jupyterlab-settings && \
+
+    #### dark theme
+    apputils_conf_home=${user_settings_path_prefix}/@jupyterlab/apputils-extension && \
+    mkdir -p ${apputils_conf_home} && \
+    echo -e """{\n\
+        \"theme\": \"JupyterLab Dark\"\n\
+    }""" > ${apputils_conf_home}/themes.jupyterlab-settings && \
+
+    #### record time (lab)
+    notebook_extension_home=${user_settings_path_prefix}/@jupyterlab/notebook-extension && \
+    mkdir -p ${notebook_extension_home} && \
+    echo -e """{\n\
+    \"recordTiming\": true\n\
+}""" > ${notebook_extension_home}/tracker.jupyterlab-settings && \
+
     chown -R jupyter:jupyter /home/${user_info_arr[0]}/.jupyter; \
 done
 
@@ -155,3 +179,8 @@ RUN echo "sh ${jupyter_scripts_home}/init-jupyter.sh && jupyterstart" >> /init_s
 
 ## jupyterhub log rotate
 RUN addlogrotate $jupyterhub_log jupyterhub
+
+## fix-jupyterhub start failed: load notebook.base.handlers.IPythonHandler on wrong package(jupyter_server)
+RUN site_package_path=`python3 -c "import sys; print(sys.path)" | sed "s/', '/\n/g" | sed "s#\['##g" | sed "s#'\]##g" | grep site-packages | sed -n '1p'` && \
+    sed -i "s/if they have been imported/if they have been imported\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py && \
+    sed -i "s/base_handlers.append(import_item(base_handler_name))/base_handlers.append(import_item(base_handler_name))\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py

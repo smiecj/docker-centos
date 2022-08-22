@@ -1,4 +1,5 @@
-FROM centos_base AS base
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS base
 
 MAINTAINER smiecj smiecj@github.com
 
@@ -6,11 +7,12 @@ USER root
 ENV HOME /root
 
 # install nodejs
-ARG node_version=v16.15.0
+## history version: https://nodejs.org/en/download/releases/
+ARG node_version=v16.15.1
 ARG repo_home=/home/repo
 ARG npm_home=/usr/nodejs
 ARG npm_repo_home=${repo_home}/nodejs
-ARG npm_remote_repo="https://registry.npm.taobao.org"
+ARG npm_remote_repo="https://registry.npmmirror.com"
 
 COPY env_nodejs.sh /tmp/
 

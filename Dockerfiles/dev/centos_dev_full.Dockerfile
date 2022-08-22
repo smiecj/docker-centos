@@ -6,17 +6,23 @@ ARG npm_repo_home=${repo_home}/nodejs
 ARG maven_version=3.8.4
 ARG maven_home=/usr/java/apache-maven-${maven_version}
 
+ARG JAVA_IMAGE
+ARG GO_IMAGE
+ARG NODEJS_IMAGE
+ARG PYTHON_IMAGE
+ARG BASE_IMAGE
+
 # java
-FROM centos_java AS base_java
+FROM ${JAVA_IMAGE} AS base_java
 
 # golang
-FROM centos_golang AS base_golang
+FROM ${GO_IMAGE} AS base_golang
 
 # nodejs
-FROM centos_nodejs AS base_nodejs
+FROM ${NODEJS_IMAGE} AS base_nodejs
 
 # python
-FROM centos_python AS base_python
+FROM ${PYTHON_IMAGE} AS base_python
 
 MAINTAINER smiecj smiecj@github.com
 
@@ -24,7 +30,7 @@ USER root
 ENV HOME /root
 
 # base
-FROM centos_base AS base
+FROM ${BASE_IMAGE} AS base
 
 # java
 

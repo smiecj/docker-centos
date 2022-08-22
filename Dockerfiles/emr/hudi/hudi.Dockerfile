@@ -1,4 +1,5 @@
-FROM centos_java AS java_base
+ARG JAVA_IMAGE
+FROM ${JAVA_IMAGE} AS java_base
 
 # install hudi
 ARG hudi_module_home=/home/modules/hudi

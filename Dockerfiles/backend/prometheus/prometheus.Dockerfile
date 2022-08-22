@@ -1,5 +1,6 @@
 # download pkg to install prometheus, alertmanager and grafana
-FROM centos_minimal
+ARG MINIMAL_IMAGE
+FROM ${MINIMAL_IMAGE}
 
 USER root
 ENV HOME /root

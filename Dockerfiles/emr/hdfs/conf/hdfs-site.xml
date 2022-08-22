@@ -4,7 +4,7 @@
 <configuration>
     <property>
         <name>dfs.replication</name>
-        <value>1</value>
+        <value>{DFS_REPLICATION}</value>
     </property>
     <property>
         <name>dfs.namenode.http-address</name>

@@ -1,4 +1,5 @@
-FROM centos_minimal
+ARG MINIMAL_IMAGE
+FROM ${MINIMAL_IMAGE}
 
 MAINTAINER smiecj smiecj@github.com
 

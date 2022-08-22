@@ -1,4 +1,4 @@
-FROM centos_base
+FROM ${BASE_IMAGE}
 
 # install redis
 

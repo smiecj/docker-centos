@@ -1,4 +1,5 @@
-FROM centos_java AS java_base
+ARG JAVA_IMAGE
+FROM ${JAVA_IMAGE} AS java_base
 
 # bash
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -24,7 +25,7 @@ RUN mkdir -p ${nacos_code_home} && cd ${nacos_code_home} && \
 
 ## compile
 RUN source ~/.bashrc && cd ${nacos_code_home}/${nacos_code_folder} && \
-    mvn clean install -Prelease-nacos -U -DskipTests -Dmaven.test.skip=true
+    mvn clean install -Prelease-nacos -U -Dcheckstyle.skip -DskipTests -Dmaven.test.skip=true
 
 ## copy nacos package
 ARG nacos_module_home=/home/modules/nacos

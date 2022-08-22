@@ -1,4 +1,5 @@
-FROM centos_druid_base
+ARG DRUID_BASE_IMAGE
+FROM ${DRUID_BASE_IMAGE}
 
 # install druid
 ARG druid_tag="0.22.1"
@@ -38,9 +39,7 @@ COPY ./scripts/druid-stop.sh /usr/local/bin/druidstop
 RUN sed -i "s#{druid_module_home}#${druid_module_home}#g" /usr/local/bin/druidstart && \
     sed -i "s#{druid_log}#${druid_log}#g" /usr/local/bin/druidstart && \
     sed -i "s#{druid_module_home}#${druid_module_home}#g" /usr/local/bin/druidstop
-RUN chmod +x /usr/local/bin/druidstart && /usr/local/bin/druidstop && /usr/local/bin/druidrestart
+RUN chmod +x /usr/local/bin/druidstart && chmod +x /usr/local/bin/druidstop && chmod +x /usr/local/bin/druidrestart
 
 ## init service
 RUN echo "druidstart" >> /init_service
-
-## todo: 结合 kafka 完成基本测试用例的部署和验证

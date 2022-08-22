@@ -2,7 +2,7 @@
 
 pushd {hive_module_home}/conf
 
-cp -f hive-site-example.xml hive-site.xml
+cp hive-site-example.xml hive-site.xml
 sed -i "s/\$mysql_host/$mysql_host/g" hive-site.xml
 sed -i "s/\$mysql_port/$mysql_port/g" hive-site.xml
 sed -i "s/\$mysql_db/$mysql_db/g" hive-site.xml

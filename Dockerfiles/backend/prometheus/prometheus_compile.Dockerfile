@@ -2,9 +2,12 @@
 ARG repo_home=/home/repo
 ARG npm_repo_home=${repo_home}/nodejs
 
-FROM centos_nodejs AS base_nodejs
+ARG NODEJS_IMAGE
+ARG GO_IMAGE
 
-FROM centos_golang AS base_golang
+FROM ${NODEJS_IMAGE} AS base_nodejs
+
+FROM ${GO_IMAGE} AS base_golang
 
 USER root
 ENV HOME /root

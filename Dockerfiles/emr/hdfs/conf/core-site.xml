@@ -4,11 +4,11 @@
 <configuration>
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://localhost:8020</value>
+        <value>{DEFAULTFS}</value>
     </property>
     <property>
         <name>hadoop.tmp.dir</name>
-        <value>/home/data/hdfs/tmp</value>
+        <value>{HADOOP_TMP_DIR}</value>
     </property>
 
     <!-- root user permission -->

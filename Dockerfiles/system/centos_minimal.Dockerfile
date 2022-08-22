@@ -26,9 +26,15 @@ COPY yum /tmp/yum
 RUN sh /tmp/init-system-yum.sh
 RUN rm -rf /tmp/yum
 
+### fix: Unexpected key in data: static_context
+RUN if [[ ${version} =~ 8.* ]]; then dnf -y update libmodulemd; fi
+
 ## install basic components
 ### epel refer: https://docs.fedoraproject.org/en-US/epel/
 RUN yum -y install epel-release
+
+### make
+RUN yum -y install make
 
 ### other useful tools
 RUN yum -y install lsof net-tools vim lrzsz zip unzip git wget
@@ -36,6 +42,11 @@ RUN yum -y install telnet logrotate
 
 #### git config
 RUN git config --global pull.rebase false
+
+## copy proxy init script
+COPY init-system-proxy.sh /init_system_proxy
+RUN chmod +x /init_system_proxy
+ENV HAS_PROXY "false"
 
 ## vim support utf-8
 RUN echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc
@@ -55,6 +66,8 @@ RUN rm -f /tmp/init-*.sh
 ARG s6_version=v2.2.0.3
 COPY init-system-s6.sh /tmp/
 RUN sh /tmp/init-system-s6.sh
+### check s6 is install success
+RUN ls -l /init
 RUN rm /tmp/init-system-s6.sh
 
 ### s6 with crontab
@@ -79,6 +92,7 @@ echo 'hello docker centos'\n\
 . /etc/profile\n\
 \n\
 ## child dockerfile init append after this\n\
+/init_system_proxy\n\
 """ > /init_service && chmod +x /init_service
 
 ENTRYPOINT ["/init_system"]

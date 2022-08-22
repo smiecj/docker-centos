@@ -1,4 +1,5 @@
-FROM centos_python
+ARG PYTHON_IMAGE
+FROM ${PYTHON_IMAGE}
 
 # install airflow
 USER root
@@ -21,6 +22,7 @@ ARG airflow_admin_password=admin123
 ARG airflow_log_home=/var/log/airflow
 ARG airflow_log_webserver=${airflow_log_home}/webserver.log
 ARG airflow_log_scheduler=${airflow_log_home}/scheduler.log
+RUN mkdir -p ${airflow_log_home}
 
 ARG airflow_module_home=/home/modules/airflow
 

@@ -1,4 +1,5 @@
-FROM centos_nodejs
+ARG NODEJS_IMAGE
+FROM ${NODEJS_IMAGE}
 
 ARG admin_version=4.4.0
 ARG admin_code_url=https://github.com/PanJiaChen/vue-element-admin/archive/refs/tags/${admin_version}.tar.gz

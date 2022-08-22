@@ -4,14 +4,18 @@ ARG repo_home=/home/repo
 ARG go_repo_home=$repo_home/go
 ARG npm_repo_home=${repo_home}/nodejs
 
+ARG NODEJS_IMAGE
+ARG PYTHON_IMAGE
+ARG BASE_IMAGE
+
 # nodejs
-FROM centos_nodejs AS base_nodejs
+FROM ${NODEJS_IMAGE} AS base_nodejs
 
 # python
-FROM centos_python AS base_python
+FROM ${PYTHON_IMAGE} AS base_python
 
 # base
-FROM centos_base AS base
+FROM ${BASE_IMAGE} AS base
 
 MAINTAINER smiecj smiecj@github.com
 
