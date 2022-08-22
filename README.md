@@ -13,11 +13,12 @@ Use dockerfile and compose file to build docker image and run develop environmen
   - compose: deployment on docker compose
 
 - Dockerfiles
+  - system: centos basic image
+  - dev: development env such as golang, java, python, nodejs
   - frontend: frontend service such as: vue admin, ant design
   - backend: backend service such as: zk, mysql, redis
-  - dev: development env such as golang, java, python, nodejs
   - emr: bigdata component, such as jupyter, hue
-  - system: centos basic image
+  - net: for network debug
 
 ## All Image And How To Use
 
@@ -47,6 +48,8 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | [hue](https://gethue.com) | make build_hue | hue 4.3.0 fix branch: [dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | [jupyter](https://jupyter.org) | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
 |   | [presto](https://prestodb.io) | make build_presto | presto 0.273.3 |
+| net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
+|   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
 
 note: build image & run container defail command refer: [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 

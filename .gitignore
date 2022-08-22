@@ -1,3 +1,1 @@
-test.sh
-test_*.log
-test.log
+test*.log
