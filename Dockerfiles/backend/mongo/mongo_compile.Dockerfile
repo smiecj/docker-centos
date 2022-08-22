@@ -1,4 +1,4 @@
-FROM centos_python
+FROM ${PYTHON_IMAGE}
 
 ENV PORT=27071
 

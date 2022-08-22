@@ -1,4 +1,5 @@
-FROM centos_python AS base_python
+ARG PYTHON_IMAGE
+FROM ${PYTHON_IMAGE} AS base_python
 
 ARG repo_home=/home/repo/pip_server
 ARG basic_packages=("setuptools_rust" "wheel" "cython" "numpy")

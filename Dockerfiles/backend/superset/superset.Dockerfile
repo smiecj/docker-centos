@@ -1,4 +1,5 @@
-FROM centos_python as base_python
+ARG PYTHON_IMAGE
+FROM ${PYTHON_IMAGE} as base_python
 
 # install superset
 ARG superset_version=1.4.2

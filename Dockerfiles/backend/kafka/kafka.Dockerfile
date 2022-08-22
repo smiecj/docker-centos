@@ -1,4 +1,5 @@
-FROM centos_java
+ARG JAVA_IMAGE
+FROM ${JAVA_IMAGE}
 
 # env
 ARG kafka_version=3.2.0
