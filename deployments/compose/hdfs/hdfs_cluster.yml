@@ -1,21 +1,36 @@
 version: "3.9"
 services:
   hadoop1:
-    image: centos_hdfs
+    image: ${HDFS_FULL_IMAGE}
+    hostname: hadoop1
     environment:
+      # hdfs
       - DEFAULTFS=hdfs://hadoop1:8020
       - DFS_REPLICATION=2
       - RESOURCEMANAGER_HOSTNAME=hadoop1
       - WORKERS=hadoop2,hadoop3
       - HDFS_START=hdfsstartall
+      # knox
+      - KNOX_START=knoxstart
+      # hive
+      - HIVE_START=hivestart
+      - mysql_host=mysql
+      - mysql_port=3306
+      - mysql_db=hive
+      - mysql_user=root
+      - mysql_pwd=root_HADOOP_123
     ports:
+      - "8443:8443"
       - "8088:8088"
       - "50070:50070"
+      - "10000:10000"
     depends_on:
       - hadoop2
       - hadoop3
+      - mysql
   hadoop2:
-    image: centos_hdfs
+    image: ${HDFS_FULL_IMAGE}
+    hostname: hadoop2
     environment:
       - DEFAULTFS=hdfs://hadoop1:8020
       - DFS_REPLICATION=2
@@ -23,12 +38,20 @@ services:
       - WORKERS=hadoop2,hadoop3
       - HDFS_START=hdfsnotstart
   hadoop3:
-    image: centos_hdfs
+    image: ${HDFS_FULL_IMAGE}
+    hostname: hadoop3
     environment:
       - DEFAULTFS=hdfs://hadoop1:8020
       - DFS_REPLICATION=2
       - RESOURCEMANAGER_HOSTNAME=hadoop1
       - WORKERS=hadoop2,hadoop3
       - HDFS_START=hdfsnotstart
+  mysql:
+    image: ${MYSQL_IMAGE}
+    ports:
+      - "33306:3306"
+    environment:
+      - ROOT_PASSWORD=root_HADOOP_123
+
 networks:
   my-hdfs-cluster:

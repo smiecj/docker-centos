@@ -10,6 +10,7 @@ sed -i "s#{DFS_REPLICATION}#${DFS_REPLICATION}#g" hdfs-site.xml
 
 # yarn-site.xml
 sed -i "s#{RESOURCEMANAGER_HOSTNAME}#${RESOURCEMANAGER_HOSTNAME}#g" yarn-site.xml
+sed -i "s#{RESOURCEMANAGER_WEBAPP_ADDRESS}#${RESOURCEMANAGER_WEBAPP_ADDRESS}#g" yarn-site.xml
 
 # workers
 if [ -n "${WORKERS}" ]; then

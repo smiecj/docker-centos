@@ -1,4 +1,5 @@
-FROM centos_java AS java_base
+ARG JAVA_IMAGE
+FROM ${JAVA_IMAGE} AS java_base
 
 USER root
 ENV HOME /root
@@ -6,11 +7,12 @@ ENV HOME /root
 # install hdfs
 ARG hdfs_version=3.3.2
 
-ARG hdfs_download_url=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-${hdfs_version}/hadoop-${hdfs_version}.tar.gz
-# ARG hdfs_download_url=https://dlcdn.apache.org/hadoop/common/hadoop-${hdfs_version}/hadoop-${hdfs_version}.tar.gz
+ARG hdfs_repo=https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common
+# ARG hdfs_repo=https://dlcdn.apache.org/hadoop/common
 ARG hdfs_pkg=hadoop-${hdfs_version}.tar.gz
+ARG hdfs_download_url=${hdfs_repo}/hadoop-${hdfs_version}/${hdfs_pkg}
 
-ARG hadoop_module_home=/home/modules/hadoop
+ARG hadoop_module_home=/opt/modules/hadoop
 ARG hdfs_module_folder=hadoop-${hdfs_version}
 
 ARG hdfs_module_home=${hadoop_module_home}/${hdfs_module_folder}
@@ -44,9 +46,10 @@ COPY ./conf/* ${hdfs_module_home}/etc/hadoop/
 
 #### ENV
 ENV DEFAULTFS hdfs://localhost:8020
-ENV HADOOP_TMP_DIR /home/data/hdfs/tmp
+ENV HADOOP_TMP_DIR /opt/data/hdfs/tmp
 ENV DFS_REPLICATION 1
 ENV RESOURCEMANAGER_HOSTNAME localhost
+ENV RESOURCEMANAGER_WEBAPP_ADDRESS 0.0.0.0:8088
 ENV WORKERS localhost
 
 #### init script
@@ -99,6 +102,7 @@ RUN chsh -s /bin/bash
 COPY ./scripts/hdfs-start.sh /usr/local/bin/hdfsstart
 COPY ./scripts/hdfs-stop.sh /usr/local/bin/hdfsstop
 COPY ./scripts/hdfs-restart.sh /usr/local/bin/hdfsrestart
+COPY ./scripts/hdfs-restart-all.sh /usr/local/bin/hdfsrestartall
 COPY ./scripts/hdfs-start-all.sh /usr/local/bin/hdfsstartall
 COPY ./scripts/hdfs-stop-all.sh /usr/local/bin/hdfsstopall
 COPY ./scripts/hdfs-not-start.sh /usr/local/bin/hdfsnotstart
@@ -110,12 +114,13 @@ RUN sed -i "s#{hdfs_module_home}#${hdfs_module_home}#g" /usr/local/bin/hdfsstart
     chmod +x /usr/local/bin/*
 
 ### set hdfs profile (hive will use)
-RUN echo -e """\n\
-# hdfs\n\
-export HADOOP_HOME=$hdfs_module_home\n\
+RUN echo "# hdfs" >> /etc/profile
+RUN echo -e """export HADOOP_HOME=$hdfs_module_home\n\
 export HADOOP_HDFS_HOME=\$HADOOP_HOME\n\
 export HADOOP_YARN_HOME=\$HADOOP_HOME\n\
 export HADOOP_MAPRED_HOME=\$HADOOP_HOME\n\
+export HADOOP_CONF_DIR=\$HADOOP_HOME/etc/hadoop\n\
+export PATH=\$PATH:\$HADOOP_HOME/bin\n\
 """ >> /etc/profile
 
 ### add and enable hdfs service

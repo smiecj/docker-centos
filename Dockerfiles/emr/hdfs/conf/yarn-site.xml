@@ -13,4 +13,8 @@
         <name>yarn.resourcemanager.hostname</name>
         <value>{RESOURCEMANAGER_HOSTNAME}</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.webapp.address</name>
+        <value>{RESOURCEMANAGER_WEBAPP_ADDRESS}</value>
+    </property>
 </configuration>
