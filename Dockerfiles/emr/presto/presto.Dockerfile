@@ -1,5 +1,5 @@
-
-FROM centos_presto_base
+ARG PRESTO_BASE_IMAGE
+FROM ${PRESTO_BASE_IMAGE}
 
 # install presto
 
@@ -10,8 +10,10 @@ ENV HIVE_METASTORE_URL=localhost:8093
 
 ARG presto_module_home=/home/modules
 ARG presto_version=0.273.3
-ARG presto_server_pkg_url=https://repo1.maven.org/maven2/com/facebook/presto/presto-server/${presto_version}/presto-server-${presto_version}.tar.gz
-ARG presto_client_jar_url=https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/${presto_version}/presto-cli-${presto_version}-executable.jar
+# ARG repo=https://repo1.maven.org/maven2
+ARG repo=https://mirrors.huaweicloud.com/repository/maven
+ARG presto_server_pkg_url=${repo}/com/facebook/presto/presto-server/${presto_version}/presto-server-${presto_version}.tar.gz
+ARG presto_client_jar_url=${repo}/com/facebook/presto/presto-cli/${presto_version}/presto-cli-${presto_version}-executable.jar
 ARG presto_server_pkg=presto-server-${presto_version}.tar.gz
 ARG presto_client_jar=presto-cli-${presto_version}-executable.jar
 ARG presto_server_folder=presto-server-${presto_version}

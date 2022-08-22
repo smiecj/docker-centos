@@ -30,3 +30,8 @@ notebook==6.4.12
 ipykernel==6.12.1
 ipython==8.2.0
 ipython-genutils==0.2.0
+
+# plugins
+## lsp
+jupyter-lsp==0.9.3
+python-lsp-server==1.4.1

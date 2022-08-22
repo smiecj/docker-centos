@@ -7,14 +7,18 @@ ARG npm_repo_home=${repo_home}/nodejs
 ARG maven_version=3.8.4
 ARG maven_home=/usr/java/apache-maven-${maven_version}
 
+ARG JAVA_IMAGE
+ARG NODEJS_IMAGE
+ARG MINIMAL_IMAGE_7
+
 # java
-FROM centos_java AS base_java
+FROM ${JAVA_IMAGE} AS base_java
 
 # nodejs
-FROM centos_nodejs AS base_nodejs
+FROM ${NODEJS_IMAGE} AS base_nodejs
 
 # minimal
-FROM centos_minimal_7 AS base
+FROM ${MINIMAL_IMAGE_7} AS base
 
 MAINTAINER smiecj smiecj@github.com
 

@@ -1,4 +1,5 @@
-FROM centos_hue_base
+ARG HUE_BASE_IMAGE
+FROM ${HUE_BASE_IMAGE}
 
 # install hue
 
