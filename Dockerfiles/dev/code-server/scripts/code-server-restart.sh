@@ -1,0 +1,5 @@
+#!/bin/bash
+
+codeserverstop
+
+codeserverstart

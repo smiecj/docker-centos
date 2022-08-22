@@ -1,4 +1,5 @@
-FROM centos_base AS base
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS base
 
 MAINTAINER smiecj smiecj@github.com
 
@@ -13,12 +14,15 @@ ARG java_repo_home=${repo_home}/java
 
 COPY env_java.sh /tmp/
 
-## install jdk 8 & 11
+ARG jdk_new_version=17
+
+## install jdk 8 & jdk_new_version (11 / 17)
+### todo: remove env_java.sh
 RUN mkdir -p ${java_home}
 RUN mkdir -p ${java_repo_home}
 RUN cd ${java_home} && rm -rf *
-RUN  . /tmp/env_java.sh && source /etc/profile && cd ${java_home} && curl -LO $jdk_11_download_url && tar -xzvf $jdk_11_pkg && rm -f $jdk_11_pkg
-RUN . /tmp/env_java.sh && source /etc/profile && cd ${java_home} && curl -LO $jdk_8_download_url && tar -xzvf $jdk_8_pkg && rm -f $jdk_8_pkg
+RUN  . /tmp/env_java.sh ${jdk_new_version} && source /etc/profile && cd ${java_home} && curl -LO $jdk_new_version_download_url && tar -xzvf $jdk_new_version_pkg && rm -f $jdk_new_version_pkg
+RUN . /tmp/env_java.sh ${jdk_new_version} && source /etc/profile && cd ${java_home} && curl -LO $jdk_8_download_url && tar -xzvf $jdk_8_pkg && rm -f $jdk_8_pkg
 
 ## maven
 ARG maven_version=3.8.4
@@ -52,15 +56,26 @@ ARG gradle_pkg=gradle-${gradle_version}-bin.zip
 RUN cd ${java_home} && source /etc/profile && curl -L ${gradle_download_url} -o ${gradle_pkg} && \
     unzip ${gradle_pkg} && rm -f ${gradle_pkg}
 
+## ant
+ARG ant_repo=https://mirrors.tuna.tsinghua.edu.cn/apache/ant/binaries
+
+# ARG ant_repo=http://archive.apache.org/dist/ant/binaries
+ARG ant_version=1.10.12
+ARG ant_pkg=apache-ant-${ant_version}-bin.tar.gz
+ARG ant_folder=apache-ant-${ant_version}
+RUN cd /usr/java && curl -LO ${ant_repo}/${ant_pkg} && \
+    tar -xzvf ${ant_pkg} && rm ${ant_pkg}
+
 ## profile
-RUN . /tmp/env_java.sh && echo -e '\n# java' >> /etc/profile && \
+RUN . /tmp/env_java.sh $jdk_new_version && echo -e '\n# java' >> /etc/profile && \
     echo "export JAVA_HOME=$java_home/$jdk_8_folder" >> /etc/profile && \
     echo 'export JRE_HOME=$JAVA_HOME/jre' >> /etc/profile && \
     echo 'export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib' >> /etc/profile  && \
     echo "export MAVEN_HOME=$maven_home" >> /etc/profile  && \
     echo "export GRADLE_HOME=/usr/java/gradle-$gradle_version" >> /etc/profile  && \
     echo "export GRADLE_USER_HOME=$java_repo_home/gradle" >> /etc/profile  && \
-    echo "export JDK_HOME=$java_home/$jdk_11_folder" >> /etc/profile  && \
-    echo 'export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin' >> /etc/profile
+    echo "export JDK_HOME=$java_home/$jdk_new_version_folder" >> /etc/profile  && \
+    echo "export ANT_HOME=$java_home/$ant_folder" >> /etc/profile  && \
+    echo 'export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin:$ANT_HOME/bin' >> /etc/profile
 
 RUN rm -f /tmp/env_java.sh

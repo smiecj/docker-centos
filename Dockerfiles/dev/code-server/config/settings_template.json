@@ -1,0 +1,6 @@
+{
+    "workbench.colorTheme": "{theme}",
+    "redhat.telemetry.enabled": true,
+    "editor.fontSize": {font},
+    "java.home": "{java_home}"
+}

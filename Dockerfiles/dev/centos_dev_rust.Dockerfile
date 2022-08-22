@@ -1,4 +1,5 @@
-FROM centos_base AS base
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS base
 
 MAINTAINER smiecj smiecj@github.com
 
