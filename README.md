@@ -43,7 +43,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | [hdfs](https://hadoop.apache.org) | make build_hdfs | hdfs 3.3.2 |
 |   | [hive](https://hive.apache.org) | make build_hive | hive 3.1.2 |
 |   | [knox](https://knox.apache.org) | make build_knox | knox 1.6.1 |
-|   | hdfs_full | make build_hdfs | hdfs 3.3.2 + knox 1.6.1 + hive 3.1.2 |
+|   | hdfs_full | make build_hdfs | hdfs 3.3.2<br>knox 1.6.1<br>hive 3.1.2<br>spark 3.2<br>flink 1.15 |
 |   | [hue](https://gethue.com) | make build_hue | hue 4.3.0 fix branch: [dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | [jupyter](https://jupyter.org) | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
 |   | [presto](https://prestodb.io) | make build_presto | presto 0.273.3 |
