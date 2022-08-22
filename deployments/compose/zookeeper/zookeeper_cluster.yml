@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   zookeeper1:
-    image: centos_zookeeper
+    image: ${ZOOKEEPER_IMAGE}
     # build:
     #   context: .
     #   dockerfile: zookeeper.Dockerfile
@@ -12,13 +12,13 @@ services:
     ports:
       - "12181:2181"
   zookeeper2:
-    image: centos_zookeeper
+    image: ${ZOOKEEPER_IMAGE}
     environment:
       - MODE=cluster
       - MYID=2
       - SERVER_INFO=zookeeper1:2888:3888,0.0.0.0:2888:3888,zookeeper3:2888:3888
   zookeeper3:
-    image: centos_zookeeper
+    image: ${ZOOKEEPER_IMAGE}
     environment:
       - MODE=cluster
       - MYID=3
