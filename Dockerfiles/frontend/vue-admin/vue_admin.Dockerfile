@@ -1,3 +1,4 @@
+ARG NODEJS_IMAGE
 FROM ${NODEJS_IMAGE}
 
 ARG admin_version=4.4.0

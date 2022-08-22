@@ -1,3 +1,4 @@
+ARG NODEJS_IMAGE
 FROM ${NODEJS_IMAGE}
 
 ARG ant_version=v5.2.0
