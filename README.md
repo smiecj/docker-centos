@@ -83,4 +83,5 @@ REPO=mzsmieli make run_nacos_mysql
 |    | nacos | REPO=mzsmieli make run_nacos_mysql | nacos+mysql<br>address: http://localhost:8848 |
 |    | prometheus | REPO=mzsmieli make run_prometheus | prometheus+grafana+alertmanager<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
 |  emr  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
+|    | hue   | REPO=mzsmieli make run_hue | hue: http://localhost:8281 |
 |  web+backend  | |  | |

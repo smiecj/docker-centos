@@ -116,10 +116,10 @@ run_zookeeper:
 	docker run -it -d --hostname test_zookeeper --name dev_zookeeper -p 12181:2181 ${ZOOKEEPER_IMAGE}
 
 run_zookeeper_cluster:
-	ZOOKEEPER_IMAGE=${ZOOKEEPER_IMAGE} docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml up
+	ZOOKEEPER_IMAGE=${ZOOKEEPER_IMAGE} docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml up -d
 
 remove_zookeeper_cluster:
-	docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml down --volumes
+	ZOOKEEPER_IMAGE=${ZOOKEEPER_IMAGE} docker-compose -f ./deployments/compose/zookeeper/zookeeper_cluster.yml down --volumes
 
 ## kafka
 build_kafka:
@@ -132,31 +132,31 @@ run_kafka:
 	docker run -it -d --hostname test_kafka --name dev_kafka -p 9092:9092 -e zookeeper_server=172.17.0.1:12181 ${KAFKA_IMAGE}
 
 run_kafka_cluster:
-	ZOOKEEPER_IMAGE=${ZOOKEEPER_IMAGE} KAFKA_IMAGE=${KAFKA_IMAGE} docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml up
+	ZOOKEEPER_IMAGE=${ZOOKEEPER_IMAGE} KAFKA_IMAGE=${KAFKA_IMAGE} docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml up -d
 
 remove_kafka_cluster:
-	docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml down --volumes
+	ZOOKEEPER_IMAGE=${ZOOKEEPER_IMAGE} KAFKA_IMAGE=${KAFKA_IMAGE} docker-compose -f ./deployments/compose/kafka/kafka_cluster.yml down --volumes
 
 ## nacos
 build_nacos:
 	docker build --build-arg JAVA_IMAGE=${JAVA_IMAGE} --no-cache -f ./Dockerfiles/backend/nacos/nacos.Dockerfile -t ${NACOS_IMAGE} ./Dockerfiles/backend/nacos/
 
 run_nacos_mysql:
-	NACOS_IMAGE=${NACOS_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/nacos/nacos_mysql.yml up
+	NACOS_IMAGE=${NACOS_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/nacos/nacos_mysql.yml up -d
 
 remove_nacos_mysql:
-	docker-compose -f ./deployments/compose/nacos/nacos_mysql.yml down --volumes
+	NACOS_IMAGE=${NACOS_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/nacos/nacos_mysql.yml down --volumes
 
 ## jenkins
 build_jenkins:
-	docker build --no-cache -f ./Dockerfiles/backend/jenkins/jenkins.Dockerfile -t centos_jenkins ./Dockerfiles/backend/jenkins/
+	docker build --build-arg JAVA_IMAGE=${JAVA_IMAGE} --no-cache -f ./Dockerfiles/backend/jenkins/jenkins.Dockerfile -t centos_jenkins ./Dockerfiles/backend/jenkins/
 
 run_jenkins:
 	docker run -it -d --hostname test_jenkins --name dev_jenkins -p 8089:8089 -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/.jenkins/workspace:/var/lib/jenkins/.jenkins/workspace centos_jenkins
 
 ## git
 build_git:
-	docker build --no-cache -f ./Dockerfiles/backend/git/git.Dockerfile -t centos_git ./Dockerfiles/backend/git/
+	docker build --build-arg MINIMAL_IMAGE_7=${MINIMAL_IMAGE_7} --no-cache -f ./Dockerfiles/backend/git/git.Dockerfile -t centos_git ./Dockerfiles/backend/git/
 
 run_git:
 	docker run -it -d --hostname test_git --name dev_git -p 2022:22 centos_git
@@ -171,13 +171,13 @@ run_airflow:
 
 ## hdfs
 build_hdfs:
-	docker build --build-arg JAVA_IMAGE=${JAVA_IMAGE} --no-cache -f ./Dockerfiles/emr/hdfs/hdfs.Dockerfile -t ${HDFS_IMAGE} ./Dockerfiles/emr/hdfs/
+	docker build --build-arg JAVA_IMAGE=${JAVA_IMAGE} --build-arg PYTHON_IMAGE=${PYTHON_IMAGE} --no-cache -f ./Dockerfiles/emr/hdfs/hdfs.Dockerfile -t ${HDFS_IMAGE} ./Dockerfiles/emr/hdfs/
 
 build_hdfs_full:
 	docker build --build-arg KNOX_IMAGE=${KNOX_IMAGE} --build-arg HIVE_IMAGE=${HIVE_IMAGE} --build-arg HDFS_IMAGE=${HDFS_IMAGE} --no-cache -f ./Dockerfiles/emr/hdfs/hdfs_full.Dockerfile -t ${HDFS_FULL_IMAGE} ./Dockerfiles/emr/hdfs/
 
 ### build all hdfs cluster need image
-build_hdfs_cluster: build_base build_minimal build_mysql build_dev_java build_hdfs build_hive build_knox build_hdfs_full
+build_hdfs_cluster: build_dev_all build_hdfs build_hive build_knox build_hdfs_full
 
 run_hdfs:
 	docker run -d -it --hostname test_hdfs --name dev_hdfs -p 8088:8088 -p 50070:50070 ${HDFS_IMAGE}
@@ -186,7 +186,7 @@ run_hdfs_cluster:
 	HDFS_FULL_IMAGE=${HDFS_FULL_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/hdfs/hdfs_cluster.yml up -d
 
 remove_hdfs_cluster:
-	docker-compose -f ./deployments/compose/hdfs/hdfs_cluster.yml down --volumes
+	HDFS_FULL_IMAGE=${HDFS_FULL_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/hdfs/hdfs_cluster.yml down --volumes
 
 ## hive
 build_hive:
@@ -201,7 +201,10 @@ build_hue:
 	docker build --build-arg HUE_BASE_IMAGE=${HUE_BASE_IMAGE} --no-cache -f ./Dockerfiles/emr/hue/hue.Dockerfile -t ${HUE_IMAGE} ./Dockerfiles/emr/hue/
 
 run_hue:
-	docker run -d -it --hostname test_hue --name dev_hue -p 8281:8281 -e mysql_host=mysql_host -e mysql_port=3306 -e mysql_db=hive -e mysql_user=root -e mysql_password=pwd ${HUE_IMAGE}
+	HUE_IMAGE=${HUE_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/hue/hue.yml up -d
+
+remove_hue:
+	HUE_IMAGE=${HUE_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/hue/hue.yml down --volumes
 
 ## jupyter
 build_jupyter:
@@ -242,14 +245,14 @@ run_knox:
 # build net image
 ## xrdp
 build_xrdp:
-	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t centos_xrdp ./Dockerfiles/net/xrdp/
+	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t ${XRDP_IMAGE} ./Dockerfiles/net/xrdp/
 
 run_xrdp:
-	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 3389:3389 -p 7881:7881 centos_xrdp /usr/sbin/init
+	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 3389:3389 -p 7881:7881 ${XRDP_IMAGE} /usr/sbin/init
 
 ## easyconnect
 build_ec:
-	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/ec/easyconnect.Dockerfile -t centos_ec ./Dockerfiles/net/ec/
+	docker build --build-arg XRDP_IMAGE=${XRDP_IMAGE} --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/ec/easyconnect.Dockerfile -t ${EC_IMAGE} ./Dockerfiles/net/ec/
 
 run_ec:
-	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 3389:3389 -p 7881:7881 centos_ec /usr/sbin/init
+	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 3389:3389 -p 7881:7881 ${EC_IMAGE} /usr/sbin/init

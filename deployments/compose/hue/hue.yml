@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  hue:
+    image: ${HUE_IMAGE}
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=hue
+      - MYSQL_USER=hue
+      - MYSQL_PASSWORD=hue@Qwer123
+    ports:
+      - "8281:8281"
+    depends_on:
+      - mysql
+  mysql:
+    image: ${MYSQL_IMAGE}
+    ports:
+      - "33306:3306"
+    environment:
+      - USER_DB=hue
+      - USER_NAME=hue
+      - USER_PASSWORD=hue@Qwer123
+networks:
+  my-hue:

@@ -1,1 +1,4 @@
-test*.log
+test*log
+test*sh
+
+.DS_Store

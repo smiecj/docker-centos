@@ -5,3 +5,5 @@ socket={DATA_DIR}/mysql.sock
 
 log-error={MYSQL_LOG}
 pid-file={MYSQL_PID}
+
+port={PORT}
