@@ -1,4 +1,5 @@
-FROM centos_minimal_7
+ARG MINIMAL_IMAGE_7
+FROM ${MINIMAL_IMAGE_7}
 
 ENV repo_home=/home/coding
 

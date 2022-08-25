@@ -1,10 +1,15 @@
 ARG MINIMAL_IMAGE
 FROM ${MINIMAL_IMAGE}
 
-# ENV PORT=3306
+ENV PORT=3306
 ENV ROOT_PASSWORD=root_Test1qaz
-ENV USER_DB=
 ENV DATA_DIR=/var/lib/mysql
+
+# self define user
+ENV USER_DB ""
+ENV USER_NAME ""
+ENV USER_PASSWORD ""
+
 ARG mysql_scripts_path=/opt/modules/mysql/scripts
 ARG mysql_init_sql_home=/opt/modules/mysql/init_sql
 

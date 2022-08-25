@@ -1,13 +1,13 @@
 version: "3.9"
 services:
-  nacos:
+  hue:
     image: ${HUE_IMAGE}
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
       - MYSQL_DB=hue
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root_HUE_123
+      - MYSQL_USER=hue
+      - MYSQL_PASSWORD=hue@Qwer123
     ports:
       - "8281:8281"
     depends_on:
@@ -17,6 +17,8 @@ services:
     ports:
       - "33306:3306"
     environment:
-      - ROOT_PASSWORD=root_HUE_123
+      - USER_DB=hue
+      - USER_NAME=hue
+      - USER_PASSWORD=hue@Qwer123
 networks:
-  my-nacos:
+  my-hue:

@@ -24,7 +24,7 @@ ARG hue_code_repo=https://github.com/smiecj/hue
 ARG hue_code_url=${hue_code_repo}/archive/refs/heads/${hue_branch}.zip
 ARG code_home=/tmp
 ARG hue_code_home=${code_home}/${hue_code_folder}
-ARG hue_scripts_home=${hue_install_path}${hue_scripts_home}/
+ARG hue_scripts_home=${hue_install_path}/scripts
 
 ARG mysql_version=8.0.26
 ARG mysql_jdbc_url=https://repo1.maven.org/maven2/mysql/mysql-connector-java/${mysql_version}/mysql-connector-java-${mysql_version}.jar
@@ -38,7 +38,7 @@ COPY ./cdh-root-6.3.3.pom ${hue_code_home}/maven
 RUN sed -i 's/<version>6.3.3<\/version>/<version>6.3.3<\/version>\n<relativePath>.\/cdh-root-6.3.3.pom<\/relativePath>/g' ${hue_code_home}/maven/pom.xml
 
 ## basic env
-RUN yum -y install make gcc gcc-c++ cmake cyrus-sasl-devel cyrus-sasl-gssapi cyrus-sasl-plain libffi-devel libxml2 libxml2-devel libxslt libxslt-devel mysql mysql-devel openldap-devel sqlite-devel gmp-devel python2-devel
+RUN yum -y install make gcc gcc-c++ cmake cyrus-sasl-devel cyrus-sasl-gssapi cyrus-sasl-plain libffi-devel libxml2 libxml2-devel libxslt libxslt-devel mysql mysql-devel openldap-devel sqlite-devel gmp-devel python2-devel expect
 
 RUN cd ${hue_code_home} && source /etc/profile && PREFIX=${hue_install_prefix} make install
 RUN rm -rf ${hue_code_home}
@@ -72,7 +72,7 @@ RUN useradd hue || true
 
 ## mysql8 jdbc connector jar
 RUN mkdir -p ${hue_install_path}/jars
-RUN cd $hue_install_path/jars curl -LO $mysql_jdbc_url && \
+RUN cd $hue_install_path/jars && curl -LO $mysql_jdbc_url && \
     echo "export CLASSPATH=\$CLASSPATH:${hue_install_path}/jars/${mysql_jdbc_file_name}" >> /etc/profile
 
 ## init service

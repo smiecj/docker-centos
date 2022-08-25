@@ -11,6 +11,7 @@ if [ ! -f ${my_cnf} ]; then
     sed -i "s#{DATA_DIR}#${DATA_DIR}#g" ${my_cnf}
     sed -i "s#{MYSQL_LOG}#${MYSQL_LOG}#g" ${my_cnf}
     sed -i "s#{MYSQL_PID}#${MYSQL_PID}#g" ${my_cnf}
+    sed -i "s#{PORT}#${PORT}#g" ${my_cnf}
 fi
 
 ## init mysql data dir
@@ -36,9 +37,18 @@ if [[ "$mysql_version" =~ .*8.[0-9]+.[0-9]+ ]]; then
     mysql -uroot -p"$origin_mysql_password" -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';" --connect-expired-password
     mysql -uroot -p"${ROOT_PASSWORD}" -e "UPDATE mysql.user SET host = '%' WHERE user = 'root'"
 
-    ## set user db
+    ## set user db and add permission
     if [ -n "${USER_DB}" ]; then
         mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE DATABASE ${USER_DB}"
+        if [ -n "${USER_NAME}" ]; then
+            ## user password may set failed, to ignore
+            mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE USER '${USER_NAME}'@'%' IDENTIFIED BY '${USER_PASSWORD}'" || true
+            ## set user password by native password for mysql <= 5.7
+            mysql -uroot -p"${ROOT_PASSWORD}" -e "ALTER USER '${USER_NAME}'@'%' IDENTIFIED WITH mysql_native_password BY '${USER_PASSWORD}'" || true
+            mysql -uroot -p"${ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON ${USER_DB}.* TO '${USER_NAME}'@'%' WITH GRANT OPTION" || true
+        fi
+        
+        GRANT ALL PRIVILEGES ON mall.* TO 'mall'@'%' WITH GRANT OPTION;
     fi
 
     ## execute init sql
