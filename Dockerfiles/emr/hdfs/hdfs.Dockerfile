@@ -1,8 +1,35 @@
-ARG DEV_FULL_IMAGE
-FROM ${DEV_FULL_IMAGE}
+ARG PYTHON_IMAGE
+ARG JAVA_IMAGE
+
+FROM ${PYTHON_IMAGE} AS base_python
+FROM ${JAVA_IMAGE}
 
 USER root
 ENV HOME /root
+
+# python
+
+## copy python (conda) package
+ARG miniconda_install_path=/usr/local/miniconda
+ARG conda_env_name_python3=py3
+COPY --from=base_python ${miniconda_install_path} ${miniconda_install_path}
+
+## python soft link (copy)
+ARG python3_home_path=${miniconda_install_path}/envs/${conda_env_name_python3}
+RUN rm -f /usr/bin/python* && rm -f /usr/bin/pip* && \
+    ln -s ${python3_home_path}/bin/python3 /usr/bin/python3 && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
+    ln -s $python3_home_path/bin/pip3 /usr/bin/pip3 && \
+    ln -s /usr/bin/pip3 /usr/bin/pip
+
+## pip repo
+RUN mkdir -p /root/.pip
+COPY --from=base_python /root/.pip/pip.conf /root/.pip/
+
+## python profile
+COPY --from=base_python /etc/profile /tmp/profile_python
+RUN sed -n '/# conda/,$p' /tmp/profile_python >> /etc/profile
+RUN rm /tmp/profile_python
 
 # install hdfs
 ARG hdfs_version=3.3.2

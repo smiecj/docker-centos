@@ -79,6 +79,7 @@ REPO=mzsmieli make run_nacos_mysql
 |    | nacos | REPO=mzsmieli make run_nacos_mysql | nacos+mysql<br>地址: http://localhost:8848 |
 |    | prometheus | REPO=mzsmieli make run_prometheus | prometheus+grafana<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
 |  大数据  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
+|    | hue   | REPO=mzsmieli make run_hue | hue: http://localhost:8281 |
 |  后台+前端  |  |  | |
 
 ## 待规划需求
@@ -90,14 +91,18 @@ REPO=mzsmieli make run_nacos_mysql
 | 一期 |  readme 完善  | 项目背景 & makefile & vscode remote 开发 & compose 使用 | 完成 |
 | 一期 |  makefile  | 所有镜像构建、启动服务指令都放在 makefile 中 | 完成 |
 | 二期 |  compose  | 支持 hdfs cluster 本地搭建 | 完成 |
+| 二期 |  jupyter  | lab2、lab3 均安装常用插件，提升体验 | 完成 |
 | 二期 |  dockerfile  | 优化 镜像 tag，如 java 镜像 tag 跟随 jdk 版本，java:v1_8 | 待规划 |
 | 二期 |  dockerfile  | dev 相关基础环境下载源可通过 ARG 配置 | 待规划 |
-| 二期 |  jupyter  | lab2、lab3 均安装常用插件，提升体验 | 待规划 |
+| 二期 |  dockerfile  | 优化镜像层数，避免出现 [failed to register layer: max depth exceeded](https://github.com/docker/for-linux/issues/414#issuecomment-569227637) 的问题 | 待规划 |
 | 三期 |  通过 K8S 搭建zk 集群  | 声明 k8s 部署配置文件，一键启动 zk 集群 | 待实现 |
+| 三期 |  vscode 开发镜像  | 预装开发环境，包括语言环境、vscode server 等 | 待实现 |
 | 持续迭代 |  需要扩展的 dockerfile  | backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能 | |
 |  |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb)、es | |
 |  |  需要扩展的 dockerfile  | emr - [atlas](https://github.com/apache/atlas) | |
 |  |  需要扩展的 dockerfile  | emr - [presto](https://github.com/apache/atlas) | |
+|  |  需要扩展的 dockerfile  | emr - [es](https://github.com/elastic/elasticsearch) | |
+|  |  需要扩展的 dockerfile  | emr - [hbase](https://github.com/apache/hbase) | |
 
 ## 最后，欢迎大家一起交流一起学习！
 如果你对镜像或者这个仓库有任何疑问，都欢迎直接通过 issue 直接提问题和建议

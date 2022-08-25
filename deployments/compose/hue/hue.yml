@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  nacos:
+    image: ${HUE_IMAGE}
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=hue
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root_HUE_123
+    ports:
+      - "8281:8281"
+    depends_on:
+      - mysql
+  mysql:
+    image: ${MYSQL_IMAGE}
+    ports:
+      - "33306:3306"
+    environment:
+      - ROOT_PASSWORD=root_HUE_123
+networks:
+  my-nacos:

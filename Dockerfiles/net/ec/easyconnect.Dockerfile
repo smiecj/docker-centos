@@ -15,7 +15,7 @@ RUN mkdir -p ${clash_folder} && cd ${clash_folder} && curl -LO ${clash_pkg_url} 
 RUN cd ${clash_folder} && curl -LO ${clash_country_db_url}
 
 ## config
-COPY ./clash_config.yaml ${clash_folder}/
+COPY ./config.yaml ${clash_folder}/config.yaml
 
 ## start when reboot(crond)
 RUN yum -y install cronie && systemctl enable crond
@@ -29,7 +29,10 @@ ARG ec_pkg=EasyConnect_x64_7_6_7_3.rpm
 RUN cd /tmp && curl -LO ${ec_pkg_url} && rpm -ivh ${ec_pkg} && rm ${ec_pkg}
 
 ## temporary close ECAgent process to avoid memory leak
-RUN echo "*/10 * * * * ps -ef | grep ECAgent | grep -v grep | awk '{print $2}' | xargs --no-run-if-empty kill -9" >> /var/spool/cron/root
+## backup /etc/hosts
+RUN echo "*/10 * * * * ps -ef | grep ECAgent | grep -v grep | awk '{print $2}' | xargs --no-run-if-empty kill -9" >> /var/spool/cron/root && \
+    echo "@reboot cat /etc/hosts_bak > /etc/hosts" >> /var/spool/cron/root && \
+    echo "0 */1 * * * cat /etc/hosts > /etc/hosts_bak"
 
 # firefox
 ARG firefox_pkg_url=https://download-installer.cdn.mozilla.net/pub/firefox/releases/101.0/linux-x86_64/en-US/firefox-101.0.tar.bz2
@@ -40,4 +43,5 @@ RUN mkdir -p ${module_home} && cd ${module_home} && curl -LO ${firefox_pkg_url} 
     tar -jxvf ${firefox_pkg} && rm ${firefox_pkg}
 
 ## soft link to desktop
-RUN mkdir -p ${HOME}/Desktop && ln -s ${module_home}/${firefox_folder}/firefox ${HOME}/Desktop/firefox
+RUN mkdir -p ${HOME}/Desktop && ln -s ${module_home}/${firefox_folder}/firefox ${HOME}/Desktop/firefox && \
+    ln -s /usr/share/sangfor/EasyConnect/EasyConnect ${HOME}/Desktop/EasyConnect

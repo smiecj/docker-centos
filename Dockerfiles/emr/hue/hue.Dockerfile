@@ -3,19 +3,25 @@ FROM ${HUE_BASE_IMAGE}
 
 # install hue
 
-ENV mysql_host=localhost
-ENV mysql_port=3306
-ENV mysql_db=hive
-ENV mysql_user=hive
-ENV mysql_pwd=hive
+ENV MYSQL_HOST=localhost
+ENV MYSQL_PORT=3306
+ENV MYSQL_DB=hue
+ENV MYSQL_USER=hue
+ENV MYSQL_PASSWORD=hue123
+
+ENV ADMIN_USER=admin
+ENV ADMIN_PASSWORD=admin
+ENV ADMIN_MAIL=admin@test.com
 
 ENV PORT=8281
 
 ARG hue_install_prefix=/usr/local
 ARG hue_install_path=${hue_install_prefix}/hue
-ARG hue_code_url=https://github.com/smiecj/hue/archive/refs/heads/dev_bugfix.zip
-ARG hue_code_pkg=dev_bugfix.zip
-ARG hue_code_folder=hue-dev_bugfix
+ARG hue_branch=dev_bugfix
+ARG hue_code_pkg=${hue_branch}.zip
+ARG hue_code_folder=hue-${hue_branch}
+ARG hue_code_repo=https://github.com/smiecj/hue
+ARG hue_code_url=${hue_code_repo}/archive/refs/heads/${hue_branch}.zip
 ARG code_home=/tmp
 ARG hue_code_home=${code_home}/${hue_code_folder}
 ARG hue_scripts_home=${hue_install_path}${hue_scripts_home}/
@@ -25,14 +31,14 @@ ARG mysql_jdbc_url=https://repo1.maven.org/maven2/mysql/mysql-connector-java/${m
 ARG mysql_jdbc_file_name=mysql-connector-java-${mysql_version}.jar
 ARG mysql_jdbc_class=com.mysql.cj.jdbc.Driver
 
-## basic env
-RUN yum -y install make gcc gcc-c++ cmake cyrus-sasl-devel cyrus-sasl-gssapi cyrus-sasl-plain libffi-devel libxml2 libxml2-devel libxslt libxslt-devel mysql mysql-devel openldap-devel sqlite-devel gmp-devel python2-devel
-
 ## compile hue source code
 
 RUN cd ${code_home} && curl -LO ${hue_code_url} && unzip ${hue_code_pkg} && cd ${hue_code_folder}
 COPY ./cdh-root-6.3.3.pom ${hue_code_home}/maven
 RUN sed -i 's/<version>6.3.3<\/version>/<version>6.3.3<\/version>\n<relativePath>.\/cdh-root-6.3.3.pom<\/relativePath>/g' ${hue_code_home}/maven/pom.xml
+
+## basic env
+RUN yum -y install make gcc gcc-c++ cmake cyrus-sasl-devel cyrus-sasl-gssapi cyrus-sasl-plain libffi-devel libxml2 libxml2-devel libxslt libxslt-devel mysql mysql-devel openldap-devel sqlite-devel gmp-devel python2-devel
 
 RUN cd ${hue_code_home} && source /etc/profile && PREFIX=${hue_install_prefix} make install
 RUN rm -rf ${hue_code_home}
