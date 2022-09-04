@@ -1,0 +1,5 @@
+#!/bin/bash
+
+azkabanexecserverstop
+
+azkabanexecserverstart

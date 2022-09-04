@@ -48,6 +48,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 |   | [hue](https://gethue.com) | make build_hue | hue 4.3.0 fix branch: [dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | [jupyter](https://jupyter.org) | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
 |   | [presto](https://prestodb.io) | make build_presto | presto 0.273.3 |
+|   | [superset](https://superset.apache.org) | make build_superset | superset 1.4.2 |
 | net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
 
@@ -84,4 +85,5 @@ REPO=mzsmieli make run_nacos_mysql
 |    | prometheus | REPO=mzsmieli make run_prometheus | prometheus+grafana+alertmanager<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
 |  emr  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
 |    | hue   | REPO=mzsmieli make run_hue | hue: http://localhost:8281 |
+|    | azkaban   | REPO=mzsmieli make run_azkaban | azkaban web: http://localhost:8020 |
 |  web+backend  | |  | |

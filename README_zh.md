@@ -47,6 +47,7 @@
 |   | [hue](https://gethue.com) | make build_hue | hue 4.3.0 修复版[dev_bugfix](https://github.com/smiecj/hue/tree/dev_bugfix) |
 |   | [jupyter](https://jupyter.org) | make build_jupyter | jupyterlab 3.3.3<br>notebook 6.4.10 |
 |   | [presto](https://prestodb.io) | make build_presto | presto 0.273.3 |
+|   | [superset](https://superset.apache.org) | make build_superset | superset 1.4.2 |
 | net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
 
@@ -80,6 +81,7 @@ REPO=mzsmieli make run_nacos_mysql
 |    | prometheus | REPO=mzsmieli make run_prometheus | prometheus+grafana<br>grafana: http://localhost:3000<br>prometheus: http://localhost:3001 |
 |  大数据  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
 |    | hue   | REPO=mzsmieli make run_hue | hue: http://localhost:8281 |
+|    | azkaban   | REPO=mzsmieli make run_azkaban | azkaban web: http://localhost:8020 |
 |  后台+前端  |  |  | |
 
 ## 待规划需求
@@ -95,6 +97,7 @@ REPO=mzsmieli make run_nacos_mysql
 | 二期 |  dockerfile  | 优化 镜像 tag，如 java 镜像 tag 跟随 jdk 版本，java:v1_8 | 待规划 |
 | 二期 |  dockerfile  | dev 相关基础环境下载源可通过 ARG 配置 | 待规划 |
 | 二期 |  dockerfile  | 优化镜像层数，避免出现 [failed to register layer: max depth exceeded](https://github.com/docker/for-linux/issues/414#issuecomment-569227637) 的问题 | 待规划 |
+| 二期 |  readme  | 每个镜像（dockerfile）都提供单独的 readme，说明如何启动容器和服务提供的端口、服务页面截图，方便用户了解如何使用 | 待规划 |
 | 三期 |  通过 K8S 搭建zk 集群  | 声明 k8s 部署配置文件，一键启动 zk 集群 | 待实现 |
 | 三期 |  vscode 开发镜像  | 预装开发环境，包括语言环境、vscode server 等 | 待实现 |
 | 持续迭代 |  需要扩展的 dockerfile  | backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能 | |

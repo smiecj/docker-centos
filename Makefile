@@ -161,6 +161,23 @@ build_git:
 run_git:
 	docker run -it -d --hostname test_git --name dev_git -p 2022:22 centos_git
 
+## superset
+build_superset:
+	docker build --build-arg PYTHON_IMAGE=${PYTHON_IMAGE} --no-cache -f ./Dockerfiles/backend/superset/superset.Dockerfile -t ${SUPERSET_IMAGE} ./Dockerfiles/backend/superset/
+
+run_superset:
+	docker run -it -d --hostname test_superset --name dev_superset -p 8088:8088 ${SUPERSET_IMAGE}
+
+## azkaban
+build_azkaban:
+	docker build --build-arg JAVA_IMAGE=${JAVA_IMAGE} --no-cache -f ./Dockerfiles/emr/azkaban/azkaban.Dockerfile -t ${AZKABAN_IMAGE} ./Dockerfiles/emr/azkaban/
+
+run_azkaban:
+	AZKABAN_IMAGE=${AZKABAN_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/azkaban/azkaban.yml up -d
+
+remove_azkaban:
+	AZKABAN_IMAGE=${AZKABAN_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/azkaban/azkaban.yml down --volumes
+
 # build emr image
 ## airflow
 build_airflow:
