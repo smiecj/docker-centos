@@ -1,4 +1,4 @@
-# compile to install prometheus, alertmanager and grafana
+# compile to install prometheus, alertmanager
 ARG repo_home=/home/repo
 ARG npm_repo_home=${repo_home}/nodejs
 
@@ -11,9 +11,6 @@ FROM ${GO_IMAGE} AS base_golang
 
 USER root
 ENV HOME /root
-
-# install npm
-## 后续: 如果有重复代码，看是否可以把 npm 和 golang 打包到一个镜像中
 
 ## copy npm package
 ARG repo_home
@@ -53,7 +50,7 @@ RUN cd ${code_home} && curl -L ${prometheus_source_url} -o ${prometheus_source_p
 
 ## compile and copy bin
 RUN mkdir -p ${prometheus_module_home}
-RUN cd ${prometheus_code_home} && sed -i "s/npm install/yarn install --loglevel verbose/g" Makefile && source /etc/profile && make build && \
+RUN cd ${prometheus_code_home} && source /etc/profile && make build && \
     cp ./documentation/examples/prometheus.yml ${prometheus_module_home} && \
     cp -r ./console_libraries ${prometheus_module_home} && \
     cp -r ./consoles ${prometheus_module_home} && \
@@ -88,32 +85,6 @@ RUN cd ${alertmanager_code_home} && source /etc/profile && make build && \
     cp ./NOTICE ${alertmanager_module_home} && \
     rm -rf ${alertmanager_code_home}
 
-# install grafana
-ARG grafana_version=8.4.2
-ARG grafana_code_home=${code_home}/grafana-${grafana_version}
-ARG grafana_module_home=/home/modules/grafana
-ARG grafana_bin_home=${grafana_module_home}/bin
-ARG grafana_scripts_home=${grafana_module_home}/scripts
-ARG grafana_log=${grafana_module_home}/grafana.log
-
-ENV GRAFANA_PORT=3000
-
-## download source code
-ARG grafana_source_url=https://github.com/grafana/grafana/archive/refs/tags/v${grafana_version}.tar.gz
-ARG grafana_source_pkg=grafana_code.tar.gz
-RUN cd ${code_home} && curl -L ${grafana_source_url} -o ${grafana_source_pkg} && \
-    tar -xzvf ${grafana_source_pkg} && rm -f ${grafana_source_pkg}
-
-## compile and copy bin
-RUN mkdir -p ${grafana_code_home} && mkdir -p ${grafana_bin_home}
-RUN source /etc/profile && npm -g install yarn && cd ${grafana_code_home} && rm yarn.lock && yarn install
-RUN cd ${grafana_code_home} && source /etc/profile && make build && \
-    cp -r ./conf ${grafana_module_home} && \
-    cp ${grafana_module_home}/conf/defaults.ini ${grafana_module_home}/conf/custom.ini && \
-    cp ./bin/linux-amd64/* ${grafana_bin_home} && \
-    cp -r ./public ${grafana_module_home} && \
-    rm -rf ${grafana_code_home}
-
 # init script
 ## prometheus init script
 RUN mkdir -p ${prometheus_scripts_home}
@@ -127,7 +98,7 @@ RUN sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" /usr/local/bin
     sed -i "s#{prometheus_log}#$prometheus_log#g" /usr/local/bin/prometheusstart && \
     sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" /usr/local/bin/prometheusstop
 RUN echo "sh ${prometheus_scripts_home}/init-prometheus.sh && prometheusstart" >> /init_service
-RUN addlogrotate ${redis_log_path} redis-server
+RUN addlogrotate ${prometheus_log} prometheus
 
 ## alertmanager init script
 RUN mkdir -p ${alertmanager_scripts_home}
@@ -141,16 +112,4 @@ RUN sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" /usr/local
     sed -i "s#{alertmanager_log}#$alertmanager_log#g" /usr/local/bin/alertmanagerstart && \
     sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" /usr/local/bin/alertmanagerstop
 RUN echo "sh ${alertmanager_scripts_home}/init-alertmanager.sh && alertmanagerstart" >> /init_service
-
-# install grafana
-RUN mkdir -p ${grafana_scripts_home}
-COPY ./scripts/init-grafana.sh ${grafana_scripts_home}/
-RUN sed -i "s#{grafana_module_home}#$grafana_module_home#g" ${grafana_scripts_home}/init-grafana.sh
-COPY ./scripts/grafana-restart.sh /usr/local/bin/grafanarestart
-COPY ./scripts/grafana-start.sh /usr/local/bin/grafanastart
-COPY ./scripts/grafana-stop.sh /usr/local/bin/grafanastop
-RUN chmod +x /usr/local/bin/grafanarestart && chmod +x /usr/local/bin/grafanastart && chmod +x /usr/local/bin/grafanastop
-RUN sed -i "s#{grafana_module_home}#$grafana_module_home#g" /usr/local/bin/grafanastart && \
-    sed -i "s#{grafana_log}#$grafana_log#g" /usr/local/bin/grafanastart && \
-    sed -i "s#{grafana_module_home}#$grafana_module_home#g" /usr/local/bin/grafanastop
-RUN echo "sh ${grafana_scripts_home}/init-grafana.sh && grafanastart" >> /init_service
+RUN addlogrotate ${alertmanager_log} alertmanager

@@ -103,10 +103,26 @@ build_prometheus:
 	docker build --build-arg MINIMAL_IMAGE=${MINIMAL_IMAGE} --no-cache -f ./Dockerfiles/backend/prometheus/prometheus.Dockerfile -t ${PROMETHEUS_IMAGE} ./Dockerfiles/backend/prometheus/
 
 build_prometheus_compile:
-	docker build --build-arg NODEJS_IMAGE=${NODEJS_IMAGE} --build-arg GO_IMAGE=${GO_IMAGE} --no-cache -f ./Dockerfiles/backend/prometheus/prometheus_compile.Dockerfile -t ${PROMETHEUS_IMAGE} ./Dockerfiles/backend/prometheus/
+	docker build --build-arg GO_IMAGE=${GO_IMAGE} --build-arg NODEJS_IMAGE=${NODEJS_IMAGE} --no-cache -f ./Dockerfiles/backend/prometheus/prometheus_compile.Dockerfile -t ${PROMETHEUS_IMAGE} ./Dockerfiles/backend/prometheus/
 
 run_prometheus:
-	docker run -it -d --hostname test_prometheus --name dev_prometheus -p 3000:3000 -p 3001:3001 -p 9001:9001 ${PROMETHEUS_IMAGE}
+	docker run -it -d --hostname test_prometheus --name dev_prometheus -p 3001:3001 -p 9001:9001 ${PROMETHEUS_IMAGE}
+
+run_prometheus_grafana:
+	PROMETHEUS_IMAGE=${PROMETHEUS_IMAGE} GRAFANA_IMAGE=${GRAFANA_IMAGE} docker-compose -f ./deployments/compose/prometheus/prometheus_grafana.yml up -d
+
+remove_prometheus_grafana:
+	PROMETHEUS_IMAGE=${PROMETHEUS_IMAGE} GRAFANA_IMAGE=${GRAFANA_IMAGE} docker-compose -f ./deployments/compose/prometheus/prometheus_grafana.yml down --volumes
+
+## grafana
+build_grafana:
+	docker build --build-arg MINIMAL_IMAGE=${MINIMAL_IMAGE} --no-cache -f ./Dockerfiles/backend/grafana/grafana.Dockerfile -t ${GRAFANA_IMAGE} ./Dockerfiles/backend/grafana/
+
+build_grafana_compile:
+	docker build --build-arg NODEJS_IMAGE=${NODEJS_IMAGE} --no-cache -f ./Dockerfiles/backend/grafana/grafana_compile.Dockerfile -t ${GRAFANA_IMAGE} ./Dockerfiles/backend/grafana/
+
+run_grafana:
+	docker run -it -d --hostname test_grafana --name dev_grafana -p 3000:3000 ${GRAFANA_IMAGE}
 
 ## zookeeper
 build_zookeeper:
@@ -222,6 +238,12 @@ run_hue:
 
 remove_hue:
 	HUE_IMAGE=${HUE_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} docker-compose -f ./deployments/compose/hue/hue.yml down --volumes
+
+run_hue_hdfs:
+	HUE_IMAGE=${HUE_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} HDFS_FULL_IMAGE=${HDFS_FULL_IMAGE} docker-compose -f ./deployments/compose/hue/hue_hdfs.yml up -d
+
+remove_hue_hdfs:
+	HUE_IMAGE=${HUE_IMAGE} MYSQL_IMAGE=${MYSQL_IMAGE} HDFS_FULL_IMAGE=${HDFS_FULL_IMAGE} docker-compose -f ./deployments/compose/hue/hue_hdfs.yml down --volumes
 
 ## jupyter
 build_jupyter:

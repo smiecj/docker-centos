@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  prometheus:
+    image: ${PROMETHEUS_IMAGE}
+    hostname: prometheus
+    environment:
+      # hdfs
+      - PROMETHEUS_PORT=3001
+      - ALERTMANAGER_PORT=2113
+    ports:
+      - "3001:3001"
+  grafana:
+    image: ${GRAFANA_IMAGE}
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
