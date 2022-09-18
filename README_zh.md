@@ -37,7 +37,7 @@
 | 中间件  | mysql | make build_mysql | mysql 8.0.27 |
 |   | [redis](https://redis.io) | make build_redis | redis 7.0-rc2 |
 |   | [mongodb](https://www.mongodb.com) | make build_mongo | mongo 6.0.0 |
-|   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>alertmanager 0.23.0 |
+|   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>alertmanager 0.23.0<br>pushgateway 1.4.3<br>node exporter 1.3.1 |
 |   | [grafana](https://grafana.com) | make build_grafana | grafana 8.4.2 |
 |   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.6.3 |
 | emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.1.2 |
@@ -97,12 +97,14 @@ REPO=mzsmieli make run_nacos_mysql
 | 二期 |  jupyter  | lab2、lab3 均安装常用插件，提升体验 | 完成 |
 | 二期 |  dockerfile  | 优化 镜像 tag，如 java 镜像 tag 跟随 jdk 版本，java:v1_8 | 待规划 |
 | 二期 |  dockerfile  | dev 相关基础环境下载源可通过 ARG 配置 | 待规划 |
+| 二期 |  dockerfile  | 下载源相关配置通过 makefile 配置区分国内/国外 | 待规划 |
 | 二期 |  dockerfile  | 优化镜像层数，避免出现 [failed to register layer: max depth exceeded](https://github.com/docker/for-linux/issues/414#issuecomment-569227637) 的问题 | 待规划 |
 | 二期 |  readme  | 每个镜像（dockerfile）都提供单独的 readme，说明如何启动容器和服务提供的端口、服务页面截图，方便用户了解如何使用 | 待规划 |
 | 三期 |  通过 K8S 搭建zk 集群  | 声明 k8s 部署配置文件，一键启动 zk 集群 | 待实现 |
 | 三期 |  vscode 开发镜像  | 预装开发环境，包括语言环境、vscode server 等 | 待实现 |
 | 持续迭代 |  需要扩展的 dockerfile  | backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能 | |
 |  |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb)、es | |
+|  |  需要扩展的 dockerfile  | backend - [nginx](https://github.com/nginx/nginx)、[nginx manager](https://github.com/NginxProxyManager/nginx-proxy-manager) | |
 |  |  需要扩展的 dockerfile  | emr - [atlas](https://github.com/apache/atlas) | |
 |  |  需要扩展的 dockerfile  | emr - [presto](https://github.com/apache/atlas) | |
 |  |  需要扩展的 dockerfile  | emr - [es](https://github.com/elastic/elasticsearch) | |

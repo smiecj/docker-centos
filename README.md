@@ -38,7 +38,7 @@ Use dockerfile and compose file to build docker image and run develop environmen
 | middleware  | mysql | make build_mysql | mysql 8.0.27 |
 |   | [redis](https://redis.io) | make build_redis | redis 7.0-rc2 |
 |   | [mongodb](https://www.mongodb.com) | make build_mongo | mongo 6.0.0 |
-|   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>alertmanager 0.23.0 |
+|   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>alertmanager 0.23.0<br>pushgateway 1.4.3<br>node exporter 1.3.1 |
 |   | [grafana](https://grafana.com) | make build_grafana | grafana 8.4.2 |
 |   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.6.3 |
 | emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.1.2 |

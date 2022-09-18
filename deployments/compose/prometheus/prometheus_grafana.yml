@@ -9,6 +9,7 @@ services:
       - ALERTMANAGER_PORT=2113
     ports:
       - "3001:3001"
+      - "9010:9010"
   grafana:
     image: ${GRAFANA_IMAGE}
     environment:
