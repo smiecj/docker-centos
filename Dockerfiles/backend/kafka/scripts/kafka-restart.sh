@@ -2,4 +2,4 @@
 
 kafkastop
 
-kafkarestart
+kafkastart
