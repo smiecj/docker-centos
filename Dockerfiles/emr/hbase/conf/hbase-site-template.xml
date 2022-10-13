@@ -1,0 +1,34 @@
+<configuration>
+  <property>
+    <name>hbase.cluster.distributed</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hbase.tmp.dir</name>
+    <value>./tmp</value>
+  </property>
+  <property>
+    <name>hbase.unsafe.stream.capability.enforce</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>hbase.master.port</name>
+    <value>{HBASE_MASTER_PORT}</value>
+  </property>
+  <property>
+    <name>hbase.master.info.port</name>
+    <value>{HBASE_MASTER_INFO_PORT}</value>
+  </property>
+  <property>
+    <name>hbase.regionserver.port</name>
+    <value>{HBASE_REGION_SERVER_PORT}</value>
+  </property>
+  <property>
+    <name>hbase.regionserver.info.port</name>
+    <value>{HBASE_REGION_SERVER_INFO_PORT}</value>
+  </property>
+  <property>
+    <name>hbase.thrift.info.port</name>
+    <value>{HBASE_THRIFT_PORT}</value>
+  </property>
+</configuration>
