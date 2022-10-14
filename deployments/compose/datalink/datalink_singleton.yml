@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  datalink:
+    image: ${DATALINK_IMAGE}
+    hostname: datalink
+    environment:
+      ## mysql
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=datalink
+      - MYSQL_USER=datalink
+      - MYSQL_PASSWORD=datalink_TEST_123
+      ## zk
+      - ZOOKEEPER_ADDRESS=zookeeper:2181
+      ## manager
+      - MANAGER_NETTY_PORT=8898
+      - MANAGER_HTTP_PORT=8080
+      ## start
+      - DATALINK_START=datalinkmanagerstart
+    ports:
+      - "18080:8080"
+    depends_on:
+      - zookeeper
+      - mysql
+  zookeeper:
+    image: ${ZOOKEEPER_IMAGE}
+    environment:
+      - MODE=singleton
+  mysql:
+    image: ${MYSQL_IMAGE}
+    environment:
+      - USER_NAME=datalink
+      - USER_PASSWORD=datalink_TEST_123
+      - USER_DB=datalink
+    volumes:
+      - "./:/opt/modules/mysql/init_sql"
