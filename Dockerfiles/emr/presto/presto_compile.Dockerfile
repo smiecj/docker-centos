@@ -1,28 +1,35 @@
 ARG PRESTO_BASE_IMAGE
 FROM ${PRESTO_BASE_IMAGE}
 
-# install presto
+ARG repo_home=/home/repo
+ARG java_repo_home=${repo_home}/java
 
+# env
 ENV PORT=7070
 ENV HADOOP_CONF_DIR=/etc/hadoop/conf
-ENV DATA_DIR=/opt/data/presto
+ENV DATA_DIR=/home/data/presto
 ENV HIVE_METASTORE_URL=localhost:8093
 
+# arg
 ARG presto_module_home=/opt/modules/presto
-ARG presto_version=0.275
-# ARG repo=https://repo1.maven.org/maven2
-ARG maven_repo=https://mirrors.huaweicloud.com/repository/maven
 ARG presto_script_home=${presto_module_home}/scripts
+ARG git_branch=release-0.275
+ARG git_repo=https://github.com
+ARG presto_repo=${git_repo}/prestodb/presto
 
-## install
-RUN presto_server_folder=presto-server-${presto_version} && \
-    presto_server_pkg=${presto_server_folder}.tar.gz && \
-    presto_server_pkg_url=${maven_repo}/com/facebook/presto/presto-server/${presto_version}/${presto_server_pkg} && \
-    presto_client_jar=presto-cli-${presto_version}-executable.jar && \
-    presto_client_jar_url=${maven_repo}/com/facebook/presto/presto-cli/${presto_version}/${presto_client_jar} && \
-    mkdir -p ${presto_module_home} && cd ${presto_module_home} && curl -LO ${presto_server_pkg_url} && \
-    tar -xzvf ${presto_server_pkg} && rm ${presto_server_pkg} && mv ${presto_server_folder}/* ./ && rm -rf ${presto_server_folder} && \
-    curl -LO ${presto_client_jar_url} && mv ${presto_client_jar} ./bin/presto && chmod +x ./bin/presto
+## compile
+RUN yum -y install diffutils
+RUN mkdir -p ${presto_module_home} && cd ${presto_module_home} && git clone ${presto_repo} -b ${git_branch} && \
+    source /etc/profile && cd presto && mvn clean install -DskipTests && \
+    presto_server_pkg=`ls -l presto-server/target/ | grep "SNAPSHOT.tar.gz" | sed 's#.* ##g'` && \
+    presto_server_folder=`echo ${presto_server_pkg} | sed 's#.tar.*##g'` && \
+    presto_client_jar=`ls -l presto-cli/target/ | grep "executable.jar" | sed 's#.* ##g'` && \
+    mv presto-server/target/${presto_server_pkg} ${presto_module_home}/ && \
+    mv presto-cli/target/${presto_client_jar} ${presto_module_home}/ && \
+    cd .. && rm -rf presto && tar -xzvf ${presto_server_pkg} && rm ${presto_server_pkg} && \
+    mv ${presto_server_folder}/* ./ && rm -rf ${presto_server_folder} && \
+    mv ${presto_client_jar} bin/presto && \
+    rm -rf ${java_repo_home}
 
 ## copy config
 RUN mkdir -p ${presto_module_home}/etc && mkdir -p ${presto_script_home}

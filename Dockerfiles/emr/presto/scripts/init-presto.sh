@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # init config
-pushd {presto_server_home}
+pushd {presto_module_home}
 host_name=`hostname`
 
 ## config.properties
