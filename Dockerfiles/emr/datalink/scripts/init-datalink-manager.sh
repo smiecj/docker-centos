@@ -28,5 +28,6 @@ sed -i "s/{MYSQL_PASSWORD}/${MYSQL_PASSWORD}/g" datasource.properties
 sed -i "s/{MANAGER_NETTY_PORT}/${MANAGER_NETTY_PORT}/g" manager.properties
 sed -i "s/{MANAGER_HTTP_PORT}/${MANAGER_HTTP_PORT}/g" manager.properties
 sed -i "s/{ZOOKEEPER_ADDRESS}/${ZOOKEEPER_ADDRESS}/g" manager.properties
+sed -i "s/{ZOOKEEPER_ROOT}/${ZOOKEEPER_ROOT}/g" manager.properties
 
 popd

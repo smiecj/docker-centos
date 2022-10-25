@@ -27,5 +27,6 @@ sed -i "s/{MYSQL_PASSWORD}/${MYSQL_PASSWORD}/g" datasource.properties
 
 sed -i "s/{MANAGER_NETTY_ADDRESS}/${MANAGER_NETTY_ADDRESS}/g" worker.properties
 sed -i "s/{ZOOKEEPER_ADDRESS}/${ZOOKEEPER_ADDRESS}/g" worker.properties
+sed -i "s/{ZOOKEEPER_ROOT}/${ZOOKEEPER_ROOT}/g" worker.properties
 
 popd

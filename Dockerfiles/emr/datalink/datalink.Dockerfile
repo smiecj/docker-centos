@@ -24,6 +24,7 @@ ENV MYSQL_PASSWORD=datalink123
 
 ## env: zk
 ENV ZOOKEEPER_ADDRESS=localhost:2181
+ENV ZOOKEEPER_ROOT=/datalink
 
 ## env: manager
 ENV MANAGER_NETTY_PORT=8898

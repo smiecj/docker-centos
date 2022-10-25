@@ -916,7 +916,7 @@ CREATE TABLE `t_dl_flinker_job_run_queue` (
   `success_list` varchar(200) DEFAULT NULL COMMENT '已经执行完的job数量',
   `failure_list` varchar(200) DEFAULT NULL COMMENT '已执行失败的job数量',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   `top_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Flinker job运行队列表';
@@ -1396,10 +1396,6 @@ insert into t_dl_menu (code,name,parent_code,type,url,icon,create_time,modify_ti
 insert into t_dl_menu (code,name,parent_code,type,url,icon,create_time,modify_time ) values('005003011','开启或关闭Job队列','005003000','ACTION','/jobRunQueue/doOpenOrCloseQueue','',now(),now());
 insert into t_dl_menu (code,name,parent_code,type,url,icon,create_time,modify_time ) values('005003012','再次执行Job','005003000','ACTION','/jobRunQueue/doUpdateJobRunQueueById','',now(),now());
 
-
-INSERT INTO `t_dl_sys_properties` (`properties_key`, `properties_value`, `create_time`, `modify_time`) VALUES
-  ('multiplexingReadGlobal', 'false', now(), now());
-
 INSERT INTO `t_dl_role` (`id`, `code`, `name`, `create_time`, `modify_time`) VALUES (1, 'SUPER', '超级管理员', now(), now());
 INSERT INTO `t_dl_role` (`id`, `code`, `name`, `create_time`, `modify_time`)
 VALUES (2, 'ORDINARY', '普通用户', now(), now());
@@ -1540,7 +1536,7 @@ CREATE TABLE `t_dl_flinker_job_run_queue` (
   `success_list` varchar(200) DEFAULT NULL COMMENT '已经执行完的job数量',
   `failure_list` varchar(200) DEFAULT NULL COMMENT '已执行失败的job数量',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modify_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `modify_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   `top_time` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Flinker job运行队列表';
@@ -1707,16 +1703,6 @@ CREATE TABLE `t_dl_task_trace` (
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8
   COMMENT = '任务轨迹监控表';
-
-
-ALTER TABLE `t_dl_media_mapping` DROP INDEX `idx1_mediamapping`;
-ALTER TABLE `t_dl_media_mapping` ADD CONSTRAINT `idx1_mediamapping` UNIQUE (`task_id`, `source_media_id`, `target_media_source_id`, `target_media_name`);
-ALTER TABLE `t_dl_media_mapping` ADD COLUMN `es_routing` VARCHAR(100) DEFAULT NULL
-COMMENT 'esRouting字段';
-ALTER TABLE `t_dl_media_mapping` ADD COLUMN `es_routing_ignore` VARCHAR(5) DEFAULT NULL
-COMMENT '如果routing字段值不存在，写入的数据是否可忽略写入,true：可以忽略，false：不可以忽略';
-ALTER TABLE `t_dl_sys_properties` MODIFY `properties_key` VARCHAR(30);
-
 
 INSERT INTO t_dl_menu (CODE, NAME, parent_code, type, url, icon, create_time, modify_time) VALUES
   ('008002000', '审计日志', '007000000', 'LEAF', '/auditLog/auditLogList', '', now(), now());
