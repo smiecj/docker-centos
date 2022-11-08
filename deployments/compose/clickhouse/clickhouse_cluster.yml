@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  ck00:
+    image: ${CLICKHOUSE_IMAGE}
+    hostname: ck00
+    environment:
+      ## replica
+      - REPLICA_NODES=ck00,ck01,ck02
+      - USER_ALLOW_DB=ck_test00,ck_test01,ck_test02
+      ## zk
+      - ZOOKEEPER_NODES=zookeeper:2181
+    ports:
+      - "18123:8123"
+      - "19000:9000"
+      - "19363:9363"
+    depends_on:
+      - zookeeper
+  ck01:
+    image: ${CLICKHOUSE_IMAGE}
+    hostname: ck01
+    environment:
+      ## replica
+      - REPLICA_NODES=ck00,ck01,ck02
+      - USER_ALLOW_DB=ck_test00,ck_test01,ck_test02
+      ## zk
+      - ZOOKEEPER_NODES=zookeeper:2181
+    ports:
+      - "28123:8123"
+      - "29000:9000"
+      - "29363:9363"
+    depends_on:
+      - zookeeper
+  ck02:
+    image: ${CLICKHOUSE_IMAGE}
+    hostname: ck02
+    environment:
+      ## replica
+      - REPLICA_NODES=ck00,ck01,ck02
+      - USER_ALLOW_DB=ck_test00,ck_test01,ck_test02
+      ## zk
+      - ZOOKEEPER_NODES=zookeeper:2181
+    ports:
+      - "38123:8123"
+      - "39000:9000"
+      - "39363:9363"
+    depends_on:
+      - zookeeper
+  zookeeper:
+    image: ${ZOOKEEPER_IMAGE}
+    environment:
+      - MODE=singleton
