@@ -67,6 +67,7 @@ extend blog:
 |   | [trino](https://trino.io) | make build_trino | trino 403 |
 |   | [superset](https://superset.apache.org) | make build_superset | superset 2.0.0 |
 |   | [azkaban](https://azkaban.github.io) | make build_azkaban | azkaban master branch |
+|   | [datalink](https://github.com/ucarGroup/DataLink) | make build_datalink | [datalink dev branch](https://github.com/smiecj/datalink/tree/dev_bugfix) |
 |   | [elasticsearch](https://www.elastic.co/cn/elasticsearch) | make build_es | elasticsearch 8.4.1 |
 |   | [kibana](https://www.elastic.co/cn/kibana) | make build_kibana | kibana 8.4.1 |
 |   | [atlas](https://atlas.apache.org) | make build_atlas | atlas 2.2.0 |
