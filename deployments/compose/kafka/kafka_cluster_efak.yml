@@ -1,0 +1,65 @@
+version: "3.9"
+services:
+  # zk singleton
+  zookeeper:
+    image: ${IMAGE_ZOOKEEPER}
+    environment:
+      - MODE=singleton
+    ports:
+      - "12181:2181"
+  # kafka cluster
+  kafka1:
+    image: ${IMAGE_KAFKA}
+    environment:
+      - zookeeper_server=zookeeper:2181
+      - MODE=cluster
+      - ID=0
+    depends_on:
+      - zookeeper
+    ports:
+      - "19092:9092"
+  kafka2:
+    image: ${IMAGE_KAFKA}
+    environment:
+      - zookeeper_server=zookeeper:2181
+      - MODE=cluster
+      - ID=1
+    depends_on:
+      - zookeeper
+    ports:
+      - "19093:9092"
+  kafka3:
+    image: ${IMAGE_KAFKA}
+    environment:
+      - zookeeper_server=zookeeper:2181
+      - MODE=cluster
+      - ID=2
+    depends_on:
+      - zookeeper
+    ports:
+      - "19094:9092"
+  # mysql
+  mysql:
+    image: ${IMAGE_MYSQL}
+    environment:
+      - USER_PASSWORD=efak_TEST_123
+      - USER_DB=efak
+      - USER_NAME=efak
+    ports:
+      - "33306:3306"
+  # efak
+  efak:
+    image: ${IMAGE_EFAK}
+    environment:
+      - ZOOKEEPER_ADDRESS=zookeeper:2181
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=efak
+      - MYSQL_USER=efak
+      - MYSQL_PASSWORD=efak_TEST_123
+    depends_on:
+      - mysql
+      - kafka1
+      - kafka2
+      - kafka3
+    ports:
+      - "38042:8042"

@@ -6,7 +6,7 @@
 ## set mysql cnf file
 my_cnf_template=/etc/my.cnf_template
 my_cnf=/etc/my.cnf
-if [ ! -f ${my_cnf} ]; then
+if [ ! -f ${my_cnf} ] || [[ -z `cat ${my_cnf} | grep "port="` ]] ; then
     cp ${my_cnf_template} ${my_cnf}
     sed -i "s#{DATA_DIR}#${DATA_DIR}#g" ${my_cnf}
     sed -i "s#{MYSQL_LOG}#${MYSQL_LOG}#g" ${my_cnf}
@@ -16,6 +16,7 @@ fi
 
 ## init mysql data dir
 if [ ! -f ${DATA_DIR} ]; then
+    echo "" > ${MYSQL_LOG}
     mysqld --initialize
 fi
 
@@ -34,7 +35,7 @@ mysql_version=`mysql -V`
 
 if [[ "$mysql_version" =~ .*8.[0-9]+.[0-9]+ ]]; then
     ## set root password
-    mysql -uroot -p"$origin_mysql_password" -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';" --connect-expired-password
+    mysql -uroot -p"$origin_mysql_password" -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${ROOT_PASSWORD}';" --connect-expired-password
     mysql -uroot -p"${ROOT_PASSWORD}" -e "UPDATE mysql.user SET host = '%' WHERE user = 'root'"
 
     ## set user db and add permission
@@ -47,22 +48,21 @@ if [[ "$mysql_version" =~ .*8.[0-9]+.[0-9]+ ]]; then
             mysql -uroot -p"${ROOT_PASSWORD}" -e "ALTER USER '${USER_NAME}'@'%' IDENTIFIED WITH mysql_native_password BY '${USER_PASSWORD}'" || true
             mysql -uroot -p"${ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON ${USER_DB}.* TO '${USER_NAME}'@'%' WITH GRANT OPTION" || true
         fi
-        
-        GRANT ALL PRIVILEGES ON mall.* TO 'mall'@'%' WITH GRANT OPTION;
     fi
 
     ## execute init sql
     sql_files=`ls -l {mysql_init_sql_home} | grep -E "\.sql$" | sed "s/.* //g" | tr '\n' ' '`
     for current_sql_file in ${sql_files[@]}
     do
-        mysql -uroot -p"${ROOT_PASSWORD}" -f -D${USER_DB} < {mysql_init_sql_home}/${current_sql_file}
+        mysql -uroot -p"${ROOT_PASSWORD}" -D${USER_DB} < {mysql_init_sql_home}/${current_sql_file} || true
     done
 
     ### todo: add user account with permission
 fi
 
 ## close mysql
-mysqladmin -uroot -p${ROOT_PASSWORD} shutdown
+# mysqladmin -uroot -p${ROOT_PASSWORD} shutdown
+ps -ef | grep "mysqld --user" | grep -v grep | awk '{print $2}' | xargs --no-run-if-empty kill -9
 
 ## remove origin mysql log
 echo "" > ${MYSQL_LOG}

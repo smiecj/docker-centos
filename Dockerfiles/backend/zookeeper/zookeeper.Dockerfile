@@ -1,63 +1,50 @@
-ARG JAVA_IMAGE
-FROM ${JAVA_IMAGE} AS java_base
+ARG IMAGE_JAVA
+FROM ${IMAGE_JAVA} AS java_base
 
 # zookeeper config
-ARG zookeeper_home=/home/modules/zookeeper
-ARG zookeeper_scripts_home=$zookeeper_home/scripts
-ARG zookeeper_tag=release-3.6.3
-ARG zookeeper_tag_num=3.6.3
+ARG module_home
 
-ARG zookeeper_source_url=https://github.com/apache/zookeeper/archive/refs/tags/$zookeeper_tag.tar.gz
-ARG zookeeper_source_pkg=zookeeper_code.tar.gz
-ARG zookeeper_source_folder=zookeeper-$zookeeper_tag
-ARG zookeeper_pkg=apache-zookeeper-$zookeeper_tag_num-bin.tar.gz
-ARG zookeeper_folder=apache-zookeeper-$zookeeper_tag_num-bin
+ARG ZOOKEEPER_VERSION
+ARG github_repo
 
 ENV MODE=singleton
 ENV MYID=1
 ENV PORT=2181
-ENV zookeeper_data_home=${zookeeper_home}/${zookeeper_folder}/data
+ENV zookeeper_data_home=/opt/data/zookeeper
 ENV SERVER_INFO={zk_host_1}:2888:3888,{zk_host_2}:2888:3888,{zk_host_3}:2888:3888
 
-ARG repo_home=/home/repo
-ARG java_repo_home=${repo_home}/java
+# copy script
+COPY ./scripts/zookeeper-start.sh /usr/local/bin/zookeeperstart
+COPY ./scripts/zookeeper-restart.sh /usr/local/bin/zookeeperrestart
+COPY ./scripts/zookeeper-stop.sh /usr/local/bin/zookeeperstop
+COPY ./scripts/init-zookeeper.sh /tmp
+# copy cfg
+COPY zoo_*.cfg /tmp
 
 # download zookeeper source code and compile
-RUN mkdir -p ${zookeeper_home}
-RUN cd ${zookeeper_home} && curl -L $zookeeper_source_url -o $zookeeper_source_pkg \
-  && tar -xzvf $zookeeper_source_pkg && rm -f $zookeeper_source_pkg
-
-RUN source /etc/profile && cd ${zookeeper_home}/${zookeeper_source_folder} && \
-    mvn clean install -DskipTests && mv zookeeper-assembly/target/$zookeeper_pkg ${zookeeper_home}/
-RUN cd ${zookeeper_home} && rm -rf ${zookeeper_source_folder}
-
-RUN cd ${zookeeper_home} && tar -xzvf $zookeeper_pkg && rm -f $zookeeper_pkg
-
-# copy cfg
-COPY zoo_*.cfg ${zookeeper_home}/${zookeeper_folder}/conf/
-
-### copy zk init script and add to entrypoint
-COPY ./scripts/init-zookeeper.sh ${zookeeper_home}/${zookeeper_folder}/
-RUN echo "sh ${zookeeper_home}/${zookeeper_folder}/init-zookeeper.sh" >> /init_service
-
+RUN zookeeper_home=${module_home}/zookeeper && \
+    zookeeper_release_version=release-${ZOOKEEPER_VERSION} && \
+    zookeeper_source_pkg=${zookeeper_release_version}.tar.gz && \
+    zookeeper_source_url=${github_repo}/apache/zookeeper/archive/refs/tags/${zookeeper_source_pkg} && \
+    zookeeper_source_folder=zookeeper-${zookeeper_release_version} && \
+    zookeeper_pkg_folder=apache-zookeeper-${ZOOKEEPER_VERSION}-bin && \
+    zookeeper_pkg=${zookeeper_pkg_folder}.tar.gz && \
+    mkdir -p ${zookeeper_home} && \
+    cd ${zookeeper_home} && curl -LO ${zookeeper_source_url} && \
+    tar -xzvf ${zookeeper_source_pkg} && rm ${zookeeper_source_pkg} && \
+    source /etc/profile && cd ${zookeeper_source_folder} && \
+    mvn clean install -DskipTests && mv zookeeper-assembly/target/${zookeeper_pkg} ${zookeeper_home}/ && \
+    cd ${zookeeper_home} && rm -r ${zookeeper_source_folder} && \
+    tar -xzvf ${zookeeper_pkg} && rm $zookeeper_pkg && mv ${zookeeper_pkg_folder}/* ./ && rm -r ${zookeeper_pkg_folder} && \
+### copy zk init script and conf
+    mv /tmp/init-zookeeper.sh ${zookeeper_home}/ && \
+    mv /tmp/zoo_*.cfg ${zookeeper_home}/conf/ && \
+    echo "sh ${zookeeper_home}/init-zookeeper.sh" >> /init_service && \
 ## clean mvn download packages
-RUN rm -rf ${java_repo_home}/maven/*
-
+    rm -rf ~/.m2/repository/* && \
 # zookeeper service
-
-## zookeeper start and stop script
-### sed can set split character, refer: https://stackoverflow.com/a/26603752
-COPY ./scripts/zookeeper-start.sh /usr/local/bin/zookeeperstart
-RUN sed -i "s#{zookeeper_home}#${zookeeper_home}/${zookeeper_folder}#g" /usr/local/bin/zookeeperstart && \
-    chmod +x /usr/local/bin/zookeeperstart
-
-COPY ./scripts/zookeeper-restart.sh /usr/local/bin/zookeeperrestart
-RUN chmod +x /usr/local/bin/zookeeperrestart
-
-COPY ./scripts/zookeeper-stop.sh /usr/local/bin/zookeeperstop
-RUN chmod +x /usr/local/bin/zookeeperstop
-
+    sed -i "s#{zookeeper_home}#${zookeeper_home}#g" /usr/local/bin/zookeeperstart && \
+    chmod +x /usr/local/bin/zookeeperstart && chmod +x /usr/local/bin/zookeeperstop && chmod +x /usr/local/bin/zookeeperrestart && \
 ### add zookeeper start to entrypoint
-RUN echo "zookeeperstart" >> /init_service
-
-RUN rm -rf /tmp/*
+    echo "zookeeperstart" >> /init_service && \
+    rm -rf /tmp/*

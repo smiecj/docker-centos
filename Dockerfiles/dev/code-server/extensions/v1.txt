@@ -1,0 +1,41 @@
+## language-golang
+golang.go@0.35.2
+
+## language-java
+vscjava.vscode-java-debug@0.44.0
+vscjava.vscode-java-dependency@0.21.0
+vscjava.vscode-java-pack@0.25.1
+vscjava.vscode-java-test@0.37.1
+vscjava.vscode-maven@0.38.0
+redhat.fabric8-analytics@0.3.6
+redhat.java@1.10.0
+
+gabrielbb.vscode-lombok@1.0.1
+
+## language-python
+donjayamanne.python-environment-manager@1.0.4
+donjayamanne.python-extension-pack@1.7.0
+
+ms-python.python@2022.14.0
+
+kevinrose.vsc-python-indent@1.17.0
+
+batisteo.vscode-django@1.8.0
+
+njpwerner.autodocstring@0.6.1
+
+## language-c
+jeff-hykin.better-cpp-syntax@1.15.19
+
+ms-vscode.cmake-tools@1.12.27
+ms-vscode.cpptools-themes@1.0.0
+
+twxs.cmake@0.0.17
+
+## language-javascript
+dbaeumer.vscode-eslint@2.2.6
+
+octref.vetur@0.36.0
+
+## tools
+hediet.vscode-drawio@1.6.4

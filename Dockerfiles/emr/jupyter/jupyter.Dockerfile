@@ -1,82 +1,85 @@
 # install jupyter (notebook or lab) on default conda env
-ARG JUPYTER_BASE_IMAGE
-FROM ${JUPYTER_BASE_IMAGE}
+ARG IMAGE_JUPYTER_BASE
+FROM ${IMAGE_JUPYTER_BASE}
 
-ARG jupyter_version=3
+ARG jupyter_version
+ARG module_home
+ARG pip_repo
+ARG github_url
 
 # install jupyter
 ENV component=notebook
-ARG jupyter_home=/home/modules/jupyter
-
-ARG npm_conpoment_arr="configurable-http-proxy"
-ARG yum_conpoment_arr="python3-zmq python3-devel libffi libffi-devel"
-
-## jupyter env
-### local user
-ARG jupyter_local_user_arr="jupyter:jupyter@Qwer jupyter_test:jupyter@test"
 
 ### proxy
-ENV proxy_port=8102
-ENV proxy_token=test_hub_123
-ENV proxy_address=http://127.0.0.1:${proxy_port}
+ENV api_port=8102
+ENV proxy_port=8000
+ENV hub_token=test_hub_123
 
-### jupyter & jupyterhub
-ARG jupyter_module_home=/home/modules/jupyter
-ARG jupyter_config_home=${jupyter_module_home}/config
-ARG jupyter_scripts_home=${jupyter_module_home}/scripts
+### authenticator
+ENV auth="dummy"
+ENV dummy_password="jupyter@Qwer"
 
-ARG jupyterhub_bind_ip=0.0.0.0
-ARG jupyterhub_bind_port=8101
+# copy script and config
+COPY ./scripts/init-jupyter.sh /tmp
+COPY ./scripts/jupyter-start.sh /usr/local/bin/jupyterstart
+COPY ./scripts/jupyter-stop.sh /usr/local/bin/jupyterstop
+COPY ./scripts/jupyter-restart.sh /usr/local/bin/jupyterrestart
+COPY ./requirements_jupyter*.txt /tmp/
+COPY ./jupyterhub_pam /tmp
 
-ARG jupyter_pam_file=jupyterhub_pam
+RUN jupyter_home=${module_home}/jupyter && \
+    npm_conpoment_arr="configurable-http-proxy" && \
+    yum_conpoment_arr="libffi libffi-devel" && \
 
-ARG jupyter_spawner_timeout=3600
-ARG jupyter_memory_limit=1G
-ARG jupyter_cpu_limit=2
+    jupyter_module_home=${module_home}/jupyter && \
+    jupyter_config_home=${jupyter_module_home}/config && \
+    jupyter_scripts_home=${jupyter_module_home}/scripts && \
 
-ARG jupyterhub_log=${jupyter_module_home}/jupyterhub.log
+    jupyter_pam_file=jupyterhub_pam && \
+    jupyter_spawner_timeout=3600 && \
+    jupyter_memory_limit=1G && \
+    jupyter_cpu_limit=2 && \
 
-### pip index
-ARG pip_index=http://mirrors.aliyun.com/pypi/simple/
-ARG pip_index_host=mirrors.aliyun.com
+    jupyterhub_log=${jupyter_module_home}/jupyterhub.log && \
+
+### local user
+    jupyter_local_user_arr="jupyter:jupyter@Qwer jupyter_test:jupyter@test" && \
+
 
 ## install npm conpoment
-RUN source /etc/profile && for conpoment in ${npm_conpoment_arr[@]}; \
+source /etc/profile && for conpoment in ${npm_conpoment_arr[@]}; \
 do\
     npm install -g $conpoment; \
-done
+done && \
 
 ## install yum component
-RUN for conpoment in ${yum_conpoment_arr[@]}; \
+for conpoment in ${yum_conpoment_arr[@]}; \
 do\
     yum -y install $conpoment; \
-done
+done && \
 
 ## install jupyter requirements
-COPY ./requirements_jupyter*.txt /tmp/
-RUN python3 -m pip install -r /tmp/requirements_jupyter_${jupyter_version}.txt --quiet --no-cache-dir -i ${pip_index} --trusted-host ${pip_index_host} -vvv
-RUN rm /tmp/requirements_jupyter*.txt
+pip3 install jupyter-packaging && \
+python3 -m pip install -r /tmp/requirements_jupyter_${jupyter_version}.txt --quiet --no-cache-dir -i ${pip_repo} -vvv && \
+rm /tmp/requirements_jupyter*.txt && \
 
 ## config jupyter proxy
-RUN echo "export CONFIGPROXY_AUTH_TOKEN=${jupyter_proxy_token}" >> /etc/profile
+echo "export CONFIGPROXY_AUTH_TOKEN=" >> /etc/profile && \
 
 ## config jupyterhub
-RUN mkdir -p ${jupyter_config_home} && cd ${jupyter_config_home} && \
-    source /etc/profile && jupyterhub --generate-config
+mkdir -p ${jupyter_config_home} && cd ${jupyter_config_home} && \
+source /etc/profile && jupyterhub --generate-config && \
 
 ### basic
 #### spawner
-RUN sed -i 's/# c.Spawner.cmd/c.Spawner.cmd/g' ${jupyter_config_home}/jupyterhub_config.py
+sed -i 's/# c.Spawner.cmd/c.Spawner.cmd/g' ${jupyter_config_home}/jupyterhub_config.py && \
 
 #### auth
-RUN sed -i "s/.*c\.JupyterHub\.ip.*/c.JupyterHub.ip = '$jupyterhub_bind_ip'/g" ${jupyter_config_home}/jupyterhub_config.py
-RUN sed -i "s/.*c\.JupyterHub\.port.*/c.JupyterHub.port = $jupyterhub_bind_port/g" ${jupyter_config_home}/jupyterhub_config.py
-RUN echo -e "\nc.PAMAuthenticator.service = '$jupyter_pam_file'\n" >> ${jupyter_config_home}/jupyterhub_config.py
-ARG jupyter_pam_path=/etc/pam.d/${jupyter_pam_file}
-COPY ./jupyterhub_pam ${jupyter_pam_path}
+echo -e "\nc.PAMAuthenticator.service = '$jupyter_pam_file'\n" >> ${jupyter_config_home}/jupyterhub_config.py && \
+jupyter_pam_path=/etc/pam.d/${jupyter_pam_file} && mv /tmp/jupyterhub_pam ${jupyter_pam_path} && \
 
 ### culler
-RUN echo -e "import sys\n\
+echo -e "import sys\n\
 c.JupyterHub.services = [\n\
     {\n\
         'name': 'idle-culler',\n\
@@ -87,12 +90,12 @@ c.JupyterHub.services = [\n\
             '--timeout=${jupyter_spawner_timeout}'\n\
         ],\n\
     }\n\
-]" >> ${jupyter_config_home}/jupyterhub_config.py
+]" >> ${jupyter_config_home}/jupyterhub_config.py && \
 
 ### scala
-RUN echo -e "c.Spawner.environment = {\n\
+echo -e "c.Spawner.environment = {\n\
         'SPARK_HOME': '/home/modules/spark-3.1.2'\n\
-}" >> ${jupyter_config_home}/jupyterhub_config.py
+}" >> ${jupyter_config_home}/jupyterhub_config.py && \
 
 ### R
 # RUN yum -y install epel-release
@@ -100,33 +103,38 @@ RUN echo -e "c.Spawner.environment = {\n\
 # RUN yum -y install R
 
 ### memory and cpu limit
-RUN echo -e """# resource limit\n\
+echo -e """# resource limit\n\
 c.Spawner.mem_limit = \"${jupyter_memory_limit}\"\n\
-c.Spawner.cpu_limit = ${jupyter_cpu_limit}\n""" >> ${jupyter_config_home}/jupyterhub_config.py
+c.Spawner.cpu_limit = ${jupyter_cpu_limit}\n""" >> ${jupyter_config_home}/jupyterhub_config.py && \
 
 ### proxy
-RUN echo -e "# proxy \n\
+echo -e "# proxy \n\
 c.JupyterHub.cleanup_servers = False\n\
 c.ConfigurableHTTPProxy.should_start = False\n\
-c.ConfigurableHTTPProxy.auth_token = '${proxy_token}'\n\
-c.ConfigurableHTTPProxy.api_url = '${proxy_address}'\n\
-" >> ${jupyter_config_home}/jupyterhub_config.py
+c.ConfigurableHTTPProxy.auth_token = ''\n\
+c.ConfigurableHTTPProxy.api_url = ''\n\
+" >> ${jupyter_config_home}/jupyterhub_config.py && \
+
+### dummy
+echo -e "# dummy \n\
+c.DummyAuthenticator.password = ''\n\
+" >> ${jupyter_config_home}/jupyterhub_config.py && \
 
 ## install some basic extensions
-RUN source /etc/profile && jupyter contrib nbextension install --sys-prefix && \
-    jupyter nbextension enable hinterland/hinterland --sys-prefix && \
-    jupyter nbextension enable execute_time/ExecuteTime --sys-prefix && \
-    jupyter nbextension enable snippets/main --sys-prefix 
+source /etc/profile && jupyter contrib nbextension install --sys-prefix && \
+jupyter nbextension enable hinterland/hinterland --sys-prefix && \
+jupyter nbextension enable execute_time/ExecuteTime --sys-prefix && \
+jupyter nbextension enable snippets/main --sys-prefix && \
 
 ### lsp
-RUN source /etc/profile && if [ "2" == "${jupyter_version}" ]; \
+source /etc/profile && if [ "2" == "${jupyter_version}" ]; \
 then\
     jupyter labextension install @krassowski/jupyterlab-lsp@2.1.4;\
-fi
-RUN pip3 install git+https://github.com/krassowski/python-language-server.git@main
+fi && \
+pip3 install git+${github_url}/krassowski/python-language-server.git@main && \
 
 ## add local account and set default extension config
-RUN for user_info in ${jupyter_local_user_arr[@]}; \
+for user_info in ${jupyter_local_user_arr[@]}; \
 do\
     user_info_arr=($(echo $user_info | tr ":" "\n")) && \
     useradd ${user_info_arr[0]} && \
@@ -155,32 +163,30 @@ do\
 }""" > ${notebook_extension_home}/tracker.jupyterlab-settings && \
 
     chown -R jupyter:jupyter /home/${user_info_arr[0]}/.jupyter; \
-done
+done && \
 
 ## profile & init script
-RUN echo -e """\n\
+echo -e """\n\
 # jupyter\n\
 export JUPYTERHUB_SINGLEUSER_APP=notebook.notebookapp.NotebookApp\n\
-""" >> /etc/profile
-RUN mkdir -p ${jupyter_scripts_home}
-COPY ./scripts/init-jupyter.sh ${jupyter_scripts_home}/
-RUN sed -i "s#{jupyter_config_home}#${jupyter_config_home}#g" ${jupyter_scripts_home}/init-jupyter.sh
+""" >> /etc/profile && \
+mkdir -p ${jupyter_scripts_home} && \
 
-## copy jupyter start and stop script
-COPY ./scripts/jupyter-start.sh /usr/local/bin/jupyterstart
-COPY ./scripts/jupyter-stop.sh /usr/local/bin/jupyterstop
-COPY ./scripts/jupyter-restart.sh /usr/local/bin/jupyterrestart
-RUN sed -i "s#{jupyter_config_home}#${jupyter_config_home}#g" /usr/local/bin/jupyterstart && \
-    sed -i "s#{jupyterhub_log}#${jupyterhub_log}#g" /usr/local/bin/jupyterstart && \
-    chmod +x /usr/local/bin/jupyterstart && chmod +x /usr/local/bin/jupyterstop && chmod +x /usr/local/bin/jupyterrestart
+mv /tmp/init-jupyter.sh ${jupyter_scripts_home} && \
+sed -i "s#{jupyter_config_home}#${jupyter_config_home}#g" ${jupyter_scripts_home}/init-jupyter.sh && \
+
+## copy jupyter start and stop script   
+sed -i "s#{jupyter_config_home}#${jupyter_config_home}#g" /usr/local/bin/jupyterstart && \
+sed -i "s#{jupyterhub_log}#${jupyterhub_log}#g" /usr/local/bin/jupyterstart && \
+chmod +x /usr/local/bin/jupyterstart && chmod +x /usr/local/bin/jupyterstop && chmod +x /usr/local/bin/jupyterrestart && \
 
 ## init script
-RUN echo "sh ${jupyter_scripts_home}/init-jupyter.sh && jupyterstart" >> /init_service
-
+echo "sh ${jupyter_scripts_home}/init-jupyter.sh && jupyterstart" >> /init_service && \
 ## jupyterhub log rotate
-RUN addlogrotate $jupyterhub_log jupyterhub
-
+addlogrotate $jupyterhub_log jupyterhub && \
 ## fix-jupyterhub start failed: load notebook.base.handlers.IPythonHandler on wrong package(jupyter_server)
-RUN site_package_path=`python3 -c "import sys; print(sys.path)" | sed "s/', '/\n/g" | sed "s#\['##g" | sed "s#'\]##g" | grep site-packages | sed -n '1p'` && \
-    sed -i "s/if they have been imported/if they have been imported\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py && \
-    sed -i "s/base_handlers.append(import_item(base_handler_name))/base_handlers.append(import_item(base_handler_name))\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py
+site_package_path=`python3 -c "import sys; print(sys.path)" | sed "s/', '/\n/g" | sed "s#\['##g" | sed "s#'\]##g" | grep site-packages | sed -n '1p'` && \
+sed -i "s/if they have been imported/if they have been imported\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py && \
+sed -i "s/base_handlers.append(import_item(base_handler_name))/base_handlers.append(import_item(base_handler_name))\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py
+
+### 参考 core5 配置

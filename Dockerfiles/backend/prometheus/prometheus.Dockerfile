@@ -1,100 +1,132 @@
-# download pkg to install prometheus, alertmanager and grafana
-ARG MINIMAL_IMAGE
-FROM ${MINIMAL_IMAGE}
+# download pkg to install prometheus, alertmanager
+ARG IMAGE_MINIMAL
+FROM ${IMAGE_MINIMAL}
 
-USER root
-ENV HOME /root
+ARG module_home
+ARG github_repo
 
-# install npm
-## 后续: 如果有重复代码，看是否可以把 npm 和 golang 打包到一个镜像中
+ARG TARGETARCH
+ARG prometheus_version
+ARG alertmanager_version
+ARG pushgateway_version
+ARG node_exporter_version
 
-# install prometheus
-ARG prometheus_version=2.33.4
-ARG prometheus_module_home=/home/modules/prometheus
-ARG prometheus_scripts_home=${prometheus_module_home}/scripts
-ARG prometheus_log=${prometheus_module_home}/prometheus.log
-
+ENV PROMETHEUS_HOST=localhost
 ENV PROMETHEUS_PORT=3001
 
-## install pkg
-RUN mkdir -p ${prometheus_module_home} && mkdir -p ${prometheus_scripts_home}
-COPY ./env_prometheus.sh /tmp/
-RUN . /tmp/env_prometheus.sh && cd /tmp && curl -LO $prometheus_download_url && \
-    tar -xzvf ${prometheus_pkg} && mv ${prometheus_folder}/* ${prometheus_module_home}/ && \
-    rm -rf ${prometheus_folder} && rm ${prometheus_pkg}
-RUN rm /tmp/env_prometheus.sh
-
-# install alertmanager
-ARG alertmanager_version=0.23.0
-ARG alertmanager_module_home=/home/modules/alertmanager
-ARG alertmanager_scripts_home=${alertmanager_module_home}/scripts
-ARG alertmanager_log=${prometheus_module_home}/alertmanager.log
-
+ENV ALERTMANAGER_HOST=localhost
 ENV ALERTMANAGER_PORT=2113
 
-## install pkg
-RUN mkdir -p ${alertmanager_module_home} && mkdir -p ${alertmanager_scripts_home}
-COPY ./env_alertmanager.sh /tmp/
-RUN . /tmp/env_alertmanager.sh && cd /tmp && curl -LO $alertmanager_download_url && \
-    tar -xzvf ${alertmanager_pkg} && mv ${alertmanager_folder}/* ${alertmanager_module_home}/ && \
-    rm -rf ${alertmanager_folder} && rm ${alertmanager_pkg}
-RUN rm /tmp/env_alertmanager.sh
+ENV PUSHGATEWAY_HOST=localhost
+ENV PUSHGATEWAY_PORT=9010
 
-# install grafana
-ARG grafana_version=8.4.2
-ARG grafana_module_home=/home/modules/grafana
-ARG grafana_scripts_home=${grafana_module_home}/scripts
-ARG grafana_log=${grafana_module_home}/grafana.log
+ENV NODE_EXPORTER_HOST=localhost
+ENV NODE_EXPORTER_PORT=9100
 
-ENV GRAFANA_PORT=3000
-
-## install pkg
-RUN mkdir -p ${grafana_module_home} && mkdir -p ${grafana_scripts_home}
-COPY ./env_grafana.sh /tmp/
-RUN . /tmp/env_grafana.sh && cd /tmp && curl -LO $grafana_download_url && \
-    tar -xzvf ${grafana_pkg} && mv ${grafana_folder}/* ${grafana_module_home}/ && \
-    rm -rf ${grafana_folder} && rm ${grafana_pkg}
-RUN rm /tmp/env_grafana.sh
-
-# init script
-## prometheus init script
-RUN mkdir -p ${prometheus_scripts_home}
-COPY ./scripts/init-prometheus.sh ${prometheus_scripts_home}/
-RUN sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" ${prometheus_scripts_home}/init-prometheus.sh
+# copy scripts
+COPY ./scripts/init-prometheus.sh /tmp
+COPY ./config/prometheus_template.yml /tmp
 COPY ./scripts/prometheus-restart.sh /usr/local/bin/prometheusrestart
 COPY ./scripts/prometheus-start.sh /usr/local/bin/prometheusstart
 COPY ./scripts/prometheus-stop.sh /usr/local/bin/prometheusstop
-RUN chmod +x /usr/local/bin/prometheusrestart && chmod +x /usr/local/bin/prometheusstart && chmod +x /usr/local/bin/prometheusstop
-RUN sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" /usr/local/bin/prometheusstart && \
-    sed -i "s#{prometheus_log}#$prometheus_log#g" /usr/local/bin/prometheusstart && \
-    sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" /usr/local/bin/prometheusstop
-RUN echo "sh ${prometheus_scripts_home}/init-prometheus.sh && prometheusstart" >> /init_service
-RUN addlogrotate ${prometheus_log} prometheus
 
-## alertmanager init script
-RUN mkdir -p ${alertmanager_scripts_home}
-COPY ./scripts/init-alertmanager.sh ${alertmanager_scripts_home}/
-RUN sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" ${alertmanager_scripts_home}/init-alertmanager.sh
+COPY ./scripts/init-alertmanager.sh /tmp
 COPY ./scripts/alertmanager-restart.sh /usr/local/bin/alertmanagerrestart
 COPY ./scripts/alertmanager-start.sh /usr/local/bin/alertmanagerstart
 COPY ./scripts/alertmanager-stop.sh /usr/local/bin/alertmanagerstop
-RUN chmod +x /usr/local/bin/alertmanagerrestart && chmod +x /usr/local/bin/alertmanagerstart && chmod +x /usr/local/bin/alertmanagerstop
-RUN sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" /usr/local/bin/alertmanagerstart && \
-    sed -i "s#{alertmanager_log}#$alertmanager_log#g" /usr/local/bin/alertmanagerstart && \
-    sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" /usr/local/bin/alertmanagerstop
-RUN echo "sh ${alertmanager_scripts_home}/init-alertmanager.sh && alertmanagerstart" >> /init_service
-RUN addlogrotate ${alertmanager_log} alertmanager
 
-# install grafana
-RUN mkdir -p ${grafana_scripts_home}
-COPY ./scripts/init-grafana.sh ${grafana_scripts_home}/
-RUN sed -i "s#{grafana_module_home}#$grafana_module_home#g" ${grafana_scripts_home}/init-grafana.sh
-COPY ./scripts/grafana-restart.sh /usr/local/bin/grafanarestart
-COPY ./scripts/grafana-start.sh /usr/local/bin/grafanastart
-COPY ./scripts/grafana-stop.sh /usr/local/bin/grafanastop
-RUN chmod +x /usr/local/bin/grafanarestart && chmod +x /usr/local/bin/grafanastart && chmod +x /usr/local/bin/grafanastop
-RUN sed -i "s#{grafana_module_home}#$grafana_module_home#g" /usr/local/bin/grafanastart && \
-    sed -i "s#{grafana_log}#$grafana_log#g" /usr/local/bin/grafanastart && \
-    sed -i "s#{grafana_module_home}#$grafana_module_home#g" /usr/local/bin/grafanastop
-RUN echo "sh ${grafana_scripts_home}/init-grafana.sh && grafanastart" >> /init_service
-RUN addlogrotate ${grafana_log} grafana
+COPY ./scripts/pushgateway-restart.sh /usr/local/bin/pushgatewayrestart
+COPY ./scripts/pushgateway-start.sh /usr/local/bin/pushgatewaystart
+COPY ./scripts/pushgateway-stop.sh /usr/local/bin/pushgatewaystop
+
+COPY ./scripts/nodeexporter-restart.sh /usr/local/bin/nodeexporterrestart
+COPY ./scripts/nodeexporter-start.sh /usr/local/bin/nodeexporterstart
+COPY ./scripts/nodeexporter-stop.sh /usr/local/bin/nodeexporterstop
+
+## install pkg
+
+RUN prometheus_module_home=${module_home}/prometheus && \
+    prometheus_scripts_home=${prometheus_module_home}/scripts && \
+    prometheus_log=${prometheus_module_home}/prometheus.log && \
+    mkdir -p ${prometheus_module_home} && mkdir -p ${prometheus_scripts_home} && \
+    prometheus_download_url=${github_repo}/prometheus/prometheus/releases/download/v${prometheus_version}/prometheus-${prometheus_version}.linux-${TARGETARCH}.tar.gz && \
+    prometheus_pkg=`echo $prometheus_download_url | sed 's/.*\///g'` && \
+    prometheus_folder=`echo $prometheus_pkg | sed 's/.tar.*//g'` && \
+    cd /tmp && curl -LO $prometheus_download_url && \
+    tar -xzvf ${prometheus_pkg} && mv ${prometheus_folder}/* ${prometheus_module_home}/ && \
+    rm -rf ${prometheus_folder} && rm ${prometheus_pkg} && \
+    mkdir -p ${prometheus_scripts_home} && \
+    mv /tmp/init-prometheus.sh ${prometheus_scripts_home}/ && \
+    mv /tmp/prometheus_template.yml ${prometheus_module_home}/ && \
+
+# install alertmanager
+    alertmanager_module_home=${module_home}/alertmanager && \
+    alertmanager_scripts_home=${alertmanager_module_home}/scripts && \
+    alertmanager_log=${prometheus_module_home}/alertmanager.log && \
+
+## install pkg
+    mkdir -p ${alertmanager_module_home} && mkdir -p ${alertmanager_scripts_home} && \
+    alertmanager_download_url=${github_repo}/prometheus/alertmanager/releases/download/v${alertmanager_version}/alertmanager-${alertmanager_version}.linux-${TARGETARCH}.tar.gz && \
+    alertmanager_pkg=`echo $alertmanager_download_url | sed 's/.*\///g'` && \
+    alertmanager_folder=`echo $alertmanager_pkg | sed 's/.tar.*//g'` && \
+    cd /tmp && curl -LO $alertmanager_download_url && \
+    tar -xzvf ${alertmanager_pkg} && mv ${alertmanager_folder}/* ${alertmanager_module_home}/ && \
+    rm -rf ${alertmanager_folder} && rm ${alertmanager_pkg} && \
+    mkdir -p ${alertmanager_scripts_home} && \
+    mv /tmp/init-alertmanager.sh ${alertmanager_scripts_home}/ && \
+
+# install pushgateway
+    pushgateway_home=${module_home}/pushgateway && \
+
+    mkdir -p ${pushgateway_home} && \
+    pushgateway_download_url=${github_repo}/prometheus/pushgateway/releases/download/v${pushgateway_version}/pushgateway-${pushgateway_version}.linux-${TARGETARCH}.tar.gz && \
+    pushgateway_pkg=`echo $pushgateway_download_url | sed 's/.*\///g'` && \
+    pushgateway_folder=`echo $pushgateway_pkg | sed 's/.tar.*//g'` && \
+    cd /tmp && curl -LO ${pushgateway_download_url} && \
+    tar -xzvf ${pushgateway_pkg} && rm ${pushgateway_pkg} && \
+    mv ${pushgateway_folder}/* ${pushgateway_home}/ && \
+    rm -rf ${pushgateway_folder} && \
+
+# install node exporter
+## suggest dashboard: https://grafana.com/grafana/dashboards/11074-node-exporter-for-prometheus-dashboard-en-v20201010/
+    exporter_home=${module_home}/exporter && \
+    node_exporter_home=${exporter_home}/nodeexporter && \
+    mkdir -p ${exporter_home} && mkdir -p ${node_exporter_home} && \
+    node_exporter_download_url=${github_repo}/prometheus/node_exporter/releases/download/v${node_exporter_version}/node_exporter-${node_exporter_version}.linux-${TARGETARCH}.tar.gz && \
+    node_exporter_pkg=`echo $node_exporter_download_url | sed 's/.*\///g'` && \
+    node_exporter_folder=`echo $node_exporter_pkg | sed 's/.tar.*//g'` && \
+    cd /tmp && curl -LO $node_exporter_download_url && \
+    tar -xzvf ${node_exporter_pkg} && rm ${node_exporter_pkg} && \
+    mv ${node_exporter_folder}/node_exporter ${node_exporter_home}/ && \
+    rm -rf ${node_exporter_folder} && \
+
+# init script
+## prometheus init script
+    sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" ${prometheus_scripts_home}/init-prometheus.sh && \
+    chmod +x /usr/local/bin/prometheusrestart && chmod +x /usr/local/bin/prometheusstart && chmod +x /usr/local/bin/prometheusstop && \
+    sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" /usr/local/bin/prometheusstart && \
+    sed -i "s#{prometheus_log}#$prometheus_log#g" /usr/local/bin/prometheusstart && \
+    sed -i "s#{prometheus_module_home}#$prometheus_module_home#g" /usr/local/bin/prometheusstop && \
+    echo "sh ${prometheus_scripts_home}/init-prometheus.sh && prometheusstart" >> /init_service && \
+    addlogrotate ${prometheus_log} prometheus && \
+
+## alertmanager init script
+    sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" ${alertmanager_scripts_home}/init-alertmanager.sh && \
+    chmod +x /usr/local/bin/alertmanagerrestart && chmod +x /usr/local/bin/alertmanagerstart && chmod +x /usr/local/bin/alertmanagerstop && \
+    sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" /usr/local/bin/alertmanagerstart && \
+    sed -i "s#{alertmanager_log}#$alertmanager_log#g" /usr/local/bin/alertmanagerstart && \
+    sed -i "s#{alertmanager_module_home}#$alertmanager_module_home#g" /usr/local/bin/alertmanagerstop && \
+    echo "sh ${alertmanager_scripts_home}/init-alertmanager.sh && alertmanagerstart" >> /init_service && \
+    addlogrotate ${alertmanager_log} alertmanager && \
+
+## pushgateway
+    chmod +x /usr/local/bin/pushgatewayrestart && chmod +x /usr/local/bin/pushgatewaystart && chmod +x /usr/local/bin/pushgatewaystop && \
+    sed -i "s#{pushgateway_home}#$pushgateway_home#g" /usr/local/bin/pushgatewaystop && \
+    sed -i "s#{pushgateway_home}#$pushgateway_home#g" /usr/local/bin/pushgatewaystart && \
+    echo "pushgatewaystart" >> /init_service && \
+
+## exporters
+    chmod +x /usr/local/bin/nodeexporterrestart && chmod +x /usr/local/bin/nodeexporterstart && chmod +x /usr/local/bin/nodeexporterstop && \
+    sed -i "s#{node_exporter_home}#$node_exporter_home#g" /usr/local/bin/nodeexporterstop && \
+    sed -i "s#{node_exporter_home}#$node_exporter_home#g" /usr/local/bin/nodeexporterstart && \
+    echo "nodeexporterstart" >> /init_service

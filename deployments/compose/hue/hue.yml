@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   hue:
-    image: ${HUE_IMAGE}
+    image: ${IMAGE_HUE}
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
@@ -13,7 +13,7 @@ services:
     depends_on:
       - mysql
   mysql:
-    image: ${MYSQL_IMAGE}
+    image: ${IMAGE_MYSQL}
     ports:
       - "33306:3306"
     environment:

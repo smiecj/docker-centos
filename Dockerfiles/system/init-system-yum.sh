@@ -14,12 +14,13 @@ if [[ $centos_version =~ 8.* ]]; then
     # sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
     sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://mirrors.tuna.tsinghua.edu.cn/centos-vault|g" /etc/yum.repos.d/CentOS-*
 elif [[ $centos_version =~ 7.* ]]; then
-    ### centos7 需要区分不同的操作系统
-    ### 参考: https://blog.csdn.net/smart9527_zc/article/details/84976097
+    ### centos7: https://mirrors.tuna.tsinghua.edu.cn/help/centos/
     system_arch=`uname -p`
     if [ "x86_64" == "$system_arch" ]; then
-        mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
-        curl -Lo /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+        sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+                -e 's|^#baseurl=http://mirror.centos.org|baseurl=https://mirrors.tuna.tsinghua.edu.cn|g' \
+                -i.bak \
+                /etc/yum.repos.d/CentOS-*.repo
     elif [[ "aarch64" == "$system_arch" ]]; then
         mv -f /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.bak_repo
         cp -f /tmp/yum/CentOS-7-epel.repo /etc/yum.repos.d/epel.repo
@@ -31,5 +32,11 @@ elif [[ $centos_version =~ 7.* ]]; then
         rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
     fi
 fi
+
 yum clean all
 yum makecache
+
+if [[ $centos_version =~ 8.* ]]; then
+    ### fix: Unexpected key in data: static_context
+    dnf -y update libmodulemd
+fi

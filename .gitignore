@@ -2,3 +2,6 @@ test*log
 test*sh
 
 .DS_Store
+
+Dockerfiles/emr/ambari
+Dockerfiles/backend/haproxy

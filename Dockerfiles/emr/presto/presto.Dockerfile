@@ -1,41 +1,45 @@
-ARG PRESTO_BASE_IMAGE
-FROM ${PRESTO_BASE_IMAGE}
+ARG IMAGE_PRESTO_BASE
+FROM ${IMAGE_PRESTO_BASE}
 
 # install presto
-
 ENV PORT=7070
 ENV HADOOP_CONF_DIR=/etc/hadoop/conf
-ENV DATA_DIR=/home/data/presto
+ENV DATA_DIR=/opt/data/presto
 ENV HIVE_METASTORE_URL=localhost:8093
+ENV XMX=4G
 
-ARG presto_module_home=/home/modules
-ARG presto_version=0.273.3
-# ARG repo=https://repo1.maven.org/maven2
-ARG repo=https://mirrors.huaweicloud.com/repository/maven
-ARG presto_server_pkg_url=${repo}/com/facebook/presto/presto-server/${presto_version}/presto-server-${presto_version}.tar.gz
-ARG presto_client_jar_url=${repo}/com/facebook/presto/presto-cli/${presto_version}/presto-cli-${presto_version}-executable.jar
-ARG presto_server_pkg=presto-server-${presto_version}.tar.gz
-ARG presto_client_jar=presto-cli-${presto_version}-executable.jar
-ARG presto_server_folder=presto-server-${presto_version}
-ARG presto_server_home=${presto_module_home}/${presto_server_folder}
-ARG presto_script_home=${presto_server_home}/scripts
+ARG maven_repo
+ARG module_home
+ARG presto_version
 
-## install
-RUN mkdir -p ${presto_module_home} && cd ${presto_module_home} && curl -LO ${presto_server_pkg_url} && \
-    tar -xzvf ${presto_server_pkg} && rm ${presto_server_pkg} && curl -LO ${presto_client_jar_url} && \
-    mv ${presto_client_jar} ${presto_server_folder}/bin/presto && chmod +x ${presto_server_folder}/bin/presto
-## copy config
-RUN mkdir -p ${presto_server_home}/etc && mkdir -p ${presto_script_home}
-COPY ./etc ${presto_server_home}/etc
-COPY ./scripts/init-presto.sh ${presto_script_home}/
-
-## start and stop script
+# scripts & config
+COPY ./etc /tmp/etc
+COPY ./scripts/init-presto.sh /tmp
 COPY ./scripts/presto-start.sh /usr/local/bin/prestostart
 COPY ./scripts/presto-stop.sh /usr/local/bin/prestostop
 COPY ./scripts/presto-restart.sh /usr/local/bin/prestorestart
-RUN sed -i "s#{presto_server_home}#${presto_server_home}#g" /usr/local/bin/prestostart && \
-    sed -i "s#{presto_server_home}#${presto_server_home}#g" /usr/local/bin/prestostop && \
-    chmod +x /usr/local/bin/prestostart && chmod +x /usr/local/bin/prestostop && chmod +x /usr/local/bin/prestorestart
+
+## install
+RUN presto_module_home=${module_home}/presto && \
+    presto_script_home=${presto_module_home}/scripts && \
+    presto_server_folder=presto-server-${presto_version} && \
+    presto_server_pkg=${presto_server_folder}.tar.gz && \
+    presto_server_pkg_url=${maven_repo}/com/facebook/presto/presto-server/${presto_version}/${presto_server_pkg} && \
+    presto_client_jar=presto-cli-${presto_version}-executable.jar && \
+    presto_client_jar_url=${maven_repo}/com/facebook/presto/presto-cli/${presto_version}/${presto_client_jar} && \
+    mkdir -p ${presto_module_home} && cd ${presto_module_home} && curl -LO ${presto_server_pkg_url} && \
+    tar -xzvf ${presto_server_pkg} && rm ${presto_server_pkg} && mv ${presto_server_folder}/* ./ && rm -rf ${presto_server_folder} && \
+    curl -LO ${presto_client_jar_url} && mv ${presto_client_jar} ./bin/presto && chmod +x ./bin/presto && \
+
+## copy config
+    mkdir -p ${presto_module_home}/etc && mkdir -p ${presto_script_home} && \
+    mv /tmp/etc/* ${presto_module_home}/etc/ && rm -r /tmp/etc && \
+    mv /tmp/init-presto.sh ${presto_script_home}/ && \
+
+    sed -i "s#{presto_module_home}#${presto_module_home}#g" /usr/local/bin/prestostart && \
+    sed -i "s#{presto_module_home}#${presto_module_home}#g" /usr/local/bin/prestostop && \
+    sed -i "s#{presto_module_home}#${presto_module_home}#g" ${presto_script_home}/init-presto.sh && \
+    chmod +x /usr/local/bin/prestostart && chmod +x /usr/local/bin/prestostop && chmod +x /usr/local/bin/prestorestart && \
 
 ## init service
-RUN echo "sh ${presto_script_home}/init-presto.sh && prestostart" >> /init_service
+    echo "sh ${presto_script_home}/init-presto.sh && prestostart" >> /init_service

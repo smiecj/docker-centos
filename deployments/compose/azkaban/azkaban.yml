@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  azkaban:
+    platform: linux/amd64
+    image: ${IMAGE_AZKABAN}
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=azkaban
+      - MYSQL_USER=azkaban
+      - MYSQL_PASSWORD=azkaban_TEST_123
+      - WEB_SERVER_PORT=8020
+      - EXEC_SERVER_PORT=8030
+      - AZKABAN_START=azkabanstartall
+    ports:
+      - "8020:8020"
+    depends_on:
+      - mysql
+  mysql:
+    image: ${IMAGE_MYSQL}
+    environment:
+      - USER_PASSWORD=azkaban_TEST_123
+      - USER_DB=azkaban
+      - USER_NAME=azkaban

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # init config
-pushd {presto_server_home}
+pushd {presto_module_home}
 host_name=`hostname`
 
 ## config.properties
@@ -17,6 +17,7 @@ sed -i "s#{DATA_DIR}#${DATA_DIR}#g" etc/node.properties
 
 ## jvm.config
 cp etc/jvm.config_template etc/jvm.config
+sed -i "s#{XMX}#${XMX}#g" etc/jvm.config
 
 ## log.properties
 cp etc/log.properties_template etc/log.properties

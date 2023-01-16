@@ -1,6 +1,5 @@
-FROM centos:centos8.4.2105
-
-MAINTAINER smiecj smiecj@github.com
+ARG CENTOS_VERSION
+FROM centos:centos${CENTOS_VERSION}
 
 ARG ROOT_PWD=root!centos123
 
@@ -10,111 +9,91 @@ ENV HOME /root
 
 COPY init-*.sh /tmp/
 COPY env_*.sh /tmp/
+COPY yum /tmp/yum
 
 ## bashrc
-RUN sed -i "s/alias cp/#alias cp/g" ~/.bashrc
-RUN sed -i "s/alias mv/#alias mv/g" ~/.bashrc
-RUN echo "alias ll='ls -l'" >> ~/.bashrc
-RUN echo "alias rm='rm -f'" >> ~/.bashrc
-RUN echo "source /etc/profile" >> ~/.bashrc
-
+RUN sed -i "s/alias cp/#alias cp/g" ~/.bashrc && \
+    sed -i "s/alias mv/#alias mv/g" ~/.bashrc && \
+    echo "alias ll='ls -l'" >> ~/.bashrc && \
+    echo "alias rm='rm -f'" >> ~/.bashrc && \
+    echo "source /etc/profile" >> ~/.bashrc && \
 ## yum
-COPY yum /tmp/yum
-RUN sh /tmp/init-system-yum.sh
-RUN rm -rf /tmp/yum
-
-### fix: Unexpected key in data: static_context
-RUN dnf -y update libmodulemd
-
+    sh /tmp/init-system-yum.sh && \
+    rm -r /tmp/yum && \
 ## install basic components
 ### epel refer: https://docs.fedoraproject.org/en-US/epel/
-RUN yum -y install epel-release
-
+    yum -y install epel-release \
 ### initscripts refer: https://yum-info.contradodigital.com/view-package/installed/initscripts/
-RUN yum -y install initscripts
-
+    initscripts \
 ### some compile basic package
-RUN yum -y install libncurses* libaio numactl
-
+    libncurses* libaio numactl \
 ### sshd
-RUN yum -y install openssh-server openssh-clients openssl openssl-devel compat-openssl10
-#systemctl enable sshd
-
+    openssh-server openssh-clients openssl openssl-devel compat-openssl10 \
 ### gcc & make
-RUN yum -y install make
-RUN yum -y install gcc
-RUN yum -y install gcc-c++
-RUN yum -y install cmake
-
+    make gcc gcc-c++ cmake \
 ### other useful tools
-RUN yum -y install lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd
-RUN yum -y install expect jq telnet net-tools rsync logrotate
-
-#### git config
-RUN git config --global pull.rebase false
-
+    lsof net-tools vim lrzsz zip unzip bzip2 ncurses git wget sudo passwd \
+    expect jq telnet net-tools rsync logrotate \
 ### devel pkg
-RUN yum -y install cyrus-sasl cyrus-sasl-devel
-RUN yum -y install python3-devel
-RUN yum -y install libffi-devel
-RUN yum -y install freetds-devel
-RUN yum -y install mysql-devel unixODBC-devel
-RUN yum -y install libxml2 libxml2-devel
-RUN yum -y install libxslt libxslt-devel
+    cyrus-sasl cyrus-sasl-devel libffi-devel \
+    mysql-devel unixODBC-devel libxml2 libxml2-devel libxslt libxslt-devel && \
+#### git config
+    git config --global pull.rebase false
 
 ## copy proxy init script
 COPY init-system-proxy.sh /init_system_proxy
-RUN chmod +x /init_system_proxy
 ENV HAS_PROXY "false"
 
 ## zsh
-RUN sh /tmp/init-system-zsh.sh
-
+RUN sh /tmp/init-system-zsh.sh && \
 ## vim support utf-8
-RUN echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc
-
+    echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc && \
 ## set login password
-RUN echo root:${ROOT_PWD} | chpasswd
-
+    echo root:${ROOT_PWD} | chpasswd && \
 ## history
-RUN echo "export HISTCONTROL=ignoredups" >> /etc/profile
-
+    echo "export HISTCONTROL=ignoredups" >> /etc/profile && \
 ## timezone
-RUN cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
-RUN rm -f /tmp/init-*.sh && rm -f /tmp/env_*.sh
+    cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    rm -f /tmp/init-*.sh && rm -f /tmp/env_*.sh
 
 ## s6
 ARG s6_version=v2.2.0.3
 COPY init-system-s6.sh /tmp/
-RUN sh /tmp/init-system-s6.sh
+RUN sh /tmp/init-system-s6.sh && \
 ### check s6 is install success
-RUN ls -l /init
-RUN rm /tmp/init-system-s6.sh
-
+    ls -l /init && \
+    rm /tmp/init-system-s6.sh && \
 ### s6 with crontab
-RUN yum -y install crontabs
+    yum -y install crontabs
+
 COPY s6/ /etc
 
 ## add `add logrotate task` command
-RUN mkdir -p /tmp/bin
-COPY command/ /tmp/bin/
-RUN chmod -R 755 /tmp/bin && mv /tmp/bin/* /usr/local/bin && rm -rf /tmp/bin
+COPY command/ /usr/local/bin/
+RUN chmod +x /usr/local/bin/* && \
 
 ## init and child dockerfile endpoint
 ### child dockerfile service init can add to /init_service script (append)
 ### https://stackoverflow.com/questions/2518127/how-to-reload-bashrc-settings-without-logging-out-and-back-in-again
-RUN echo -e """#!/bin/bash\n\
+    echo -e """#!/bin/bash\n\
 sh /init_service\n\
 exec /init\n\
-""" > /init_system && chmod +x /init_system
-
-RUN echo -e """#!/bin/bash\n\
+""" > /init_system && \
+echo -e """#!/bin/bash\n\
 echo 'hello docker centos'\n\
 . /etc/profile\n\
 \n\
 ## child dockerfile init append after this\n\
 /init_system_proxy\n\
-""" > /init_service && chmod +x /init_service
+""" > /init_service
+
+## init ssh
+COPY ./scripts/sshd-start.sh /init_ssh_service
+
+## add execute permission
+RUN chmod +x /init_ssh_service && \
+    chmod +x /init_system_proxy && \
+    chmod +x /init_system && \
+    chmod +x /init_service
 
 ENTRYPOINT ["/init_system"]

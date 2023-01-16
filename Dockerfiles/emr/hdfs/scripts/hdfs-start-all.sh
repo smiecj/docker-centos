@@ -8,7 +8,6 @@ do
         echo "sshd process has not start, will continuous wait"
         sleep 1
     else
-        echo "sshd process has start!"
         break
     fi
 done

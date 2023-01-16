@@ -1,12 +1,12 @@
+ARG DEV_FULL_IMAGE
 FROM ${DEV_FULL_IMAGE}
 
 ARG TARGETARCH
 
 ARG code_server_short_version=4.5.1
 ARG code_server_tag=v${code_server_short_version}
-ARG code_server_code_url=https://github.com/coder/code-server
-ARG module_home=/opt/modules
-ARG code_server_module_home=/opt/modules/code_server
+ARG module_home
+ARG code_server_module_home=${module_home}/code_server
 ARG code_server_log_home=/var/log/code-server
 ARG code_server_log=${code_server_log_home}/code-server.log
 ARG code_server_config_home=${code_server_module_home}/config
@@ -14,9 +14,7 @@ ARG code_server_config_file=${code_server_config_home}/config.yaml
 ARG code_server_config_template_file=${code_server_config_home}/config_template.yaml
 ARG code_server_scripts_home={code_server_module_home}/scripts
 
-ARG code_server_default_extensions="vscjava.vscode-java-pack@0.25.0 hediet.vscode-drawio@1.6.4 golang.go@0.35.1 ms-python.python@2022.10.1 ms-vscode.cpptools-themes@1.0.0"
-
-ARG code_server_download_url_prefix=https://github.com/coder/code-server/releases/download
+ARG github_url
 
 ENV PORT=8080
 ENV PASSWORD=test_code_server
@@ -43,7 +41,8 @@ RUN dnf -y --enablerepo=powertools install libxkbfile-devel
 # compile code-server
 ## todo: fix argon2 compile problem
 ## https://github.com/ranisalt/node-argon2/issues/331
-RUN cd /tmp && git clone ${code_server_code_url} && cd code_server && git checkout tags/${code_server_tag} && \
+RUN code_server_code_url=${github_url}/coder/code-server && \
+    cd /tmp && git clone ${code_server_code_url} && cd code_server && git checkout tags/${code_server_tag} && \
     git clone https://github.com/microsoft/vscode lib/vscode && \
     source /etc/profile && npm -g install yarn typescript && \
     unset http_proxy && unset https_proxy && \
@@ -52,11 +51,12 @@ RUN cd /tmp && git clone ${code_server_code_url} && cd code_server && git checko
 # move package to module folder
 RUN mkdir -p ${code_server_module_home}
 
-# install code-server default plugins
-RUN for extension in ${code_server_default_extensions[@]}; \
-do\
-    ${code_server_module_home}/code-server --install-extension $extension; \
-done
+# install code-server plugins
+ARG EXTENSION_VERSION=v1
+ARG extension_file=/tmp/${EXTENSION_VERSION}.txt
+COPY ./extensions/${EXTENSION_VERSION}.txt ${extension_file}
+RUN cat ${extension_file} | xargs -I {} bash -c 'if [[ ! "{}" =~ ^# ]]; then echo "{}"; fi' | \
+    xargs -I {} bash -c "${code_server_module_home}/code-server --install-extension {}"
 
 # code server config
 RUN mkdir -p ${code_server_config_home}

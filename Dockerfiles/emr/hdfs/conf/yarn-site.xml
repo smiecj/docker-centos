@@ -17,4 +17,9 @@
         <name>yarn.resourcemanager.webapp.address</name>
         <value>{RESOURCEMANAGER_WEBAPP_ADDRESS}</value>
     </property>
+
+    <property>
+        <name>yarn.webapp.ui2.enable</name>
+        <value>true</value>
+    </property>
 </configuration>

@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  ck01:
+    image: ${IMAGE_CLICKHOUSE}
+    hostname: ck00
+    environment:
+      ## zk
+      - ZOOKEEPER_NODES=zookeeper:2181
+    ports:
+      - "38123:8123"
+      - "39000:9000"
+      - "39363:9363"
+    depends_on:
+      - zookeeper
+  zookeeper:
+    image: ${IMAGE_ZOOKEEPER}
+    environment:
+      - MODE=singleton
