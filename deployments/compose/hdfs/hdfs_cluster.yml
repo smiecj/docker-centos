@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   hadoop1:
-    image: ${HDFS_FULL_IMAGE}
+    image: ${IMAGE_HDFS_FULL}
     hostname: hadoop1
     environment:
       # hdfs
@@ -29,7 +29,7 @@ services:
       - hadoop3
       - mysql
   hadoop2:
-    image: ${HDFS_FULL_IMAGE}
+    image: ${IMAGE_HDFS_FULL}
     hostname: hadoop2
     environment:
       - DEFAULTFS=hdfs://hadoop1:8020
@@ -38,7 +38,7 @@ services:
       - WORKERS=hadoop2,hadoop3
       - HDFS_START=hdfsnotstart
   hadoop3:
-    image: ${HDFS_FULL_IMAGE}
+    image: ${IMAGE_HDFS_FULL}
     hostname: hadoop3
     environment:
       - DEFAULTFS=hdfs://hadoop1:8020
@@ -47,9 +47,9 @@ services:
       - WORKERS=hadoop2,hadoop3
       - HDFS_START=hdfsnotstart
   mysql:
-    image: ${MYSQL_IMAGE}
+    image: ${IMAGE_MYSQL}
     ports:
-      - "33306:3306"
+      - "33307:3306"
     environment:
       - ROOT_PASSWORD=root_HADOOP_123
 

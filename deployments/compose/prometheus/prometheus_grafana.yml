@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   prometheus:
-    image: ${PROMETHEUS_IMAGE}
+    image: ${IMAGE_PROMETHEUS}
     hostname: prometheus
     environment:
       # hdfs
@@ -11,7 +11,7 @@ services:
       - "3001:3001"
       - "9010:9010"
   grafana:
-    image: ${GRAFANA_IMAGE}
+    image: ${IMAGE_GRAFANA}
     environment:
       - PORT=3000
     ports:

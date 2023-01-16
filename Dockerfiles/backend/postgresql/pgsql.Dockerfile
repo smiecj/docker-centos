@@ -1,5 +1,5 @@
-ARG MINIMAL_IMAGE
-FROM ${MINIMAL_IMAGE}
+ARG IMAGE_MINIMAL
+FROM ${IMAGE_MINIMAL}
 
 ENV PORT=5432
 ENV POSTGRES_PASSWORD=root_Test1qaz
@@ -11,17 +11,25 @@ ENV USER_DB ""
 ENV USER_NAME ""
 ENV USER_PASSWORD ""
 
-ARG pgsql_scripts_path=/opt/modules/pgsql/scripts
-ARG pgsql_version=14
+ARG module_home
+ARG pgsql_version
+ARG TARGETARCH
 
-RUN mkdir -p ${pgsql_scripts_path}
-COPY ./scripts/init-pgsql.sh ${pgsql_scripts_path}/
+## copy scripts
+COPY ./scripts/pgsql-start.sh /usr/local/bin/pgsqlstart
+COPY ./scripts/pgsql-stop.sh /usr/local/bin/pgsqlstop
+COPY ./scripts/pgsql-restart.sh /usr/local/bin/pgsqlrestart
+COPY ./scripts/pgsql-connect.sh /usr/local/bin/pgsqlconnect
+COPY ./scripts/init-pgsql.sh /tmp/
+
+RUN pgsql_module_home=${module_home}/pgsql && \
+    pgsql_scripts_path=${pgsql_module_home}/scripts && \
+    mkdir -p ${pgsql_scripts_path} && \
+    mv /tmp/init-pgsql.sh ${pgsql_scripts_path}/ && \
 
 # install pgsql
-
 ## download rpm and install
-ARG TARGETARCH
-RUN cd /tmp && if [ "arm64" == "$TARGETARCH" ]; \
+cd /tmp && if [ "arm64" == "$TARGETARCH" ]; \
 then\
     arch="aarch64";\
 else\
@@ -38,16 +46,10 @@ yum -y install postgresql${pgsql_version}-server && \
 pgsql_home=/usr/pgsql-${pgsql_version} && \
 echo "# postgresql" >> /etc/profile && \
 echo "export PG_HOME=${pgsql_home}" >> /etc/profile && \
-echo 'export PATH=$PATH:$PG_HOME/bin' >> /etc/profile
+echo 'export PATH=$PATH:$PG_HOME/bin' >> /etc/profile && \
 
-## copy scripts
-COPY ./scripts/pgsql-start.sh /usr/local/bin/pgsqlstart
-COPY ./scripts/pgsql-stop.sh /usr/local/bin/pgsqlstop
-COPY ./scripts/pgsql-restart.sh /usr/local/bin/pgsqlrestart
-RUN chmod +x /usr/local/bin/pgsqlstart && chmod +x /usr/local/bin/pgsqlstop && chmod +x /usr/local/bin/pgsqlrestart
-
-COPY ./scripts/pgsql-connect.sh /usr/local/bin/pgsqlconnect
-RUN chmod +x /usr/local/bin/pgsqlconnect
+chmod +x /usr/local/bin/pgsqlstart && chmod +x /usr/local/bin/pgsqlstop && chmod +x /usr/local/bin/pgsqlrestart && \
+chmod +x /usr/local/bin/pgsqlconnect && \
 
 ## init
-RUN echo "sh ${pgsql_scripts_path}/init-pgsql.sh > /tmp/init-pgsql.log 2>&1 && pgsqlstart" >> /init_service
+echo "sh ${pgsql_scripts_path}/init-pgsql.sh > /tmp/init-pgsql.log 2>&1 && pgsqlstart" >> /init_service

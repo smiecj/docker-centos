@@ -1,6 +1,6 @@
 -server
 -Dpresto-temporarily-allow-java8=true
--Xmx6G
+-Xmx{XMX}
 -XX:-UseBiasedLocking
 -XX:+UseG1GC
 -XX:G1HeapRegionSize=32M

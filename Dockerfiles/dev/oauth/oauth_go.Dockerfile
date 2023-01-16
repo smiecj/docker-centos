@@ -1,5 +1,5 @@
-ARG GO_IMAGE
-FROM ${GO_IMAGE}
+ARG IMAGE_GO
+FROM ${IMAGE_GO}
 
 # ENV CLIENT_PORT=9094
 # ENV SERVER_PORT=9096
@@ -7,8 +7,8 @@ ENV HOST "localhost"
 ENV HOST_SERVER_PORT "9096"
 ENV HOST_CLIENT_PORT "9094"
 
-ARG module_home=/opt/modules
-ARG github_url=https://github.com
+ARG module_home
+ARG github_url
 ARG branch=dev
 
 # compile

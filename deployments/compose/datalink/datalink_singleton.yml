@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   datalink:
-    image: ${DATALINK_IMAGE}
+    image: ${IMAGE_DATALINK}
     hostname: datalink
     environment:
       ## mysql
@@ -26,7 +26,7 @@ services:
     environment:
       - MODE=singleton
   mysql:
-    image: ${MYSQL_IMAGE}
+    image: ${IMAGE_MYSQL}
     environment:
       - USER_NAME=datalink
       - USER_PASSWORD=datalink_TEST_123

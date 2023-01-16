@@ -1,12 +1,12 @@
 version: "3.9"
 services:
   elasticsearch:
-    image: ${ES_IMAGE}
+    image: ${IMAGE_ES}
     hostname: elasticsearch
     ports:
       - "9200:9200"
   kibana:
-    image: ${KIBANA_IMAGE}
+    image: ${IMAGE_KIBANA}
     environment:
       - ES_ADDRESS=http://elasticsearch:9200
     ports:

@@ -5,9 +5,8 @@ ARG TARGETARCH
 
 ARG code_server_short_version=4.5.1
 ARG code_server_tag=v${code_server_short_version}
-ARG code_server_code_url=https://github.com/coder/code-server
-ARG module_home=/opt/modules
-ARG code_server_module_home=/opt/modules/code_server
+ARG module_home
+ARG code_server_module_home=${module_home}/code_server
 ARG code_server_log_home=/var/log/code-server
 ARG code_server_log=${code_server_log_home}/code-server.log
 ARG code_server_config_home=${code_server_module_home}/config
@@ -15,8 +14,7 @@ ARG code_server_config_file=${code_server_config_home}/config.yaml
 ARG code_server_config_template_file=${code_server_config_home}/config_template.yaml
 ARG code_server_scripts_home={code_server_module_home}/scripts
 
-ARG github_repo=https://github.com
-ARG code_server_download_url_prefix=${github_repo}/coder/code-server/releases/download
+ARG github_url
 
 ENV PORT=8080
 ENV PASSWORD=test_code_server
@@ -43,7 +41,8 @@ RUN dnf -y --enablerepo=powertools install libxkbfile-devel
 # compile code-server
 ## todo: fix argon2 compile problem
 ## https://github.com/ranisalt/node-argon2/issues/331
-RUN cd /tmp && git clone ${code_server_code_url} && cd code_server && git checkout tags/${code_server_tag} && \
+RUN code_server_code_url=${github_url}/coder/code-server && \
+    cd /tmp && git clone ${code_server_code_url} && cd code_server && git checkout tags/${code_server_tag} && \
     git clone https://github.com/microsoft/vscode lib/vscode && \
     source /etc/profile && npm -g install yarn typescript && \
     unset http_proxy && unset https_proxy && \

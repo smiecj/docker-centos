@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   ck01:
-    image: ${CLICKHOUSE_IMAGE}
+    image: ${IMAGE_CLICKHOUSE}
     hostname: ck00
     environment:
       ## zk
@@ -13,6 +13,6 @@ services:
     depends_on:
       - zookeeper
   zookeeper:
-    image: ${ZOOKEEPER_IMAGE}
+    image: ${IMAGE_ZOOKEEPER}
     environment:
       - MODE=singleton

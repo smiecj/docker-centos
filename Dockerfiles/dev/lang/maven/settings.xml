@@ -52,7 +52,7 @@ under the License.
    | Default: ${user.home}/.m2/repository
   <localRepository>/path/to/local/repo</localRepository>
   -->
-  <localRepository>maven_local_repo</localRepository>
+  <localRepository>{maven_local_repo}</localRepository>
 
   <!-- interactiveMode
    | This will determine whether maven prompts you when it needs input. If set to false,
@@ -156,20 +156,14 @@ under the License.
       <name>Human Readable Name for this Mirror.</name>
       <url>http://my.repository.com/repo/path</url>
     </mirror>
-     -->
+    
     <mirror>
       <id>maven-default-http-blocker</id>
       <mirrorOf>external:http:*</mirrorOf>
       <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
       <url>http://0.0.0.0/</url>
       <blocked>true</blocked>
-    </mirror>
-    <mirror>
-    <id>aliyunmaven</id>
-    <mirrorOf>central</mirrorOf>
-    <name>aliyun maven</name>
-    <url>https://maven.aliyun.com/repository/public </url>
-    </mirror>
+    </mirror>-->
   </mirrors>
 
   <!-- profiles
@@ -258,6 +252,34 @@ under the License.
       </properties>
     </profile>
     -->
+
+    <!-- mvn -Pnet_cn -->
+    <profile>
+        <id>net_cn</id>
+        <repositories>
+            <repository>
+                <id>aliyunmaven</id>
+                <name>aliyunmaven</name>
+                <url>https://maven.aliyun.com/repository/public</url>
+                <layout>default</layout>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+            <repository>
+                <id>MavenCentral</id>
+                <url>http://repo1.maven.org/maven2/</url>
+            </repository>
+            <repository>
+                <id>aliyunmavenApache</id>
+                <url>https://maven.aliyun.com/repository/apache-snapshots</url>
+            </repository>
+        </repositories>
+    </profile>
+
   </profiles>
 
   <!-- activeProfiles

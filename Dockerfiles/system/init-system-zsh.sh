@@ -48,6 +48,10 @@ echo "setopt nonomatch" >> ~/.zshrc
 ### not share history between session
 echo "unsetopt share_history" >> ~/.zshrc
 
+### don't notice when remove multiple files
+#### https://stackoverflow.com/a/27995504
+echo "setopt RM_STAR_SILENT" >> ~/.zshrc
+
 ### source profile
 echo "source /etc/profile" >> ~/.zshrc
 

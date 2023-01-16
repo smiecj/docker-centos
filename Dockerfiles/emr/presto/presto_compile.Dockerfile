@@ -1,25 +1,32 @@
-ARG PRESTO_BASE_IMAGE
-FROM ${PRESTO_BASE_IMAGE}
-
-ARG repo_home=/home/repo
-ARG java_repo_home=${repo_home}/java
+ARG IMAGE_PRESTO_BASE
+FROM ${IMAGE_PRESTO_BASE}
 
 # env
 ENV PORT=7070
 ENV HADOOP_CONF_DIR=/etc/hadoop/conf
 ENV DATA_DIR=/home/data/presto
 ENV HIVE_METASTORE_URL=localhost:8093
+ENV XMX=4G
 
 # arg
-ARG presto_module_home=/opt/modules/presto
-ARG presto_script_home=${presto_module_home}/scripts
-ARG git_branch=release-0.275
-ARG git_repo=https://github.com
-ARG presto_repo=${git_repo}/prestodb/presto
+ARG module_home
+ARG github_url
+ARG presto_version
+
+# script
+COPY ./etc /tmp/etc
+COPY ./scripts/init-presto.sh /tmp
+COPY ./scripts/presto-start.sh /usr/local/bin/prestostart
+COPY ./scripts/presto-stop.sh /usr/local/bin/prestostop
+COPY ./scripts/presto-restart.sh /usr/local/bin/prestorestart
 
 ## compile
-RUN yum -y install diffutils
-RUN mkdir -p ${presto_module_home} && cd ${presto_module_home} && git clone ${presto_repo} -b ${git_branch} && \
+RUN presto_module_home=${module_home}/presto && \
+    presto_script_home=${presto_module_home}/scripts && \
+    presto_git_branch=release-${presto_version} && \
+    yum -y install diffutils && \
+    presto_repo=${github_url}/prestodb/presto && \
+    mkdir -p ${presto_module_home} && cd ${presto_module_home} && git clone ${presto_repo} -b ${presto_git_branch} && \
     source /etc/profile && cd presto && mvn clean install -DskipTests && \
     presto_server_pkg=`ls -l presto-server/target/ | grep "SNAPSHOT.tar.gz" | sed 's#.* ##g'` && \
     presto_server_folder=`echo ${presto_server_pkg} | sed 's#.tar.*##g'` && \
@@ -29,21 +36,18 @@ RUN mkdir -p ${presto_module_home} && cd ${presto_module_home} && git clone ${pr
     cd .. && rm -rf presto && tar -xzvf ${presto_server_pkg} && rm ${presto_server_pkg} && \
     mv ${presto_server_folder}/* ./ && rm -rf ${presto_server_folder} && \
     mv ${presto_client_jar} bin/presto && \
-    rm -rf ${java_repo_home}
+    rm -r ~/.m2/repository/* && \
 
 ## copy config
-RUN mkdir -p ${presto_module_home}/etc && mkdir -p ${presto_script_home}
-COPY ./etc/ ${presto_module_home}/etc/
-COPY ./scripts/init-presto.sh ${presto_script_home}/
+    mkdir -p ${presto_module_home}/etc && mkdir -p ${presto_script_home} && \
+    mv /tmp/etc/* ${presto_module_home}/etc/ && rm -r /tmp/etc && \
+    mv /tmp/init-presto.sh ${presto_script_home}/ && \
 
 ## start and stop script
-COPY ./scripts/presto-start.sh /usr/local/bin/prestostart
-COPY ./scripts/presto-stop.sh /usr/local/bin/prestostop
-COPY ./scripts/presto-restart.sh /usr/local/bin/prestorestart
-RUN sed -i "s#{presto_module_home}#${presto_module_home}#g" /usr/local/bin/prestostart && \
+    sed -i "s#{presto_module_home}#${presto_module_home}#g" /usr/local/bin/prestostart && \
     sed -i "s#{presto_module_home}#${presto_module_home}#g" /usr/local/bin/prestostop && \
     sed -i "s#{presto_module_home}#${presto_module_home}#g" ${presto_script_home}/init-presto.sh && \
-    chmod +x /usr/local/bin/prestostart && chmod +x /usr/local/bin/prestostop && chmod +x /usr/local/bin/prestorestart
+    chmod +x /usr/local/bin/prestostart && chmod +x /usr/local/bin/prestostop && chmod +x /usr/local/bin/prestorestart && \
 
 ## init service
-RUN echo "sh ${presto_script_home}/init-presto.sh && prestostart" >> /init_service
+    echo "sh ${presto_script_home}/init-presto.sh && prestostart" >> /init_service

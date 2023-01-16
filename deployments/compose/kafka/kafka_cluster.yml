@@ -2,14 +2,14 @@ version: "3.9"
 services:
   # zk singleton
   zookeeper:
-    image: ${ZOOKEEPER_IMAGE}
+    image: ${IMAGE_ZOOKEEPER}
     environment:
       - MODE=singleton
     ports:
       - "12181:2181"
   # kafka cluster
   kafka1:
-    image: ${KAFKA_IMAGE}
+    image: ${IMAGE_KAFKA}
     environment:
       - zookeeper_server=zookeeper:2181
       - MODE=cluster
@@ -19,7 +19,7 @@ services:
     depends_on:
       - zookeeper
   kafka2:
-    image: ${KAFKA_IMAGE}
+    image: ${IMAGE_KAFKA}
     environment:
       - zookeeper_server=zookeeper:2181
       - MODE=cluster
@@ -29,7 +29,7 @@ services:
     depends_on:
       - zookeeper
   kafka3:
-    image: ${KAFKA_IMAGE}
+    image: ${IMAGE_KAFKA}
     environment:
       - zookeeper_server=zookeeper:2181
       - MODE=cluster

@@ -2,7 +2,7 @@ version: "3.9"
 services:
   azkaban:
     platform: linux/amd64
-    image: ${AZKABAN_IMAGE}
+    image: ${IMAGE_AZKABAN}
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
@@ -17,7 +17,7 @@ services:
     depends_on:
       - mysql
   mysql:
-    image: ${MYSQL_IMAGE}
+    image: ${IMAGE_MYSQL}
     environment:
       - USER_PASSWORD=azkaban_TEST_123
       - USER_DB=azkaban

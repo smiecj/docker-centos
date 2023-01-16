@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   manager:
-    image: ${DATALINK_IMAGE}
+    image: ${IMAGE_DATALINK}
     hostname: datalink
     environment:
       ## mysql
@@ -22,7 +22,7 @@ services:
       - zookeeper
       - mysql
   worker1:
-    image: ${DATALINK_IMAGE}
+    image: ${IMAGE_DATALINK}
     hostname: datalink
     environment:
       ## mysql
@@ -41,7 +41,7 @@ services:
       - mysql
       - manager
   worker2:
-    image: ${DATALINK_IMAGE}
+    image: ${IMAGE_DATALINK}
     hostname: datalink
     environment:
       ## mysql
@@ -60,11 +60,11 @@ services:
       - mysql
       - manager
   zookeeper:
-    image: ${ZOOKEEPER_IMAGE}
+    image: ${IMAGE_ZOOKEEPER}
     environment:
       - MODE=singleton
   mysql:
-    image: ${MYSQL_IMAGE}
+    image: ${IMAGE_MYSQL}
     environment:
       - USER_NAME=datalink
       - USER_PASSWORD=datalink_TEST_123

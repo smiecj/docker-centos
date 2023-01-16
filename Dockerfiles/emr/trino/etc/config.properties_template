@@ -1,0 +1,5 @@
+coordinator=true
+node-scheduler.include-coordinator=true
+http-server.http.port={PORT}
+discovery-server.enabled=true
+discovery.uri=http://{hostname}:{PORT}
