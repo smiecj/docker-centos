@@ -29,5 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: build_and_push
-        run: VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_base
+      - name: build_base
+        run: |
+          VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_base
+          VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_base
