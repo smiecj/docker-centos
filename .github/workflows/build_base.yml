@@ -1,5 +1,3 @@
-name: dockerhub
-
 on:
   push:
     branches:
@@ -9,7 +7,6 @@ on:
       - 'main'
   schedule:
   - cron: "0 2 * * 1-5"
-
 
 jobs:
   docker:
@@ -32,13 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          platforms: linux/amd64,linux/arm64
-          context: ./Dockerfiles/system
-          file: ./Dockerfiles/system/centos_base.Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/centos_base:v1.1.0
+      - name: build_base
+        run: |
+          VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_base
+          VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_base
