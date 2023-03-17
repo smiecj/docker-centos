@@ -15,8 +15,10 @@ ARG apache_repo
 ARG JDK_OLD_VERSION
 ARG JDK_NEW_VERSION
 
+# init repo
+COPY ./scripts/init_java_repo /
+
 ARG TARGETARCH
-RUN echo "[test] ${jdk_repo} ${JDK_OLD_VERSION} ${JDK_NEW_VERSION} ${TARGETARCH}"
 RUN mkdir -p ${java_home} && mkdir -p ${java_repo_home} && \
     if [ "amd64" == "${TARGETARCH}" ]; then arch="x64"; else arch="aarch64"; fi && \
     jdk_new_version_repo="${jdk_repo}/${JDK_NEW_VERSION}/jdk/${arch}/linux" && \
@@ -29,7 +31,6 @@ RUN mkdir -p ${java_home} && mkdir -p ${java_repo_home} && \
     jdk_old_version_download_url=${jdk_old_version_repo}/${jdk_old_version_pkg} && \
     jdk_old_version_detail_version=`echo ${jdk_old_version_pkg} | sed "s/.*hotspot_${JDK_OLD_VERSION}/${JDK_OLD_VERSION}/g" | sed 's/.tar.*//g' | sed 's/b/-b/g'` && \
     jdk_old_version_folder="jdk${jdk_old_version_detail_version}" && \
-    echo "[test] jdk new version url: ${jdk_new_version_download_url}, old version: ${jdk_old_version_download_url}" && \
     cd ${java_home} && curl -LO ${jdk_new_version_download_url} && tar -xzvf ${jdk_new_version_pkg} && rm ${jdk_new_version_pkg} && \
     curl -LO ${jdk_old_version_download_url} && tar -xzvf ${jdk_old_version_pkg} && rm ${jdk_old_version_pkg} && \
 

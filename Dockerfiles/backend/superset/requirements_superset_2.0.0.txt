@@ -84,6 +84,7 @@ pyarrow==5.0.0
 pycparser==2.21
 PyJWT==2.6.0
 PyMeeus==0.5.11
+PyMySQL==1.0.2
 pyparsing==3.0.9
 pyrsistent==0.19.2
 PySocks==1.7.1

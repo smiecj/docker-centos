@@ -5,3 +5,5 @@ test*sh
 
 Dockerfiles/emr/ambari
 Dockerfiles/backend/haproxy
+
+./data

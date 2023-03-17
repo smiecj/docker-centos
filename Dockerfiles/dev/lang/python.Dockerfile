@@ -8,10 +8,14 @@ ARG miniconda_install_path=/usr/local/miniconda
 ARG conda_env_name_python3=py3
 ARG python3_version
 ARG condarc_file
-COPY ./conda/${condarc_file} ${HOME}/.condarc
+COPY ./conda/condarc* ${HOME}/
 
 ARG github_url
 ARG pip_repo
+
+# init repo
+COPY ./scripts/init_python_repo /
+COPY ./conda/ ${HOME}/
 
 ## download conda
 ARG CONDA_FORGE_VERSION

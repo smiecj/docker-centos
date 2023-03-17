@@ -6,7 +6,6 @@ export
 hello:
 	@echo "hello docker centos!"
 	@if [[ "${REPO}" != "" ]]; then echo "repo: ${REPO}"; fi
-	@echo ${python3_tag}
 
 # build basic system image
 build_base:
@@ -243,6 +242,20 @@ run_azkaban:
 remove_azkaban:
 	bash ${compose_script} remove ./deployments/compose/azkaban/azkaban.yml
 
+## dolphinscheduler
+build_dolphinscheduler:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/dolphinscheduler/dolphinscheduler.Dockerfile ${IMAGE_DOLPHINSCHEDULER} ./Dockerfiles/emr/dolphinscheduler/
+
+build_dolphinscheduler_compile:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/dolphinscheduler/dolphinscheduler_compile.Dockerfile ${IMAGE_DOLPHINSCHEDULER} ./Dockerfiles/emr/dolphinscheduler/
+
+## prefect
+build_prefect:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/prefect/prefect.Dockerfile ${IMAGE_PREFECT} ./Dockerfiles/emr/prefect/
+
+run_prefect:
+	docker run -d -it --hostname test_prefect --name dev_prefect -e API_URL=http://localhost:3000/api -p 3000:3000 ${IMAGE_PREFECT}
+
 ## datalink
 build_datalink:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/datalink/datalink.Dockerfile ${IMAGE_DATALINK} ./Dockerfiles/emr/datalink/
@@ -268,6 +281,19 @@ build_airflow:
 
 run_airflow:
 	docker run -it -d --hostname test_airflow --name dev_airflow -p 8072:8072 ${IMAGE_AIRFLOW}
+
+## flink
+build_flink:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/flink/flink.Dockerfile ${IMAGE_FLINK} ./Dockerfiles/emr/flink/
+
+build_flink_compile:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/flink/flink_compile.Dockerfile ${IMAGE_FLINK} ./Dockerfiles/emr/flink/
+
+run_flink:
+	bash ${compose_script} run ./deployments/compose/flink/flink_cluster.yml
+
+remove_flink:
+	bash ${compose_script} remove ./deployments/compose/flink/flink_cluster.yml
 
 ## hdfs
 build_hdfs:
@@ -316,11 +342,17 @@ run_hue:
 remove_hue:
 	bash ${compose_script} remove ./deployments/compose/hue/hue.yml
 
-run_hue_hdfs:
-	bash ${compose_script} run ./deployments/compose/hue/hue_hdfs.yml
+run_hue_hive:
+	bash ${compose_script} run ./deployments/compose/hue/hue_hive.yml
 
-remove_hue_hdfs:
-	bash ${compose_script} remove ./deployments/compose/hue/hue_hdfs.yml
+remove_hue_hive:
+	bash ${compose_script} remove ./deployments/compose/hue/hue_hive.yml
+
+run_hue_presto:
+	bash ${compose_script} run ./deployments/compose/hue/hue_presto.yml
+
+remove_hue_presto:
+	bash ${compose_script} remove ./deployments/compose/hue/hue_presto.yml
 
 ## jupyter
 build_jupyter:
@@ -411,6 +443,13 @@ run_clickhouse_cluster:
 
 remove_clickhouse_cluster:
 	bash ${compose_script} remove ./deployments/compose/clickhouse/clickhouse_cluster.yml
+
+## minio
+build_minio:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/minio/minio.Dockerfile ${IMAGE_MINIO} ./Dockerfiles/emr/minio/
+
+run_minio:
+	docker run -d -it --hostname test_minio --name dev_minio ${IMAGE_MINIO}
 
 # build net image
 ## xrdp

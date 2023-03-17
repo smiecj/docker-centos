@@ -65,13 +65,17 @@ extend blog:
 |   | [zeppelin](https://zeppelin.apache.org) | make build_zeppelin | zeppelin 0.10.1 |
 |   | [presto](https://prestodb.io) | make build_presto | presto 0.275 |
 |   | [trino](https://trino.io) | make build_trino | trino 403 |
+|   | [flink](https://github.com/apache/flink) | make build_flink | flink 1.15 |
 |   | [superset](https://superset.apache.org) | make build_superset | superset 2.0.0 |
 |   | [azkaban](https://azkaban.github.io) | make build_azkaban | azkaban master branch |
+|   | [prefect](https://www.prefect.io) | make build_prefect | prefect 2.7.7 |
+|   | [dolphinscheduler](https://github.com/apache/dolphinscheduler) | make build_dolphinscheduler | dolphinscheduler 3.1.4 |
 |   | [datalink](https://github.com/ucarGroup/DataLink) | make build_datalink | [datalink dev branch](https://github.com/smiecj/datalink/tree/dev_bugfix) |
 |   | [elasticsearch](https://www.elastic.co/cn/elasticsearch) | make build_es | elasticsearch 8.4.1 |
 |   | [kibana](https://www.elastic.co/cn/kibana) | make build_kibana | kibana 8.4.1 |
 |   | [atlas](https://atlas.apache.org) | make build_atlas | atlas 2.2.0 |
 |   | [clickhouse](https://github.com/ClickHouse/ClickHouse) | make build_clickhouse | clickhouse 21.7.8 |
+|   | [minio](https://github.com/minio/minio) | make build_minio | minio release |
 | net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
 
@@ -108,8 +112,11 @@ REPO=mzsmieli make run_nacos_mysql
 |    | kafka+efak | REPO=mzsmieli make run_kafka_efak | efak: http://localhost:38042<br>admin/123456 |
 |  emr  | hadoop   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
 |    | hue   | REPO=mzsmieli make run_hue | hue: http://localhost:8281 |
+|    | hue+hdfs+hive   | REPO=mzsmieli make run_hue_hive | hue: http://localhost:8281 |
+|    | hue+hdfs+hive+presto   | REPO=mzsmieli make run_hue_presto | hue: http://localhost:8281 |
 |    | azkaban   | REPO=mzsmieli make run_azkaban | azkaban web: http://localhost:8020 |
 |    | datalink   | REPO=mzsmieli make run_datalink_singleton | datalink: http://localhost:18080<br>admin/admin |
 |  web+backend  | |  | |
 |    | clickhouse   | REPO=mzsmieli make run_clickhouse_cluster | 3 clickhouse nodes: localhost:18123,localhost:28123,localhost:38123 |
 |    | es+kibana   | REPO=mzsmieli make run_es_kibana | es: http://localhost:9200<br>kibana: http://localhost:5601 |
+|    | flink  | REPO=mzsmieli make run_flink | flink ui: http://localhost:8081 |

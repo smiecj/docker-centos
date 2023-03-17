@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  master:
+    image: ${IMAGE_FLINK}
+    hostname: master
+    environment:
+      # flink
+      - rest_port=8081
+      - jobmanager_host=master
+      - workers=worker1,worker2
+    ports:
+      - "8081:8081"
+    depends_on:
+      - worker1
+      - worker2
+  worker1:
+    image: ${IMAGE_FLINK}
+    hostname: worker1
+    environment:
+      - FLINK_START=flinknotstart
+      - jobmanager_host=master
+  worker2:
+    image: ${IMAGE_FLINK}
+    hostname: worker2
+    environment:
+      - FLINK_START=flinknotstart
+      - jobmanager_host=master

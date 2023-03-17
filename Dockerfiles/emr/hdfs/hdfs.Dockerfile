@@ -60,6 +60,8 @@ sed -i "s#{hdfs_module_home}#${hdfs_module_home}#g" ${hdfs_scripts_home}/init-hd
 ### link config path
 mkdir -p /etc/hadoop && \
 ln -s ${hdfs_module_home}/etc/hadoop /etc/hadoop/conf && \
+#### copy default config for volume
+cp -r ${hdfs_module_home}/etc/hadoop ${hdfs_module_home}/etc/hadoop_default && \
 
 ### hdfs and yarn start and stop script env
 

@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+  hadoop1:
+    image: ${IMAGE_HDFS_FULL}
+    hostname: hadoop1
+    environment:
+      # hdfs
+      - DEFAULTFS=hdfs://hadoop1:8020
+      - RESOURCEMANAGER_HOSTNAME=hadoop1
+      - HDFS_START=hdfsstart
+      - SUPERUSER=admin,root,hue
+      # knox
+      - KNOX_START=knoxstart
+      # hive
+      - HIVE_START=hivestart
+      - mysql_host=mysql
+      - mysql_port=3306
+      - mysql_db=hive
+      - mysql_user=root
+      - mysql_pwd=root_HADOOP_123
+    ports:
+      - "8443:8443"
+      - "8088:8088"
+      - "50070:50070"
+      - "10000:10000"
+    depends_on:
+      - mysql
+    volumes:
+      - "./data/hadoop_conf:/etc/hadoop/conf"
+  hue:
+    image: ${IMAGE_HUE}
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=hue
+      - MYSQL_USER=hue
+      - MYSQL_PASSWORD=hue@Qwer123
+      - HIVE_SERVER_HOST=hadoop1
+      - DEFAULTFS=hdfs://hadoop1:8020
+      - WEBHDFS_ADDRESS=hadoop1:50070
+      - PRESTO_SERVER=presto:7070
+      - PRESTO_HIVE_CATALOG=hive
+    ports:
+      - "8281:8281"
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "33306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_HADOOP_123
+      - MYSQL_DATABASE=hue
+      - MYSQL_USER=hue
+      - MYSQL_PASSWORD=hue@Qwer123
+  presto:
+    image: ${IMAGE_PRESTO}
+    ports:
+      - "7070:7070"
+    environment:
+      - HIVE_METASTORE_URL=hadoop1:9083
+      - HADOOP_CONF_DIR=/etc/hadoop/conf
+    volumes:
+      - "./data/hadoop_conf:/etc/hadoop/conf"

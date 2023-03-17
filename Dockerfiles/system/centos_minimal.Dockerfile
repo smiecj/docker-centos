@@ -48,6 +48,10 @@ RUN if [[ ${version} =~ 8.* ]]; then dnf -y update libmodulemd; fi && \
 COPY init-system-proxy.sh /init_system_proxy
 ENV HAS_PROXY "false"
 
+## copy repo
+COPY init-repo.sh /init_repo
+COPY ./repo/ /
+
 ## vim support utf-8
 RUN echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc && \
 
@@ -93,10 +97,12 @@ echo 'hello docker centos'\n\
 \n\
 ## child dockerfile init append after this\n\
 /init_system_proxy\n\
+/init_repo\n\
 """ > /init_service
 
 ## add execute permission
 RUN chmod +x /init_system_proxy && \
+    chmod +x /init_repo && \
     chmod +x /init_system && \
     chmod +x /init_service
 

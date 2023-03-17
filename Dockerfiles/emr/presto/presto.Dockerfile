@@ -5,7 +5,7 @@ FROM ${IMAGE_PRESTO_BASE}
 ENV PORT=7070
 ENV HADOOP_CONF_DIR=/etc/hadoop/conf
 ENV DATA_DIR=/opt/data/presto
-ENV HIVE_METASTORE_URL=localhost:8093
+ENV HIVE_METASTORE_URL=localhost:9083
 ENV XMX=4G
 
 ARG maven_repo

@@ -13,3 +13,7 @@ do
 done
 
 source /etc/profile && nohup {hdfs_module_home}/sbin/start-all.sh > /tmp/test.log 2>&1 &
+
+# set root path 777 (for hive create table)
+sleep 5
+hdfs dfs -ls chmod 777 / || true

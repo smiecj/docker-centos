@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -n "${condarc_file}" ]; then
+    cp -f ${HOME}/${condarc_file} ${HOME}/.condarc
+fi
+
+sed -i "s#index-url = .*#index-url = ${pip_repo}#g" $HOME/.pip/pip.conf

@@ -47,11 +47,11 @@ services:
       - WORKERS=hadoop2,hadoop3
       - HDFS_START=hdfsnotstart
   mysql:
-    image: ${IMAGE_MYSQL}
+    image: mysql:5.7
     ports:
       - "33307:3306"
     environment:
-      - ROOT_PASSWORD=root_HADOOP_123
+      - MYSQL_ROOT_PASSWORD=root_HADOOP_123
 
 networks:
   my-hdfs-cluster:

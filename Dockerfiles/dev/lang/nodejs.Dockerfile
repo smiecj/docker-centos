@@ -15,6 +15,9 @@ ARG nodejs_repo
 
 ARG preinstall_component="yarn vue-cli react-cli"
 
+# init repo
+COPY ./scripts/init_nodejs_repo /
+
 ## install
 ARG TARGETARCH
 RUN if [ "amd64" == "${TARGETARCH}" ]; then arch="x64"; else arch=${TARGETARCH}; fi && \

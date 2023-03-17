@@ -18,6 +18,7 @@ ARG superset_password=admin123
 COPY ./scripts/superset-restart.sh /usr/local/bin/supersetrestart
 COPY ./scripts/superset-start.sh /usr/local/bin/supersetstart
 COPY ./scripts/superset-stop.sh /usr/local/bin/supersetstop
+COPY ./scripts/superset-log.sh /usr/local/bin/supersetlog
 
 ## pip install superset
 COPY ./requirements_superset*.txt /tmp/
@@ -44,6 +45,8 @@ export FLASK_APP=superset""" >> /etc/profile && \
     superset init && \
 
     chmod +x /usr/local/bin/supersetrestart && chmod +x /usr/local/bin/supersetstart && chmod +x /usr/local/bin/supersetstop && \
-    sed -i "s#{superset_log}#$superset_log#g" /usr/local/bin/supersetstart && \
+    chmod +x /usr/local/bin/supersetlog && \
+    sed -i "s#{superset_log}#${superset_log}#g" /usr/local/bin/supersetstart && \
+    sed -i "s#{superset_log}#${superset_log}#g" /usr/local/bin/supersetlog && \
     echo "supersetstart" >> /init_service && \
     addlogrotate ${superset_log} superset
