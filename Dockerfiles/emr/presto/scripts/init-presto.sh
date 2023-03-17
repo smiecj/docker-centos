@@ -15,6 +15,13 @@ cp etc/node.properties_template etc/node.properties
 sed -i "s#{hostname}#${host_name}#g" etc/node.properties
 sed -i "s#{DATA_DIR}#${DATA_DIR}#g" etc/node.properties
 
+presto_log_home=/var/log/
+presto_log_dir=${presto_log_home}/presto
+if [ ! -L ${presto_log_dir} ]; then
+    mkdir -p ${presto_log_home}
+    mkdir -p ${DATA_DIR}/var/log && ln -s ${DATA_DIR}/var/log ${presto_log_dir}
+fi
+
 ## jvm.config
 cp etc/jvm.config_template etc/jvm.config
 sed -i "s#{XMX}#${XMX}#g" etc/jvm.config

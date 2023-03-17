@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -i "s@.*{maven_public_repo}.*@<mirror>\n<id>mirror</id>\n<mirrorOf>central</mirrorOf>\n<name>maven</name>\n<url>${maven_public_repo}</url>\n</mirror>@g" ~/.m2/settings.xml

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# copy hdfs config folder
+cp -r {hdfs_module_home}/etc/hadoop_default/* {hdfs_module_home}/etc/hadoop/
+
 # core-site.xml
 pushd {hdfs_module_home}/etc/hadoop/
 sed -i "s#{DEFAULTFS}#${DEFAULTFS}#g" core-site.xml
@@ -8,10 +11,10 @@ sed -i "s#{HADOOP_TMP_DIR}#${HADOOP_TMP_DIR}#g" core-site.xml
 ## super user
 if [[ -n "${SUPERUSER}" ]]; then
     user_list=($(echo ${SUPERUSER} | tr "," "\n" | uniq))
-    for current_user in ${user_list}
+    for current_user in ${user_list[@]}
     do
         proxyuser_grep_out=`cat core-site.xml | grep hadoop.proxyuser.${current_user}.hosts`
-        if [[ -z ${proxyuser_grep_out} ]]; then
+        if [[ -z "${proxyuser_grep_out}" ]]; then
             sed -i "s#.*</configuration>.*##g" core-site.xml
             echo """
     <property>

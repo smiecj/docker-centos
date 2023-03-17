@@ -18,3 +18,7 @@ done
 
 nohup {hdfs_module_home}/sbin/start-dfs.sh > {dfs_log_path} 2>&1 &
 nohup {hdfs_module_home}/sbin/start-yarn.sh > {yarn_log_path} 2>&1 &
+
+# set root path 777 (for hive create table)
+sleep 5
+hdfs dfs -ls chmod 777 / || true

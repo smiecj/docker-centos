@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sed -i "s@export GOPROXY=.*@export GOPROXY=${go_proxy}@g" /etc/profile

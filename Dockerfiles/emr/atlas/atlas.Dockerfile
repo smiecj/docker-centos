@@ -32,28 +32,21 @@ RUN atlas_module_home=${module_home}/atlas && \
     # sed -i "s#.*test-tools.*##g" pom.xml && \
     ## PKIX path validation failed: ignore ssl check
     ## https://stackoverflow.com/a/68201055
-    echo "[test] ready to compile" && \
     mvn clean -DskipTests package -Pdist,embedded-hbase-solr -Drat.skip=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true && \
-    echo "[test] compile finish" && \
     cp ./distro/target/${atlas_pkg} ${atlas_module_home} && \
     cd ${atlas_module_home} && tar -xzvf ${atlas_pkg} && rm ${atlas_pkg} && \
     mv ${atlas_folder}/* ./ && rm -r ${atlas_folder} && \
-    echo "[test] copy package finish" && \
     rm -r ${atlas_source_folder} && \
     rm -rf ~/.m2/repository/* && \
-    echo "[test] 111" && \
 
 # copy scripts
     mkdir -p ${atlas_scripts_home} && \
 
-    echo "[test] 222" && \
     mv /tmp/init-atlas.sh ${atlas_scripts_home} && \
     mv /tmp/atlas-application.properties_template ${atlas_module_home}/conf/ && \
     sed -i "s#{atlas_module_home}#${atlas_module_home}#g" ${atlas_scripts_home}/init-atlas.sh && \
-    echo "[test] 333" && \
 
     sed -i "s#{atlas_module_home}#${atlas_module_home}#g" /usr/local/bin/atlasstart && \
     chmod +x /usr/local/bin/atlasstart && chmod +x /usr/local/bin/atlasstop && chmod +x /usr/local/bin/atlasrestart && \
-    echo "[test] 444" && \
 # init
     echo "sh ${atlas_scripts_home}/init-atlas.sh && atlasstart" >> /init_service

@@ -44,6 +44,10 @@ RUN sed -i "s/alias cp/#alias cp/g" ~/.bashrc && \
 COPY init-system-proxy.sh /init_system_proxy
 ENV HAS_PROXY "false"
 
+## copy repo
+COPY init-repo.sh /init_repo
+COPY ./repo/ /
+
 ## zsh
 RUN sh /tmp/init-system-zsh.sh && \
 ## vim support utf-8
@@ -85,6 +89,7 @@ echo 'hello docker centos'\n\
 \n\
 ## child dockerfile init append after this\n\
 /init_system_proxy\n\
+/init_repo\n\
 """ > /init_service
 
 ## init ssh
@@ -92,6 +97,7 @@ COPY ./scripts/sshd-start.sh /init_ssh_service
 
 ## add execute permission
 RUN chmod +x /init_ssh_service && \
+    chmod +x /init_repo && \
     chmod +x /init_system_proxy && \
     chmod +x /init_system && \
     chmod +x /init_service

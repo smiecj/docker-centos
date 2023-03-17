@@ -1,0 +1,28 @@
+jobmanager.rpc.address: {jobmanager_host}
+
+jobmanager.rpc.port: {jobmanager_port}
+
+jobmanager.bind-host: 0.0.0.0
+
+jobmanager.memory.process.size: 1600m
+
+taskmanager.bind-host: localhost
+
+taskmanager.host: localhost
+
+taskmanager.memory.process.size: 1728m
+
+taskmanager.numberOfTaskSlots: 1
+
+parallelism.default: 1
+
+jobmanager.execution.failover-strategy: region
+
+rest.port: {rest_port}
+
+rest.address: localhost
+
+rest.bind-address: 0.0.0.0
+
+# ha
+high-availability.type: 

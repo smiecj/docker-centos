@@ -19,6 +19,9 @@ ENV EXEC_SERVER_PORT=8030
 ### start command: azkabanstartall / azkabanwebserverstart / azkabanexecserverstart
 ENV AZKABAN_START=azkabanstartall
 
+ENV ADMIN_USER=azkaban
+ENV ADMIN_PASSWORD=azkaban
+
 # scripts
 COPY ./scripts/web-server-start.sh /usr/local/bin/azkabanwebserverstart
 COPY ./scripts/web-server-stop.sh /usr/local/bin/azkabanwebserverstop
@@ -36,6 +39,7 @@ COPY ./scripts/init-db.sh /tmp
 COPY ./sql/init-azkaban.sql /tmp
 COPY ./conf/azkaban_web_server.properties.template /tmp
 COPY ./conf/azkaban_exec_server.properties.template /tmp
+COPY ./conf/azkaban-users.xml.template /tmp
 
 # mysql client
 RUN yum -y install mysql && \
@@ -71,6 +75,7 @@ RUN yum -y install mysql && \
     mv /tmp/init-web-server.sh ${scripts_home} && \
     mv /tmp/init-exec-server.sh ${scripts_home} && \
     mv /tmp/azkaban_web_server.properties.template ${web_server_home}/conf/ && \
+    mv /tmp/azkaban-users.xml.template ${web_server_home}/conf/ && \
     mv /tmp/azkaban_exec_server.properties.template ${exec_server_home}/conf/ && \
     mv /tmp/init-azkaban.sql ${sql_home} && \
 

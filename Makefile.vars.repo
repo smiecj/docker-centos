@@ -31,6 +31,7 @@ npm_mirror = https://registry.npmjs.org
 
 ## golang
 go_proxy = https://proxy.golang.org,direct
+# go_proxy = https://repo.huaweicloud.com/repository/goproxy
 go_pkg_repo = https://go.dev/dl
 
 ## rust
@@ -78,11 +79,7 @@ gradle_repo = https://mirrors.aliyun.com/macports/distfiles/gradle
 # gradle_repo = https://mirrors.tuna.tsinghua.edu.cn/macports/distfiles/gradle
 
 # conda
-condarc_file = condarc_tsing
-
-# nodejs
-nodejs_repo = https://nodejs.org/dist
-npm_mirror = https://registry.npmjs.org
+condarc_file = condarc
 
 # python
 pip_repo = https://mirrors.aliyun.com/pypi/simple

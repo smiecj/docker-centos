@@ -1,0 +1,16 @@
+# maven
+maven_public_repo=https://maven.aliyun.com/repository/public
+# maven_public_repo=https://repo.huaweicloud.com/repository/maven/
+
+# conda
+condarc_file=condarc_cn
+pip_repo=https://mirrors.aliyun.com/pypi/simple
+
+# nodejs
+npm_mirror=https://registry.npmmirror.com
+
+# python
+pip_repo=https://mirrors.aliyun.com/pypi/simple
+
+# golang
+go_proxy=https://goproxy.cn,direct

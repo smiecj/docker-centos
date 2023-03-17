@@ -47,7 +47,6 @@ curl -LO ${rpcgen_rpm_url} && rpm -ivh ${rpcgen_rpm} && rm ${rpcgen_rpm} && \
 
 # compile
 mysql_source_pkg_url=${mysql_repo}/MySQL-${mysql_short_version}/mysql-boost-${mysql_version}.tar.gz && \
-echo "[test] mysql_source_pkg_url: ${mysql_source_pkg_url}" && \
 mkdir -p ${mysql_module_home} && cd ${mysql_module_home} && curl -LO ${mysql_source_pkg_url} && \
 tar -xzvf ${mysql_source_pkg} && rm ${mysql_source_pkg} && cd ${mysql_source_folder} && \
 cmake . -DCMAKE_INSTALL_PREFIX=${mysql_module_home} \

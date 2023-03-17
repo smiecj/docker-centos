@@ -51,7 +51,7 @@ fi
 
 ## build and push image
 if [ "${command}" == "build" ]; then
-    docker buildx build --output type=docker ${platform} ${build_arg} -f ${dockerfile} ${image_tag} ${main_path}
+    docker buildx build --output type=docker ${platform} ${build_arg} --no-cache -f ${dockerfile} ${image_tag} ${main_path}
 else
     docker buildx build ${build_arg} ${platform} --no-cache -f ${dockerfile} ${image_tag} ${main_path} --push
 fi

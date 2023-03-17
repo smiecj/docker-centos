@@ -65,11 +65,15 @@
 |   | [trino](https://trino.io) | make build_trino | trino 403 |
 |   | [superset](https://superset.apache.org) | make build_superset | superset 2.0.0 |
 |   | [azkaban](https://azkaban.github.io) | make build_azkaban | azkaban master branch |
+|   | [prefect](https://www.prefect.io) | make build_prefect | prefect 2.7.7 |
+|   | [dolphinscheduler](https://github.com/apache/dolphinscheduler) | make build_dolphinscheduler | dolphinscheduler 3.1.4 |
+|   | [flink](https://github.com/apache/flink) | make build_flink | flink 1.15 |
 |   | [datalink](https://github.com/ucarGroup/DataLink) | make build_datalink | [datalink dev branch](https://github.com/smiecj/datalink/tree/dev_bugfix) |
 |   | [elasticsearch](https://www.elastic.co/cn/elasticsearch) | make build_es | elasticsearch 8.4.1 |
 |   | [kibana](https://www.elastic.co/cn/kibana) | make build_kibana | kibana 8.4.1 |
 |   | [atlas](https://atlas.apache.org) | make build_atlas | atlas 2.2.0 |
 |   | [clickhouse](https://github.com/ClickHouse/ClickHouse) | make build_clickhouse | clickhouse 21.7.8 |
+|   | [minio](https://github.com/minio/minio) | make build_minio | minio release |
 | net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
 
@@ -110,6 +114,7 @@ REPO=mzsmieli make run_nacos_mysql
 |    | datalink   | REPO=mzsmieli make run_datalink_singleton | datalink: http://localhost:18080<br>admin/admin |
 |    | clickhouse   | REPO=mzsmieli make run_clickhouse_cluster | clickhouse 3节点集群: localhost:18123,localhost:28123,localhost:38123 |
 |    | es+kibana   | REPO=mzsmieli make run_es_kibana | es: http://localhost:9200<br>kibana: http://localhost:5601 |
+|    | flink  | REPO=mzsmieli make run_flink | flink ui: http://localhost:8081 |
 
 ## 待规划需求
 
@@ -135,15 +140,12 @@ REPO=mzsmieli make run_nacos_mysql
 | 四期 |  组件优化 | 各个组件对接统一的代理服务（nginx / knox）探索 | |
 | 四期 |  组件优化 | 各个组件的可视化管理平台，类似 ambari | |
 | 四期 |  镜像优化 | 区分组件的编译镜像和运行镜像，运行镜像使用更轻量的 | |
-| 持续迭代 |  需要扩展的 dockerfile  | backend - [gocron](https://github.com/ouqiang/gocron): 定时任务调度, 可结合 docker-compose 测试集群功能 | |
-|  |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb) | |
-|  |  需要扩展的 dockerfile  | emr - [dolphinscheduler](https://github.com/apache/dolphinscheduler) | |
+| 持续迭代 |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb) | |
 |  |  需要扩展的 dockerfile  | emr - [nebula](https://github.com/vesoft-inc/nebula) | |
 |  |  需要扩展的 dockerfile  | emr - [datahub](https://github.com/datahub-project/datahub) | |
 |  |  需要扩展的 dockerfile  | dev - 开发镜像扩展 vscode 插件 | |
-|  |  需要扩展的 compose  | emr - hue + hive | |
-|  |  需要扩展的 compose  | emr - hive + presto | |
 |  |  需要扩展的 compose  | emr - clickhouse 三节点集群(待验证) | |
+|  |  需要扩展的 compose  | emr - flink 集群 (带 master) | |
 |  |  需要扩展的功能  | base - 新增工具脚本，连接 mysql 验证，将 azkaban 等组件的逻辑统一 | |
 |  |  需要扩展的功能  | 存储相关镜像新增测试脚本，进行基本的 CURD 操作并返回结果 | |
 

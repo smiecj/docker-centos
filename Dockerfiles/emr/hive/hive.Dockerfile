@@ -22,6 +22,8 @@ COPY ./scripts/hive-restart.sh /usr/local/bin/hiverestart
 COPY ./scripts/hive-start.sh /usr/local/bin/hivestart
 COPY ./scripts/hive-stop.sh /usr/local/bin/hivestop
 COPY ./scripts/hive-not-start.sh /usr/local/bin/hivenotstart
+COPY ./scripts/hive-server-log.sh /usr/local/bin/hiveserverlog
+COPY ./scripts/hive-metastore-log.sh /usr/local/bin/hivemetastorelog
 
 RUN mysql_version=8.0.26 && \
     mysql_jdbc_url=${maven_repo}/mysql/mysql-connector-java/${mysql_version}/mysql-connector-java-${mysql_version}.jar && \
@@ -53,7 +55,7 @@ RUN mysql_version=8.0.26 && \
     cd ${hive_module_home}/conf && cp hive-env.sh.template hive-env.sh && \
     source /etc/profile && \
     sed -i "s@# HADOOP_HOME.*@export HADOOP_HOME=${hdfs_module_home}@g" hive-env.sh && \
-    sed -i "s@# HIVE_CONF_DIR.*@export HIVE_CONF_DIR=${hive_module_home}@g" hive-env.sh && \
+    sed -i "s@# export HIVE_CONF_DIR.*@export HIVE_CONF_DIR=${hive_module_home}/conf@g" hive-env.sh && \
     
 ### jdbc jar
     cd ${hive_module_home}/lib && curl -LO ${mysql_jdbc_url} && \
@@ -68,6 +70,8 @@ RUN mysql_version=8.0.26 && \
     sed -i "s#{hive_metastore_log}#${hive_metastore_log}#g" /usr/local/bin/hivestart && \
     sed -i "s#{hive_hiveserver2_log}#${hive_hiveserver2_log}#g" /usr/local/bin/hivestart && \
     sed -i "s#{hive_module_home}#${hive_module_home}#g" /usr/local/bin/hivestop && \
+    sed -i "s#{hive_module_home}#${hive_module_home}#g" /usr/local/bin/hiveserverlog && \
+    sed -i "s#{hive_module_home}#${hive_module_home}#g" /usr/local/bin/hivemetastorelog && \
 
 ## init service
     sed -i "s#{hive_module_home}#${hive_module_home}#g" ${hive_scripts_home}/init-hive.sh && \

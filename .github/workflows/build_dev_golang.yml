@@ -1,6 +1,6 @@
 on:
   schedule:
-  - cron: "0 3 * * 1-5"
+  - cron: "0 3 * * 0"
 
 jobs:
   docker:
@@ -21,5 +21,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: build_dev_golang
         run: |
-          VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
-          VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.19.5 VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.19.5 VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.18.10 VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.18.10 VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.17.13 VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.17.13 VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.16.15 VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.16.15 VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.20 VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
+          GO_VERSION=1.20 VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_dev_golang
