@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  master:
+    image: ${IMAGE_STARROCKS}
+    hostname: master
+    ports:
+      - "18030:8030"
+      - "18040:8040"
+      - "19030:9030"

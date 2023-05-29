@@ -1,0 +1,1 @@
+tail -f {azkaban_exec_server_home}/logs/azkaban-execserver.log

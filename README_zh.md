@@ -73,6 +73,7 @@
 |   | [kibana](https://www.elastic.co/cn/kibana) | make build_kibana | kibana 8.4.1 |
 |   | [atlas](https://atlas.apache.org) | make build_atlas | atlas 2.2.0 |
 |   | [clickhouse](https://github.com/ClickHouse/ClickHouse) | make build_clickhouse | clickhouse 21.7.8 |
+|   | [starrocks](https://starrocks.io) | make build_starrocks | starrocks 2.5.3 |
 |   | [minio](https://github.com/minio/minio) | make build_minio | minio release |
 | net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
@@ -113,6 +114,7 @@ REPO=mzsmieli make run_nacos_mysql
 |    | azkaban   | REPO=mzsmieli make run_azkaban | azkaban web: http://localhost:8020 |
 |    | datalink   | REPO=mzsmieli make run_datalink_singleton | datalink: http://localhost:18080<br>admin/admin |
 |    | clickhouse   | REPO=mzsmieli make run_clickhouse_cluster | clickhouse 3节点集群: localhost:18123,localhost:28123,localhost:38123 |
+|    | starrocks   | REPO=mzsmieli make run_starrocks_cluster | starrocks 3节点集群，主节点: localhost:19030 |
 |    | es+kibana   | REPO=mzsmieli make run_es_kibana | es: http://localhost:9200<br>kibana: http://localhost:5601 |
 |    | flink  | REPO=mzsmieli make run_flink | flink ui: http://localhost:8081 |
 

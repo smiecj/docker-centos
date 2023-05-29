@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  master:
+    image: ${IMAGE_STARROCKS}
+    hostname: master
+    environment:
+      - BE_HOSTS=master,follower1,follower2
+      - FE_FOLLOWER_HOSTS=follower1,follower2
+    ports:
+      - "18030:8030"
+      - "18040:8040"
+      - "19030:9030"
+  follower1:
+    image: ${IMAGE_STARROCKS}
+    hostname: follower1
+    environment:
+      - FE_MASTER_HOST=master
+  follower2:
+    image: ${IMAGE_STARROCKS}
+    hostname: follower2
+    environment:
+      - FE_MASTER_HOST=master

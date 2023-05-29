@@ -41,13 +41,13 @@ if [[ "$mysql_version" =~ .*8.[0-9]+.[0-9]+ ]]; then
     ## set user db and add permission
     if [ -n "${USER_DB}" ]; then
         mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE DATABASE ${USER_DB}"
-        if [ -n "${USER_NAME}" ]; then
-            ## user password may set failed, to ignore
-            mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE USER '${USER_NAME}'@'%' IDENTIFIED BY '${USER_PASSWORD}'" || true
-            ## set user password by native password for mysql <= 5.7
-            mysql -uroot -p"${ROOT_PASSWORD}" -e "ALTER USER '${USER_NAME}'@'%' IDENTIFIED WITH mysql_native_password BY '${USER_PASSWORD}'" || true
-            mysql -uroot -p"${ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON ${USER_DB}.* TO '${USER_NAME}'@'%' WITH GRANT OPTION" || true
-        fi
+    fi
+    if [ -n "${USER_NAME}" ]; then
+        ## user password may set failed, to ignore
+        mysql -uroot -p"${ROOT_PASSWORD}" -e "CREATE USER '${USER_NAME}'@'%' IDENTIFIED BY '${USER_PASSWORD}'" || true
+        ## set user password by native password for mysql <= 5.7
+        mysql -uroot -p"${ROOT_PASSWORD}" -e "ALTER USER '${USER_NAME}'@'%' IDENTIFIED WITH mysql_native_password BY '${USER_PASSWORD}'" || true
+        mysql -uroot -p"${ROOT_PASSWORD}" -e "GRANT ALL PRIVILEGES ON ${USER_DB}.* TO '${USER_NAME}'@'%' WITH GRANT OPTION" || true
     fi
 
     ## execute init sql

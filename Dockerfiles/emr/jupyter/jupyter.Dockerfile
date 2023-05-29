@@ -120,6 +120,25 @@ echo -e "# dummy \n\
 c.DummyAuthenticator.password = ''\n\
 " >> ${jupyter_config_home}/jupyterhub_config.py && \
 
+### jupyterlab-code-formatter
+#### https://jupyterlab-code-formatter.readthedocs.io/custom-formatter.html#adding-custom-formatters
+echo -e """\n\
+from jupyterlab_code_formatter.formatters import BaseFormatter, handle_line_ending_and_magic, SERVER_FORMATTERS\n\
+class ExampleCustomFormatter(BaseFormatter):\n\
+\n\
+    label = \"Apply Example Custom Formatter\"\n\
+\n\
+    @property\n\
+    def importable(self) -> bool:\n\
+        return True\n\
+\n\
+    @handle_line_ending_and_magic\n\
+    def format_code(self, code: str, notebook: bool, **options) -> str:\n\
+        return \"42\"\n\
+\n\
+SERVER_FORMATTERS[\"example\"] = ExampleCustomFormatter()\n\
+""" >> ${jupyter_config_home}/jupyterhub_config.py && \
+
 ## install some basic extensions
 source /etc/profile && jupyter contrib nbextension install --sys-prefix && \
 jupyter nbextension enable hinterland/hinterland --sys-prefix && \
@@ -162,6 +181,25 @@ do\
     \"recordTiming\": true\n\
 }""" > ${notebook_extension_home}/tracker.jupyterlab-settings && \
 
+    #### toc auto update toc from notebook update
+    toc_home=${user_settings_path_prefix}/@jupyterlab/toc-extension && \
+    mkdir -p ${toc_home} && \
+    echo -e """{\n\
+    \"syncCollapseState\": true\n\
+}""" > ${toc_home}/plugin.jupyterlab-settings && \
+
+    #### auto format
+    formatter_home=${user_settings_path_prefix}/jupyterlab_code_formatter && \
+    mkdir -p ${formatter_home} && \
+    echo -e """{\n\
+        \"formatOnSave\": true,\n\
+        \"preferences\": {\n\
+            \"default_formatter\": {\n\
+                \"python\": \"autopep8\"\n\
+            }\n\
+        }\n\
+}""" > ${formatter_home}/settings.jupyterlab-settings && \
+
     chown -R jupyter:jupyter /home/${user_info_arr[0]}/.jupyter; \
 done && \
 
@@ -177,6 +215,7 @@ sed -i "s#{jupyter_config_home}#${jupyter_config_home}#g" ${jupyter_scripts_home
 
 ## copy jupyter start and stop script   
 sed -i "s#{jupyter_config_home}#${jupyter_config_home}#g" /usr/local/bin/jupyterstart && \
+sed -i "s#{jupyter_home}#${jupyter_home}#g" /usr/local/bin/jupyterstart && \
 sed -i "s#{jupyterhub_log}#${jupyterhub_log}#g" /usr/local/bin/jupyterstart && \
 chmod +x /usr/local/bin/jupyterstart && chmod +x /usr/local/bin/jupyterstop && chmod +x /usr/local/bin/jupyterrestart && \
 
@@ -186,7 +225,7 @@ echo "sh ${jupyter_scripts_home}/init-jupyter.sh && jupyterstart" >> /init_servi
 addlogrotate $jupyterhub_log jupyterhub && \
 ## fix-jupyterhub start failed: load notebook.base.handlers.IPythonHandler on wrong package(jupyter_server)
 site_package_path=`python3 -c "import sys; print(sys.path)" | sed "s/', '/\n/g" | sed "s#\['##g" | sed "s#'\]##g" | grep site-packages | sed -n '1p'` && \
-sed -i "s/if they have been imported/if they have been imported\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py && \
-sed -i "s/base_handlers.append(import_item(base_handler_name))/base_handlers.append(import_item(base_handler_name))\n    '''/g" $site_package_path/jupyterhub/singleuser/mixins.py
-
-### 参考 core5 配置
+sed -i "s/if they have been imported/if they have been imported\n    '''/g" ${site_package_path}/jupyterhub/singleuser/mixins.py && \
+sed -i "s/base_handlers.append(import_item(base_handler_name))/base_handlers.append(import_item(base_handler_name))\n    '''/g" ${site_package_path}/jupyterhub/singleuser/mixins.py && \
+## https://github.com/ryantam626/jupyterlab_code_formatter/issues/309
+sed -i "s/from functools import cache/from functools import lru_cache as cache/g" ${site_package_path}/jupyterlab_code_formatter/formatters.py

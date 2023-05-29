@@ -1,0 +1,18 @@
+LOG_DIR = ${STARROCKS_HOME}/log
+
+DATE = "$(date +%Y%m%d-%H%M%S)"
+JAVA_OPTS="-Dlog4j2.formatMsgNoLookups=true -Xmx2048m -XX:+UseMembar -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=7 -XX:+PrintGCDateStamps -XX:+PrintGCDetails -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:SoftRefLRUPolicyMSPerMB=0 -Xloggc:$STARROCKS_HOME/log/fe.gc.log.$DATE"
+
+JAVA_OPTS_FOR_JDK_9="-Dlog4j2.formatMsgNoLookups=true -Xmx2048m -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=7 -XX:+CMSClassUnloadingEnabled -XX:-CMSParallelRemarkEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:SoftRefLRUPolicyMSPerMB=0 -Xlog:gc*:$STARROCKS_HOME/log/fe.gc.log.$DATE:time"
+
+sys_log_level = DEBUG
+
+http_port = {FE_HTTP_PORT}
+rpc_port = {FE_RPC_PORT}
+query_port = {FE_QUERY_PORT}
+edit_log_port = {FE_EDIT_PORT}
+mysql_service_nio_enabled = true
+
+frontend_address = 0.0.0.0
+
+meta_dir = {FE_META_DIR}

@@ -51,3 +51,5 @@ executor.maxThreads=50
 executor.flow.threads=30
 azkaban.executor.runtimeProps.override.eager=false
 executor.port=8030
+# execute poll mode
+azkaban.poll.model=true

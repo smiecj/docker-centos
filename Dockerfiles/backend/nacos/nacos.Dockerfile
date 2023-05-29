@@ -10,6 +10,7 @@ ENV MYSQL_DB=d_nacos
 ENV MYSQL_USER=root
 ENV MYSQL_PASSWORD=pwd
 ENV PORT=8848
+# ENV GRPC_PORT=9848
 
 ## download package
 ARG github_url

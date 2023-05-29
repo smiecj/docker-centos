@@ -99,6 +99,6 @@ grafana_repo = https://mirrors.huaweicloud.com/grafana
 jenkins_repo = https://mirrors.tuna.tsinghua.edu.cn/jenkins
 
 # mysql
-mysql_repo = https://mirrors.tuna.tsinghua.edu.cn/mysql/downloads
+mysql_repo = https://mirrors.aliyun.com/mysql
 
 endif

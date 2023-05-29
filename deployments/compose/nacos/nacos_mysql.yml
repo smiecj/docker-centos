@@ -10,6 +10,7 @@ services:
       - MYSQL_PASSWORD=root_NACOS_123
     ports:
       - "8848:8848"
+      - "9848:9848"
     depends_on:
       - mysql
   mysql:

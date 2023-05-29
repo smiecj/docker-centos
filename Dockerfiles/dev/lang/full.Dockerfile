@@ -37,7 +37,8 @@ ARG conda_env_name_python3=py3
 ARG python3_home_path=${miniconda_install_path}/envs/${conda_env_name_python3}
 COPY --from=base_python ${miniconda_install_path} ${miniconda_install_path}
 COPY --from=base_python /etc/profile /tmp/profile_python
-COPY --from=base_python $HOME/.pip/pip.conf $HOME/.pip/
+COPY --from=base_python $HOME/.pip/pip.conf $HOME/.pip
+COPY --from=base_python $HOME/condarc* $HOME/
 
 ## python soft link (copy)
 RUN rm /usr/bin/pip* && \

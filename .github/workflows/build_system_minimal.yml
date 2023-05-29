@@ -19,7 +19,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: build_dev_python
+      - name: build_minimal
         run: |
           VERSION=7 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_minimal
           VERSION=8 REPO=mzsmieli cmd=push platform=linux/amd64,linux/arm64 make build_minimal
