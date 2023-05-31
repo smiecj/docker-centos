@@ -196,6 +196,16 @@ run_nacos_mysql:
 remove_nacos_mysql:
 	bash ${compose_script} remove ./deployments/compose/nacos/nacos_mysql.yml
 
+## apollo
+build_apollo:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/backend/apollo/apollo.Dockerfile ${IMAGE_APOLLO} ./Dockerfiles/backend/apollo/
+
+run_apollo:
+	bash ${compose_script} run ./deployments/compose/apollo/apollo.yml
+
+remove_apollo:
+	bash ${compose_script} remove ./deployments/compose/apollo/apollo.yml
+
 ## jenkins
 build_jenkins:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/backend/jenkins/jenkins.Dockerfile ${IMAGE_JENKINS} ./Dockerfiles/backend/jenkins/
@@ -444,6 +454,22 @@ run_clickhouse_cluster:
 remove_clickhouse_cluster:
 	bash ${compose_script} remove ./deployments/compose/clickhouse/clickhouse_cluster.yml
 
+## starrocks
+build_starrocks:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/starrocks/starrocks.Dockerfile ${IMAGE_STARROCKS} ./Dockerfiles/emr/starrocks/
+
+run_starrocks_singleton:
+	bash ${compose_script} run ./deployments/compose/starrocks/starrocks_singleton.yml
+
+remove_starrocks_singleton:
+	bash ${compose_script} remove ./deployments/compose/starrocks/starrocks_singleton.yml
+
+run_starrocks_cluster:
+	bash ${compose_script} run ./deployments/compose/starrocks/starrocks_cluster.yml
+
+remove_starrocks_cluster:
+	bash ${compose_script} remove ./deployments/compose/starrocks/starrocks_cluster.yml
+
 ## minio
 build_minio:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/minio/minio.Dockerfile ${IMAGE_MINIO} ./Dockerfiles/emr/minio/
@@ -454,14 +480,14 @@ run_minio:
 # build net image
 ## xrdp
 build_xrdp:
-	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t ${XRDP_IMAGE} ./Dockerfiles/net/xrdp/
+	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t ${IMAGE_XRDP} ./Dockerfiles/net/xrdp/
 
 run_xrdp:
-	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 3389:3389 -p 7881:7881 ${XRDP_IMAGE} /usr/sbin/init
+	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 33389:3389 -p 37881:7881 ${IMAGE_XRDP} /usr/sbin/init
 
 ## easyconnect
 build_ec:
-	docker build --build-arg XRDP_IMAGE=${XRDP_IMAGE} --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/ec/easyconnect.Dockerfile -t ${EC_IMAGE} ./Dockerfiles/net/ec/
+	docker build --build-arg XRDP_IMAGE=${XRDP_IMAGE} --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/ec/easyconnect.Dockerfile -t ${IMAGE_EC} ./Dockerfiles/net/ec/
 
 run_ec:
-	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 3389:3389 -p 7881:7881 ${EC_IMAGE} /usr/sbin/init
+	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 3389:3389 -p 7881:7881 ${IMAGE_EC} /usr/sbin/init

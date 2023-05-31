@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  apollo:
+    image: ${IMAGE_APOLLO}
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root_APOLLO_123
+    ports:
+      - "8070:8070"
+      - "8080:8080"
+      - "8090:8090"
+    depends_on:
+      - mysql
+  mysql:
+    image: ${IMAGE_MYSQL}
+    environment:
+      - ROOT_PASSWORD=root_APOLLO_123

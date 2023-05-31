@@ -1,0 +1,10 @@
+sys_log_level = DEBUG
+
+be_port = {BE_PORT}
+webserver_port = {BE_HTTP_PORT}
+heartbeat_service_port = {BE_HEARTBEAT_PORT}
+brpc_port = {BE_BRPC_PORT}
+
+storage_root_path = {BE_STORAGE_PATH}
+
+default_rowset_type = beta

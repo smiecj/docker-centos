@@ -20,8 +20,8 @@ sed -i "s/http_port=.*/http_port=${PORT}/g" ${hue_conf}
 sed -i "s/\[\[database\]\]/\[\[database\]\]\nname=${MYSQL_DB}\nengine=mysql\nhost=${MYSQL_HOST}\nport=${MYSQL_PORT}\nuser=${MYSQL_USER}\npassword=${MYSQL_PASSWORD}\n/g" ${hue_conf}
 ### hue interpreter (mysql, impala...)
 #### mysql
-sed -i "s/\[\[interpreters\]\]/\[\[interpreters\]\]\n\[\[\[hue_mysql\]\]\]\nname = ${HUE_MYSQL_QUERIER_NAME}\ninterface=rdbms\n/g" ${hue_conf}
-sed -i "s/\[\[databases\]\]/\[\[databases\]\]\n\[\[\[hue_mysql\]\]\]\nnice_name = hue_mysql\nengine=mysql\nhost=${MYSQL_HOST}\nport=${MYSQL_PORT}\nuser=${MYSQL_USER}\npassword=${MYSQL_PASSWORD}\noptions='{\"charset\": \"utf8\"}'\n/g" ${hue_conf}
+password=$(echo ${MYSQL_PASSWORD} | jq -Rr '@uri')
+sed -i "s/\[\[interpreters\]\]/\[\[interpreters\]\]\n\[\[\[hue_mysql\]\]\]\nname = ${HUE_MYSQL_QUERIER_NAME}\ninterface=sqlalchemy\noptions='{\"url\": \"mysql+mysqldb:\/\/${MYSQL_USER}:${password}@${MYSQL_HOST}:${MYSQL_PORT}\/mysql?charset=utf8mb4\"}'\n/g" ${hue_conf}
 
 ## hive
 if [[ -n "${HIVE_SERVER_HOST}" ]]; then

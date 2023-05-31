@@ -88,7 +88,7 @@ RUN ant_repo=${apache_repo}/ant/binaries && \
     tar -xzvf ${ant_pkg} && rm ${ant_pkg} && \
 
 ## profile
-    echo "export GRADLE_HOME=/usr/java/gradle-$gradle_version" >> /etc/profile  && \
+    echo "export GRADLE_HOME=/usr/java/gradle-$GRADLE_VERSION" >> /etc/profile  && \
     echo "export GRADLE_USER_HOME=$java_repo_home/gradle" >> /etc/profile  && \
     echo "export ANT_HOME=$java_home/$ant_folder" >> /etc/profile  && \
     echo 'export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$GRADLE_HOME/bin:$ANT_HOME/bin' >> /etc/profile

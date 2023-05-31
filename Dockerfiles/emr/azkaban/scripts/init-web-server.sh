@@ -20,3 +20,5 @@ sed -i "s/mysql.password=.*/mysql.password=${MYSQL_PASSWORD}/g" {azkaban_web_ser
 
 sed -i "s#{ADMIN_USER}#${ADMIN_USER}#g" {azkaban_web_server_home}/conf/${user_conf}
 sed -i "s#{ADMIN_PASSWORD}#${ADMIN_PASSWORD}#g" {azkaban_web_server_home}/conf/${user_conf}
+sed -i "s#{USER_NAME}#${USER_NAME}#g" {azkaban_web_server_home}/conf/${user_conf}
+sed -i "s#{USER_PASSWORD}#${USER_PASSWORD}#g" {azkaban_web_server_home}/conf/${user_conf}

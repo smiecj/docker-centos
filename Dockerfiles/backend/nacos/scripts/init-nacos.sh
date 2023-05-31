@@ -11,5 +11,6 @@ sed -i "s/# db.url.0.*/db.url.0=jdbc:mysql:\/\/$MYSQL_HOST:$MYSQL_PORT\/$MYSQL_D
 sed -i "s/# db.user.0.*/db.user.0=$MYSQL_USER/g" application.properties
 sed -i "s/# db.password.0.*/db.password.0=$MYSQL_PASSWORD/g" application.properties
 sed -i "s/^server.port=.*/server.port=$PORT/g" application.properties
+sed -i "s/^server.port=.*/server.port=$PORT/g" application.properties
 
 popd

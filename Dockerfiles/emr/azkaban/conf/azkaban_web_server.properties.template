@@ -45,8 +45,10 @@ mysql.password=azkaban
 mysql.numconnections=100
 #Multiple Executor
 azkaban.use.multiple.executors=true
-azkaban.executorselector.filters=StaticRemainingFlowSize,MinimumFreeMemory,CpuStatus
+azkaban.executorselector.filters=StaticRemainingFlowSize,CpuStatus
 azkaban.executorselector.comparator.NumberOfAssignedFlowComparator=1
 azkaban.executorselector.comparator.Memory=1
 azkaban.executorselector.comparator.LastDispatched=1
 azkaban.executorselector.comparator.CpuUsage=1
+# execute poll mode
+azkaban.poll.model=true
