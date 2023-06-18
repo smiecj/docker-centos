@@ -49,5 +49,7 @@ export PATH=\$PATH:\$FLINK_HOME/bin\n\
     sed -i "s#{flink_module_home}#${flink_module_home}#g" /usr/local/bin/flinkstart && \
     sed -i "s#{flink_module_home}#${flink_module_home}#g" /usr/local/bin/flinkstop && \
     chmod +x /usr/local/bin/flink* && \
-    echo "/init_ssh_service" >> /init_service && \
     echo "sh ${flink_module_home}/init-flink.sh && nohup \${FLINK_START} > /dev/null 2>&1 &" >> /init_service
+
+## sshd
+ENV INIT_SERVICE="ssh"
