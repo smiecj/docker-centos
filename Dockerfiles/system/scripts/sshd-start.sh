@@ -1,5 +1,11 @@
 #!/bin/bash
 
+init_service=`echo ${INIT_SERVICE} | sed "s#,#|#g"`
+if [ -z "${INIT_SERVICE}" ] && [[ ! "ssh" =~ ${init_service} ]]; then
+    echo "sshd will not start"
+    exit
+fi
+
 ## init ssh
 if [ ! -f "/etc/ssh/ssh_host_rsa_key" ]; then
     ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key -N ""

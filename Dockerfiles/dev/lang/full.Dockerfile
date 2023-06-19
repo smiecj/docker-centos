@@ -103,7 +103,7 @@ COPY --from=base_golang ${go_home}/ ${go_home}/
 ## go profile
 COPY --from=base_golang /etc/profile /tmp/profile_golang
 RUN sed -n '/# go/,$p' /tmp/profile_golang >> /etc/profile && \
-    rm /tmp/profile_golang && \
+    rm /tmp/profile_golang
 
-# sshd
-echo "/init_ssh_service" >> /init_service
+## sshd
+ENV INIT_SERVICE="ssh"

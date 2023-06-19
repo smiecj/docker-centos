@@ -12,6 +12,7 @@ ENV RESOURCEMANAGER_HOSTNAME localhost
 ENV RESOURCEMANAGER_WEBAPP_ADDRESS 0.0.0.0:8088
 ENV WORKERS localhost
 ENV SUPERUSER=admin,root
+ENV INIT_SERVICE="ssh"
 
 # install hdfs
 ARG hdfs_version
@@ -37,9 +38,6 @@ RUN hadoop_module_home=${module_home}/hadoop && \
     yarn_log_path=${hadoop_log_home}/yarn.log && \
 
     mkdir -p ${hadoop_log_home} && \
-
-### sshd s6 script
-    echo "/init_ssh_service" >> /init_service && \
 
 ## download package
     hdfs_repo=${apache_repo}/hadoop/common && \

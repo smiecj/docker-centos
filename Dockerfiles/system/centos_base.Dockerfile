@@ -6,6 +6,7 @@ ARG ROOT_PWD=root!centos123
 # init system
 USER root
 ENV HOME /root
+ENV INIT_SERVICE=
 
 COPY init-*.sh /tmp/
 COPY env_*.sh /tmp/
@@ -91,6 +92,7 @@ echo 'hello docker centos'\n\
 ## child dockerfile init append after this\n\
 /init_system_proxy\n\
 /init_repo\n\
+/init_ssh_service\n\
 """ > /init_service
 
 ## init ssh
