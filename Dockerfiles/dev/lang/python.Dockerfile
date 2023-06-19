@@ -7,6 +7,7 @@ USER root
 ARG miniconda_install_path=/usr/local/miniconda
 ARG conda_env_name_python3=py3
 ARG python3_version
+ARG python3_tag
 ARG condarc_file
 COPY ./conda/condarc* ${HOME}/
 
@@ -34,7 +35,7 @@ RUN miniforge_url="${github_url}/conda-forge/miniforge/releases/download" && \
 
 ## profile
     python3_home_path=${miniconda_install_path}/envs/${conda_env_name_python3} && \
-    python3_lib_path=${miniconda_install_path}/envs/${conda_env_name_python3}/lib/python${python3_version}/site-packages && \
+    python3_lib_path=${miniconda_install_path}/envs/${conda_env_name_python3}/lib/python${python3_tag}/site-packages && \
     echo -e "\n# conda & python" >> /etc/profile && \
     echo "export CONDA_HOME=${miniconda_install_path}" >> /etc/profile && \
     echo "export PYTHON3_HOME=${python3_home_path}" >> /etc/profile && \

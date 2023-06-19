@@ -49,7 +49,8 @@ COPY init-repo.sh /init_repo
 COPY ./repo/ /
 
 ## zsh
-RUN sh /tmp/init-system-zsh.sh && \
+ARG github_url
+RUN export github_url=${github_url} && sh /tmp/init-system-zsh.sh && \
 ## vim support utf-8
     echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc && \
 ## set login password

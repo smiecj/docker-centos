@@ -67,7 +67,7 @@ build_oauth_server:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/dev/oauth/oauth_go.Dockerfile ${IMAGE_OAUTH_SERVER} ./Dockerfiles/dev/oauth
 
 run_oauth_server:
-	docker run -it -d --hostname test_oauth --name dev_oauth -e HOST=${SERVER_HOST} -e HOST_SERVER_PORT=19096 -e HOST_CLIENT_PORT=19094 -p 19094:9094 -p 19096:9096 ${OAUTH_SERVER_IMAGE}
+	docker run -it -d --hostname test_oauth --name dev_oauth -e HOST=localhost -e HOST_SERVER_PORT=19096 -e HOST_CLIENT_PORT=19094 -p 19094:9094 -p 19096:9096 ${IMAGE_OAUTH_SERVER}
 
 # build frontend image
 ## vue admin
