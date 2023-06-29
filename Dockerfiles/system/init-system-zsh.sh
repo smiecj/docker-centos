@@ -2,12 +2,14 @@
 
 pushd /tmp
 
-curl -LO ${github_url}/smiecj/shell-tools/archive/refs/tags/v1.0.tar.gz
-tar -xzvf v1.0.tar.gz
-rm v1.0.tar.gz
-cd shell-tools-1.0
-make zsh
+shell_tools_version=`echo ${shell_tools_tag} | sed 's#v##g'`
+
+curl -LO ${github_url}/smiecj/shell-tools/archive/refs/tags/${shell_tools_tag}.tar.gz
+tar -xzvf ${shell_tools_tag}.tar.gz
+rm ${shell_tools_tag}.tar.gz
+cd shell-tools-${shell_tools_version}
+NET=${NET} make zsh
 cd /tmp
-rm -r shell-tools-1.0
+rm -r shell-tools-${shell_tools_version}
 
 popd

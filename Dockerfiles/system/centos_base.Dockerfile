@@ -51,7 +51,9 @@ COPY ./repo/ /
 
 ## zsh
 ARG github_url
-RUN export github_url=${github_url} && sh /tmp/init-system-zsh.sh && \
+ARG shell_tools_tag
+ARG NET
+RUN github_url=${github_url} shell_tools_tag=${shell_tools_tag} NET=${NET} sh /tmp/init-system-zsh.sh && \
 ## vim support utf-8
     echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc && \
 ## set login password
@@ -65,7 +67,7 @@ RUN export github_url=${github_url} && sh /tmp/init-system-zsh.sh && \
 ## s6
 ARG s6_version=v2.2.0.3
 COPY init-system-s6.sh /tmp/
-RUN sh /tmp/init-system-s6.sh && \
+RUN github_url=${github_url} sh /tmp/init-system-s6.sh && \
 ### check s6 is install success
     ls -l /init && \
     rm /tmp/init-system-s6.sh && \

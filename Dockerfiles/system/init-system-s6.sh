@@ -9,7 +9,7 @@ if [[ "aarch64" == "$system_arch" ]]; then
     arch="arm"
 fi
 
-s6_installer_download_url="https://github.com/just-containers/s6-overlay/releases/download/${s6_version}/s6-overlay-${arch}-installer"
+s6_installer_download_url="${github_url}/just-containers/s6-overlay/releases/download/${s6_version}/s6-overlay-${arch}-installer"
 s6_installer=`echo $s6_installer_download_url | sed 's/.*\///g'`
 
 pushd /tmp
