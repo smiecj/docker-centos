@@ -6,11 +6,19 @@ set -eo pipefail
 command=$1
 composefile=$2
 
+# cli
+if [ "$CLI" == "docker" ]; then
+    CLI="docker-compose"
+elif [ "$CLI" == "podman" ]; then
+    # pip3 install podman-compose
+    CLI="podman-compose"
+fi
+
 ## build and push image
 if [ "${command}" == "run" ]; then
-    docker-compose -f ${composefile} up -d
+    ${CLI} -f ${composefile} up -d
 elif [ "${command}" == "remove" ]; then
-    docker-compose -f ${composefile} down --volumes
+    ${CLI} -f ${composefile} down --volumes
 else
     echo "command not found!"
 fi

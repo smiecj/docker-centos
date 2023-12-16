@@ -55,19 +55,23 @@ mysql_common_rpm_name="mysql-common.rpm" && \
 mysql_client_rpm_name="mysql-client.rpm" && \
 mysql_client_plugins_rpm_name="mysql-client-plugins.rpm" && \
 mysql_libs_rpm_name="mysql-libs.rpm" && \
+mysql_icu_data_files_rpm_name="mysql-community-icu-data-files.rpm" && \
 mysql_server_rpm_download_link="${mysql_repo}/MySQL-$mysql_short_version/mysql-community-server-${mysql_release_version}.${mysql_system_version}.${arch}.rpm" && \
 mysql_common_rpm_download_link="${mysql_repo}/MySQL-$mysql_short_version/mysql-community-common-${mysql_release_version}.${mysql_system_version}.${arch}.rpm" && \
 mysql_client_rpm_download_link="${mysql_repo}/MySQL-$mysql_short_version/mysql-community-client-${mysql_release_version}.${mysql_system_version}.${arch}.rpm" && \
 mysql_client_plugins_rpm_download_link="${mysql_repo}/MySQL-$mysql_short_version/mysql-community-client-plugins-${mysql_release_version}.${mysql_system_version}.${arch}.rpm" && \
 mysql_libs_rpm_download_link="${mysql_repo}/MySQL-$mysql_short_version/mysql-community-libs-${mysql_release_version}.${mysql_system_version}.${arch}.rpm" && \
+mysql_icu_data_files_rpm_download_link="${mysql_repo}/MySQL-$mysql_short_version/mysql-community-icu-data-files-${mysql_release_version}.${mysql_system_version}.${arch}.rpm" && \
 curl -Lo $mysql_server_rpm_name $mysql_server_rpm_download_link && \
 curl -Lo $mysql_common_rpm_name $mysql_common_rpm_download_link && \
 curl -Lo $mysql_client_rpm_name $mysql_client_rpm_download_link && \
 curl -Lo $mysql_client_plugins_rpm_name $mysql_client_plugins_rpm_download_link && \
 curl -Lo $mysql_libs_rpm_name $mysql_libs_rpm_download_link && \
+curl -Lo $mysql_icu_data_files_rpm_name $mysql_icu_data_files_rpm_download_link && \
 rpm -ivh $mysql_client_plugins_rpm_name && \
 rpm -ivh $mysql_common_rpm_name && \
 rpm -ivh $mysql_libs_rpm_name && \
+rpm -ivh $mysql_icu_data_files_rpm_name && \
 rpm -ivh $mysql_client_rpm_name && \
 rpm -ivh $mysql_server_rpm_name && \
 rm *.rpm && \

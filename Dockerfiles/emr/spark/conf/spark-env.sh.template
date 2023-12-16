@@ -1,0 +1,5 @@
+export JAVA_HOME={JAVA_HOME}
+export SPARK_MASTER_HOST={SPARK_MASTER_HOST}
+export SPARK_MASTER_PORT={SPARK_MASTER_RPC_PORT}
+export SPARK_MASTER_WEBUI_PORT={SPARK_MASTER_WEBUI_PORT}
+export SPARK_HISTORY_OPTS="-Dspark.history.ui.port={SPARK_HISTORY_PORT} -Dspark.history.retainedApplications={SPARK_HISTORY_RETAIN_APP} -Dspark.history.fs.logDirectory={SPARK_LOG_PATH}"

@@ -1,5 +1,5 @@
-ARG CENTOS_VERSION
-FROM centos:centos${CENTOS_VERSION}
+ARG IMAGE_CENTOS
+FROM ${IMAGE_CENTOS}
 
 ARG ROOT_PWD=root!centos123
 
@@ -9,7 +9,6 @@ ENV HOME /root
 ENV INIT_SERVICE=
 
 COPY init-*.sh /tmp/
-COPY env_*.sh /tmp/
 COPY yum /tmp/yum
 
 ## bashrc
@@ -65,14 +64,16 @@ RUN github_url=${github_url} shell_tools_tag=${shell_tools_tag} NET=${NET} sh /t
     rm -f /tmp/init-*.sh && rm -f /tmp/env_*.sh
 
 ## s6
-ARG s6_version=v2.2.0.3
+ARG s6_version
 COPY init-system-s6.sh /tmp/
 RUN github_url=${github_url} sh /tmp/init-system-s6.sh && \
 ### check s6 is install success
     ls -l /init && \
     rm /tmp/init-system-s6.sh && \
 ### s6 with crontab
-    yum -y install crontabs
+    yum -y install crontabs && \
+### s6 with syslog
+    yum -y install rsyslog
 
 COPY s6/ /etc
 

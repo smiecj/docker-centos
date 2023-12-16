@@ -110,9 +110,10 @@ c.Spawner.cpu_limit = ${jupyter_cpu_limit}\n""" >> ${jupyter_config_home}/jupyte
 ### proxy
 echo -e "# proxy \n\
 c.JupyterHub.cleanup_servers = False\n\
-c.ConfigurableHTTPProxy.should_start = False\n\
+c.ConfigurableHTTPProxy.should_start = True\n\
 c.ConfigurableHTTPProxy.auth_token = ''\n\
 c.ConfigurableHTTPProxy.api_url = ''\n\
+c.ConfigurableHTTPProxy.public_url = ''\n\
 " >> ${jupyter_config_home}/jupyterhub_config.py && \
 
 ### dummy
@@ -140,26 +141,34 @@ SERVER_FORMATTERS[\"example\"] = ExampleCustomFormatter()\n\
 """ >> ${jupyter_config_home}/jupyterhub_config.py && \
 
 ## install some basic extensions
-source /etc/profile && jupyter contrib nbextension install --sys-prefix && \
-jupyter nbextension enable hinterland/hinterland --sys-prefix && \
-jupyter nbextension enable execute_time/ExecuteTime --sys-prefix && \
-jupyter nbextension enable snippets/main --sys-prefix && \
+if [ "4" != "${jupyter_version}" ]; \
+then\
+    source /etc/profile && jupyter contrib nbextension install --sys-prefix && \
+    jupyter nbextension enable hinterland/hinterland --sys-prefix && \
+    jupyter nbextension enable execute_time/ExecuteTime --sys-prefix && \
+    jupyter nbextension enable snippets/main --sys-prefix;\
+fi && \
 
 ### lsp
 source /etc/profile && if [ "2" == "${jupyter_version}" ]; \
 then\
     jupyter labextension install @krassowski/jupyterlab-lsp@2.1.4;\
 fi && \
-pip3 install git+${github_url}/krassowski/python-language-server.git@main && \
+if [ "4" != "${jupyter_version}" ]; \
+then\
+    pip3 install 'python-language-server[all]';\
+fi && \
 
 ## add local account and set default extension config
 for user_info in ${jupyter_local_user_arr[@]}; \
 do\
     user_info_arr=($(echo $user_info | tr ":" "\n")) && \
-    useradd ${user_info_arr[0]} && \
-    echo "${user_info_arr[0]}:${user_info_arr[1]}" | chpasswd && \
+    current_user_name=${user_info_arr[0]} && \
+    current_user_pwd=${user_info_arr[1]} && \
+    useradd ${current_user_name} && \
+    echo "${current_user_name}:${current_user_pwd}" | chpasswd && \
     ### add extension default config
-    user_settings_path_prefix=/home/${user_info_arr[0]}/.jupyter/lab/user-settings && \
+    user_settings_path_prefix=/home/${current_user_name}/.jupyter/lab/user-settings && \
     #### lsp: auto hint
     lsp_user_conf_home=${user_settings_path_prefix}/@krassowski/jupyterlab-lsp && \
     mkdir -p ${lsp_user_conf_home} && \
@@ -200,7 +209,7 @@ do\
         }\n\
 }""" > ${formatter_home}/settings.jupyterlab-settings && \
 
-    chown -R jupyter:jupyter /home/${user_info_arr[0]}/.jupyter; \
+    chown -R ${current_user_name}:${current_user_name} /home/${current_user_name}/.jupyter; \
 done && \
 
 ## profile & init script

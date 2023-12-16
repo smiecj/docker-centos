@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  navidrome:
+    image: ${IMAGE_NAVIDROME}
+    environment:
+      - PORT=4533
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=admin
+      - MUSIC_FOLDER=/opt/music_folder
+      - DATA_FOLDER=/opt/data
+    ports:
+      - "4533:4533"
+    volumes:
+      - "~/modules/navidrome/music_folder:/opt/music_folder"
+      - "~/modules/navidrome/data:/opt/data"

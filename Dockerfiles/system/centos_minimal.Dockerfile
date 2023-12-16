@@ -1,7 +1,7 @@
 # a centos image smaller than centos_base only include yum repo fix and some basic component
 # for deploy simple service (such as wordpress)
-ARG VERSION
-FROM centos:centos${VERSION}
+ARG IMAGE_CENTOS
+FROM ${IMAGE_CENTOS}
 
 ARG ROOT_PWD=root!centos123
 
@@ -67,15 +67,17 @@ RUN echo "set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp936" >> ~/.vimrc && \
     rm -f /tmp/init-*.sh
 
 ## s6
-ARG s6_version=v2.2.0.3
+ARG s6_version
+ARG github_url
 COPY init-system-s6.sh /tmp/
-RUN sh /tmp/init-system-s6.sh && \
+RUN github_url=${github_url} sh /tmp/init-system-s6.sh && \
 ### check s6 is install success
     ls -l /init && \
     rm /tmp/init-system-s6.sh && \
-
 ### s6 with crontab
-    yum -y install crontabs
+    yum -y install crontabs && \
+### s6 with syslog
+    yum -y install rsyslog
 
 COPY s6/ /etc
 

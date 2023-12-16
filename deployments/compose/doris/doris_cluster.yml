@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  master:
+    image: ${IMAGE_DORIS}
+    hostname: master
+    privileged: true
+    environment:
+      - BE_HOSTS=master,follower1,follower2
+      - FE_FOLLOWER_HOSTS=follower1,follower2
+      - FE_REPLICA_ACK_POLICY=NONE
+    ports:
+      - "18030:8030"
+      - "18040:8040"
+      - "19030:9030"
+  follower1:
+    image: ${IMAGE_DORIS}
+    hostname: follower1
+    privileged: true
+    environment:
+      - FE_MASTER_HOST=master
+  follower2:
+    image: ${IMAGE_DORIS}
+    hostname: follower2
+    privileged: true
+    environment:
+      - FE_MASTER_HOST=master

@@ -1,7 +1,7 @@
 ARG IMAGE_PYTHON
 FROM ${IMAGE_PYTHON}
 
-ENV PORT=27071
+ENV PORT=27017
 
 COPY ./scripts/mongo-start.sh /usr/local/bin/mongostart
 COPY ./scripts/mongo-stop.sh /usr/local/bin/mongostop
@@ -34,7 +34,7 @@ mv ${mongo_pkg_folder}/* ./ && rm -rf ${mongo_pkg_folder} && \
 
 # bin path
 echo -e """\n# mongo\n\
-export MONGO_HOME=${mongo_module_home}/bin\n\
+export MONGO_HOME=${mongo_module_home}\n\
 export PATH=\$PATH:\$MONGO_HOME/bin\n\
 """ >> /etc/profile && \
 

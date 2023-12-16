@@ -62,6 +62,16 @@ build_code_server:
 run_code_server:
 	docker run -it -d --hostname test_code_server --name dev_code_server -p 8080:8080 ${IMAGE_CODE_SERVER}
 
+## navidrome
+build_navidrome:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/dev/navidrome/navidrome.Dockerfile ${IMAGE_NAVIDROME} ./Dockerfiles/dev/navidrome
+
+run_navidrome:
+	bash ${compose_script} run ./deployments/compose/navidrome/navidrome.yml
+
+remove_navidrome:
+	bash ${compose_script} remove ./deployments/compose/navidrome/navidrome.yml
+
 ## oauth server
 build_oauth_server:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/dev/oauth/oauth_go.Dockerfile ${IMAGE_OAUTH_SERVER} ./Dockerfiles/dev/oauth
@@ -151,6 +161,9 @@ run_grafana:
 ## zookeeper
 build_zookeeper:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/backend/zookeeper/zookeeper.Dockerfile ${IMAGE_ZOOKEEPER} ./Dockerfiles/backend/zookeeper/
+
+build_zookeeper_compile:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/backend/zookeeper/zookeeper_compile.Dockerfile ${IMAGE_ZOOKEEPER} ./Dockerfiles/backend/zookeeper/
 
 run_zookeeper:
 	docker run -it -d --hostname test_zookeeper --name dev_zookeeper -p 12181:2181 ${IMAGE_ZOOKEEPER}
@@ -292,6 +305,18 @@ build_airflow:
 run_airflow:
 	docker run -it -d --hostname test_airflow --name dev_airflow -p 8072:8072 ${IMAGE_AIRFLOW}
 
+run_airflow_singleton:
+	bash ${compose_script} run ./deployments/compose/airflow/airflow_singleton.yml
+
+remove_airflow_singleton:
+	bash ${compose_script} remove ./deployments/compose/airflow/airflow_singleton.yml
+
+run_airflow_cluster:
+	bash ${compose_script} run ./deployments/compose/airflow/airflow_cluster.yml
+
+remove_airflow_cluster:
+	bash ${compose_script} remove ./deployments/compose/airflow/airflow_cluster.yml
+
 ## flink
 build_flink:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/flink/flink.Dockerfile ${IMAGE_FLINK} ./Dockerfiles/emr/flink/
@@ -304,6 +329,25 @@ run_flink:
 
 remove_flink:
 	bash ${compose_script} remove ./deployments/compose/flink/flink_cluster.yml
+
+## spark
+build_spark:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/spark/spark.Dockerfile ${IMAGE_SPARK} ./Dockerfiles/emr/spark/
+
+build_spark_compile:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/spark/spark_compile.Dockerfile ${IMAGE_SPARK} ./Dockerfiles/emr/spark/
+
+run_spark_singleton:
+	bash ${compose_script} run ./deployments/compose/spark/spark_singleton.yml
+
+remove_spark_singleton:
+	bash ${compose_script} remove ./deployments/compose/spark/spark_singleton.yml
+
+run_spark_cluster:
+	bash ${compose_script} run ./deployments/compose/spark/spark_cluster.yml
+
+remove_spark_cluster:
+	bash ${compose_script} remove ./deployments/compose/spark/spark_cluster.yml
 
 ## hdfs
 build_hdfs:
@@ -369,10 +413,10 @@ build_jupyter:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/jupyter/jupyter.Dockerfile ${IMAGE_JUPYTER} ./Dockerfiles/emr/jupyter/
 
 run_jupyter:
-	docker run -it -d --hostname test_jupyter --name dev_jupyter -p 8000:8000 ${IMAGE_JUPYTER}
+	${CLI} run -it -d --hostname test_jupyter --name dev_jupyter -p 8000:8000 ${IMAGE_JUPYTER}
 
 run_jupyter_lab:
-	docker run -it -d --hostname test_jupyter --name dev_jupyter -e component=lab -p 8000:8000 ${IMAGE_JUPYTER}
+	${CLI} run -it -d --hostname test_jupyter --name dev_jupyter -e component=lab -p 8000:8000 ${IMAGE_JUPYTER}
 
 ## zeppelin
 build_zeppelin:
@@ -470,6 +514,22 @@ run_starrocks_cluster:
 remove_starrocks_cluster:
 	bash ${compose_script} remove ./deployments/compose/starrocks/starrocks_cluster.yml
 
+## doris
+build_doris:
+	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/doris/doris.Dockerfile ${IMAGE_DORIS} ./Dockerfiles/emr/doris/
+
+run_doris_singleton:
+	bash ${compose_script} run ./deployments/compose/doris/doris_singleton.yml
+
+remove_doris_singleton:
+	bash ${compose_script} remove ./deployments/compose/doris/doris_singleton.yml
+
+run_doris_cluster:
+	bash ${compose_script} run ./deployments/compose/doris/doris_cluster.yml
+
+remove_doris_cluster:
+	bash ${compose_script} remove ./deployments/compose/doris/doris_cluster.yml
+
 ## minio
 build_minio:
 	bash ${build_script} ${cmd} ${platform} ./Dockerfiles/emr/minio/minio.Dockerfile ${IMAGE_MINIO} ./Dockerfiles/emr/minio/
@@ -480,14 +540,14 @@ run_minio:
 # build net image
 ## xrdp
 build_xrdp:
-	docker build --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/xrdp/xrdp.Dockerfile -t ${IMAGE_XRDP} ./Dockerfiles/net/xrdp/
+	bash ${build_script} ${cmd} linux/amd64 ./Dockerfiles/net/xrdp/xrdp.Dockerfile ${IMAGE_XRDP} ./Dockerfiles/net/xrdp/
 
 run_xrdp:
-	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 33389:3389 -p 37881:7881 ${IMAGE_XRDP} /usr/sbin/init
+	${CLI} run -it -d --privileged=true --platform linux/amd64 --hostname test_xrdp --name dev_xrdp -p 33389:3389 -p 37881:7881 ${IMAGE_XRDP} /usr/sbin/init
 
 ## easyconnect
 build_ec:
-	docker build --build-arg XRDP_IMAGE=${XRDP_IMAGE} --network=host --no-cache --platform linux/amd64 -f ./Dockerfiles/net/ec/easyconnect.Dockerfile -t ${IMAGE_EC} ./Dockerfiles/net/ec/
+	bash ${build_script} ${cmd} linux/amd64 ./Dockerfiles/net/ec/easyconnect.Dockerfile ${IMAGE_EC} ./Dockerfiles/net/ec/
 
 run_ec:
-	docker run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 3389:3389 -p 7881:7881 ${IMAGE_EC} /usr/sbin/init
+	${CLI} run -it -d --privileged=true --platform linux/amd64 --hostname test_ec --name dev_ec -p 33389:3389 -p 37881:7881 ${IMAGE_EC} /usr/sbin/init

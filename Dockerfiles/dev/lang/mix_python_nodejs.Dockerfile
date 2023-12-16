@@ -31,7 +31,7 @@ COPY --from=base_python $HOME/.pip/pip.conf $HOME/.pip/
 COPY --from=base_python $HOME/condarc* $HOME/
 
 ## python soft link (copy)
-RUN rm /usr/bin/pip* && \
+RUN rm -f /usr/bin/pip* && \
     rm -f /usr/bin/python3* && \
     ln -s ${python3_home_path}/bin/python3 /usr/bin/python3 && \
     ln -s $python3_home_path/bin/pip3 /usr/bin/pip3 && \

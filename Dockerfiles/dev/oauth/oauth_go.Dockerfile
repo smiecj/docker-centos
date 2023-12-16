@@ -10,11 +10,12 @@ ENV HOST_CLIENT_PORT "9094"
 ARG module_home
 ARG github_url
 ARG branch=dev
+ARG go_proxy
 
 # compile
 ## https://github.com/smiecj/go-oauth2
 RUN mkdir -p ${module_home} && cd ${module_home} && git clone ${github_url}/smiecj/go-oauth2 -b ${branch} && \
-    source /etc/profile && cd go-oauth2 && make build
+    source /etc/profile && export GOPROXY=${go_proxy} && cd go-oauth2 && make build
 
 ## copy oauth start and stop script
 COPY ./scripts/oauth-start.sh /usr/local/bin/oauthstart

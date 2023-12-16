@@ -80,10 +80,11 @@ RUN gradle_pkg=gradle-${GRADLE_VERSION}-bin.zip && \
     unzip ${gradle_pkg} && rm -f ${gradle_pkg}
 
 ## ant
-ARG ANT_VERSION
+ARG ANT_SHORT_VERSION
 RUN ant_repo=${apache_repo}/ant/binaries && \
-    ant_folder=apache-ant-${ANT_VERSION} && \
-    ant_pkg=${ant_folder}-bin.tar.gz && \
+    ant_pkg=`curl -L ${ant_repo}/ | grep apache-ant-${ANT_SHORT_VERSION} | grep "tar.gz" | sed 's#.*href="##g' | sed 's#".*##g' | sed -n 1p` && \
+    ant_version=`echo ${ant_pkg} | sed 's#apache-ant-##g' | sed 's#-.*##g'` && \
+    ant_folder=apache-ant-${ant_version} && \
     cd /usr/java && curl -LO ${ant_repo}/${ant_pkg} && \
     tar -xzvf ${ant_pkg} && rm ${ant_pkg} && \
 

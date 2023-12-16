@@ -1,0 +1,9 @@
+User = "{ADMIN_USER}"
+Password = "{ADMIN_PASSWORD}"
+MusicFolder = "{MUSIC_FOLDER}"
+DataFolder = "{DATA_FOLDER}"
+Port = {PORT}
+
+LogLevel = "debug"
+ScanSchedule = "1h"
+SessionTimeout = "24h"

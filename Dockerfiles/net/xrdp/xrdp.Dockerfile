@@ -1,6 +1,5 @@
-FROM centos:centos8.4.2105
-
-ARG HOME=/root
+ARG IMAGE_CENTOS8
+FROM ${IMAGE_CENTOS8}
 
 ARG yum_repo=http://mirrors.tuna.tsinghua.edu.cn/centos-vault
 ARG module_home

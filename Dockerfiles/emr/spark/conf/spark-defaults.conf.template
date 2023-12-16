@@ -1,0 +1,10 @@
+spark.master                     spark://{SPARK_MASTER_HOST}:{SPARK_MASTER_RPC_PORT}
+spark.serializer                 org.apache.spark.serializer.KryoSerializer
+spark.driver.memory              {SPARK_DRIVER_MEMORY}
+spark.executor.memory            {SPARK_EXECUTOR_MEMORY}
+
+spark.eventLog.enabled {SPARK_EVENTLOG_ENABLED}
+spark.eventLog.compress {SPARK_EVENTLOG_COMPRESS}
+spark.eventLog.dir {SPARK_LOG_PATH}
+
+# spark.eventLog.dir               hdfs://namenode:8021/directory

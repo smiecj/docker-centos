@@ -1,0 +1,74 @@
+# python base
+attrs==23.1.0
+jedi==0.19.0
+packaging==23.1
+python-dateutil==2.8.2
+python-dotenv==1.0.0
+pytz==2023.3
+requests==2.31.0
+wheel==0.41.2
+zope.interface==6.0
+pandas==2.0.3
+autopep8==2.0.4
+SQLAlchemy==2.0.20
+
+# jupyter base
+jupyter==1.0.0
+jupyter_client==8.3.1
+jupyter-console==6.4.3
+jupyter-contrib-core==0.4.2
+jupyter_core==5.3.1
+jupyter-events==0.7.0
+jupyter-highlight-selected-word==0.2.0
+jupyter-latex-envs==1.4.6
+jupyter_packaging==0.12.3
+jupyter_server_terminals==0.4.4
+jupyter-telemetry==0.1.0
+jupyterhub==4.0.2
+jupyterhub-idle-culler==1.2.1
+jupyterlab==4.0.5
+jupyterlab_code_formatter==2.2.1
+jupyterlab-pygments==0.1.2
+jupyterlab_server==2.24.0
+jupyterlab-vega2==3.2.0
+jupyterlab-vega3==3.2.0
+jupyterlab-widgets==3.0.8
+jupyterthemes==0.20.0
+
+## notebook
+notebook==7.0.3
+
+## kernel
+ipykernel==6.25.1
+ipython==8.12.2
+ipython-genutils==0.2.0
+
+# plugins
+
+## jupyterlab-execute-time
+jupyterlab_execute_time==3.0.1
+
+## git
+jupyterlab-git==0.42.0
+
+## variable inspector
+# lckr-jupyterlab-variableinspector==3.0.9
+
+## latex
+# jupyterlab-latex==3.1.0
+
+## randerers
+jupyterlab-fasta==3.2.0
+jupyterlab_geojson==3.4.0
+jupyterlab_katex==3.4.0
+jupyterlab-mathjax3==4.3.0
+jupyterlab-vega2==3.2.0
+jupyterlab-vega3==3.2.0
+
+## bokeh
+jupyter-bokeh==3.0.7
+
+## drawio
+## https://github.com/QuantStack/jupyterlab-drawio/issues/119
+## https://github.com/jupyterlab/jupyterlab/issues/14590
+# jupyterlab-drawio==0.9.0

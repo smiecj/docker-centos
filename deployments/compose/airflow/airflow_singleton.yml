@@ -1,0 +1,6 @@
+version: "3.9"
+services:
+  airflow:
+    image: ${IMAGE_AIRFLOW}
+    ports:
+      - "8072:8072"

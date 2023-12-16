@@ -44,7 +44,7 @@ RUN miniforge_url="${github_url}/conda-forge/miniforge/releases/download" && \
 
 ## python soft link
     yum -y remove python3 && \
-    rm /usr/bin/pip* && \
+    rm -f /usr/bin/pip* && \
     ln -s ${python3_home_path}/bin/python3 /usr/bin/python3 && \
     ln -s $python3_home_path/bin/pip3 /usr/bin/pip3 && \
     ln -s /usr/bin/pip3 /usr/bin/pip && \

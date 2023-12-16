@@ -40,7 +40,6 @@ RUN nacos_module_home=${module_home}/nacos && \
 ## copy nacos init script
 
 ## copy nacos s6 script
-### nacos 启动脚本 ./bin/startup.sh 本身就是后台启动方式，所以不适合通过 s6 启动，在容器启动的时候运行即可
 # COPY s6/ /etc/
     mv /tmp/init-nacos.sh ${nacos_module_home}/ && \
     echo "sh ${nacos_module_home}/init-nacos.sh && ${nacos_module_home}/bin/startup.sh -m standalone" >> /init_service && \

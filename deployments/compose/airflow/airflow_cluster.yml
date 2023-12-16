@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+  webserver:
+    image: ${IMAGE_AIRFLOW}
+    hostname: airflow_webserver
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=airflow
+      - MYSQL_USER=airflow
+      - MYSQL_PASSWORD=airflow_TEST_123
+      - EXECUTOR=CeleryExecutor
+      - CELERY_BROKER_TYPE=mysql
+      - AIRFLOW_START=airflowwebserverstart
+      - AIRFLOW_DB_INIT=true
+    ports:
+      - "8072:8072"
+    depends_on:
+      - mysql
+  scheduler:
+    image: ${IMAGE_AIRFLOW}
+    hostname: airflow_scheduler
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=airflow
+      - MYSQL_USER=airflow
+      - MYSQL_PASSWORD=airflow_TEST_123
+      - EXECUTOR=CeleryExecutor
+      - CELERY_BROKER_TYPE=mysql
+      - AIRFLOW_START=airflowschedulerstart
+      - AIRFLOW_DB_INIT=false
+    depends_on:
+      - mysql
+  worker:
+    image: ${IMAGE_AIRFLOW}
+    hostname: airflow_worker
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=airflow
+      - MYSQL_USER=airflow
+      - MYSQL_PASSWORD=airflow_TEST_123
+      - EXECUTOR=CeleryExecutor
+      - CELERY_BROKER_TYPE=mysql
+      - AIRFLOW_START=airflowworkerstart
+      - AIRFLOW_DB_INIT=false
+    depends_on:
+      - mysql
+  mysql:
+    image: ${IMAGE_MYSQL}
+    environment:
+      - USER_PASSWORD=airflow_TEST_123
+      - USER_DB=airflow
+      - USER_NAME=airflow

@@ -12,7 +12,6 @@ sed -i "s/{PASSWORD}/${PASSWORD}/g" {code_server_config_file}
 user_config_home=$HOME/.local/share/code-server/User
 user_config_file=$user_config_home/settings.json
 if [ ! -f $user_config_file ]; then
-    echo "hahaha" >> /tmp/test.log
     mkdir -p $user_config_home
     cp {code_server_config_home}/settings_template.json $user_config_file
     if [ "dark" == "${theme}" ]; then

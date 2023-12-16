@@ -49,9 +49,23 @@ if [ -n "${platform}" ]; then
     platform="--platform ${platform}"
 fi
 
+# cli
+if [ "$CLI" == "docker" ]; then
+    CLI="docker buildx"
+    if [ "${command}" == "build" ]; then
+        build_arg="$build_arg --output type=docker"
+    fi
+fi
+
 ## build and push image
 if [ "${command}" == "build" ]; then
-    docker buildx build --output type=docker ${platform} ${build_arg} --no-cache -f ${dockerfile} ${image_tag} ${main_path}
+    $CLI build ${platform} ${build_arg} --no-cache -f ${dockerfile} ${image_tag} ${main_path}
 else
-    docker buildx build ${build_arg} ${platform} --no-cache -f ${dockerfile} ${image_tag} ${main_path} --push
+    ## podman: build and push
+    if [ "$CLI" == "podman" ]; then
+        $CLI build ${platform} ${build_arg} --no-cache -f ${dockerfile} ${image_tag} ${main_path}
+        $CLI push ${image_tag}
+    else
+        $CLI build ${platform} ${build_arg} --no-cache -f ${dockerfile} ${image_tag} ${main_path} --push
+    fi
 fi

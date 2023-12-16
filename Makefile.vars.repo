@@ -33,6 +33,7 @@ npm_mirror = https://registry.npmjs.org
 go_proxy = https://proxy.golang.org,direct
 # go_proxy = https://repo.huaweicloud.com/repository/goproxy
 go_pkg_repo = https://go.dev/dl
+GOPROXY = https://proxy.golang.org,direct
 
 ## rust
 rust_repo = https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup/archive
@@ -48,7 +49,8 @@ jenkins_repo = https://archives.jenkins-ci.org
 # mongodb_repo = https://fastdl.mongodb.org/linux
 
 ## mysql
-mysql_repo = https://dev.mysql.com/get/Downloads
+# mysql_repo = https://dev.mysql.com/get/Downloads
+mysql_repo = https://cdn.mysql.com//Downloads
 
 # emr
 ## clickhouse
@@ -63,9 +65,9 @@ data_home = /opt/data
 
 ifeq "${NET}" "CN"
 # git
-github_url = https://ghproxy.com/https://github.com
-github_repo = https://ghproxy.com/https://github.com
-github_raw = https://ghproxy.com/https://raw.githubusercontent.com
+github_url = https://mirror.ghproxy.com/https://github.com
+github_repo = https://mirror.ghproxy.com/https://github.com
+github_raw = https://mirror.ghproxy.com/https://raw.githubusercontent.com
 
 # apache
 # apache_repo = https://mirrors.tuna.tsinghua.edu.cn/apache
@@ -91,6 +93,7 @@ npm_mirror = https://registry.npmmirror.com
 # golang
 go_proxy = https://goproxy.cn,direct
 go_pkg_repo = https://mirrors.aliyun.com/golang
+GOPROXY = https://goproxy.cn,direct
 
 # grafana
 grafana_repo = https://mirrors.huaweicloud.com/grafana
@@ -100,5 +103,6 @@ jenkins_repo = https://mirrors.tuna.tsinghua.edu.cn/jenkins
 
 # mysql
 mysql_repo = https://mirrors.aliyun.com/mysql
+# mysql_repo = http://mirrors.sohu.com/mysql
 
 endif

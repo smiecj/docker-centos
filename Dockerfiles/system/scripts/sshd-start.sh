@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# default will start ssh
 init_service=`echo ${INIT_SERVICE} | sed "s#,#|#g"`
 if [ -z "${INIT_SERVICE}" ] && [[ ! "ssh" =~ ${init_service} ]]; then
     echo "sshd will not start"

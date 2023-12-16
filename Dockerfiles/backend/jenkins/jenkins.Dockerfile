@@ -57,5 +57,5 @@ RUN jenkins_rpm_pkg=jenkins.rpm && \
     echo "jenkinsstart" >> /init_service && \
     addlogrotate ${jenkins_log} jenkins
 
-# 源替换（需要服务启动后执行）
+# replace source repo
 # RUN sed -i 's#https://updates.jenkins.io/download#https://mirrors.tuna.tsinghua.edu.cn/jenkins#g' /var/lib/jenkins/.jenkins/updates/default.json && sed -i 's#http://www.google.com#https://www.baidu.com#g' /var/lib/jenkins/.jenkins/updates/default.json

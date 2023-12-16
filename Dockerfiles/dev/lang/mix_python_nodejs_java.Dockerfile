@@ -36,7 +36,7 @@ COPY --from=base_python $HOME/.pip/pip.conf $HOME/.pip/
 COPY --from=base_python $HOME/condarc* $HOME/
 
 ## python soft link (copy)
-RUN rm /usr/bin/pip* && \
+RUN rm -f /usr/bin/pip* && \
     rm -f /usr/bin/python3* && \
     ln -s ${python3_home_path}/bin/python3 /usr/bin/python3 && \
     ln -s $python3_home_path/bin/pip3 /usr/bin/pip3 && \
@@ -71,15 +71,15 @@ RUN mkdir -p ${npm_repo_home}/global_modules && mkdir -p ${npm_repo_home}/cache 
 ARG repo_home
 ARG java_repo_home
 ARG java_home=/usr/java
-ARG maven_repo=${java_repo_home}/maven
-ARG default_maven_repo_home=.m2
-ARG default_maven_repo_path=${default_maven_repo_home}/repository
-RUN mkdir -p ${java_home} && mkdir -p ${java_repo_home}
 COPY --from=base_java ${java_home}/ ${java_home}/
 COPY --from=base_java /etc/profile /tmp/profile_java
 
 ## init maven repo
-RUN cd ~ && mkdir -p $default_maven_repo_home && \
+RUN maven_repo=${java_repo_home}/maven && \
+    default_maven_repo_home=.m2 && \
+    default_maven_repo_path=${default_maven_repo_home}/repository && \
+    mkdir -p ${java_home} && mkdir -p ${java_repo_home} && \
+    cd ~ && mkdir -p $default_maven_repo_home && \
     cd ~ && rm -rf ${default_maven_repo_path} && mkdir -p ${maven_repo} && mkdir -p ${default_maven_repo_home} && ln -s ${maven_repo} ${default_maven_repo_path} && \
     cd ~ && rm -f ${default_maven_repo_home}/settings.xml && ln -s ${maven_home}/conf/settings.xml ${default_maven_repo_home}/settings.xml && \
 

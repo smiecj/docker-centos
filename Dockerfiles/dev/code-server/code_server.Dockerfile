@@ -3,8 +3,8 @@ FROM ${IMAGE_DEV_FULL}
 
 ARG TARGETARCH
 
-ARG code_server_short_version=4.5.1
-ARG code_server_version=v${code_server_short_version}
+ARG code_server_tag
+ARG code_server_version=v${code_server_tag}
 ARG module_home
 ARG code_server_module_home=${module_home}/code_server
 ARG code_server_log_home=/var/log/code-server
@@ -20,8 +20,8 @@ ENV PASSWORD=test_code_server
 ARG TARGETARCH
 RUN code_server_download_url_prefix=${github_repo}/coder/code-server/releases/download && \
     mkdir -p ${module_home} && cd ${module_home} && \
-    code_server_pkg=code-server-${code_server_short_version}-linux-${TARGETARCH}.tar.gz && \
-    code_server_folder=code-server-${code_server_short_version}-linux-${TARGETARCH} && \
+    code_server_pkg=code-server-${code_server_tag}-linux-${TARGETARCH}.tar.gz && \
+    code_server_folder=code-server-${code_server_tag}-linux-${TARGETARCH} && \
     code_server_download_url=${code_server_download_url_prefix}/${code_server_version}/${code_server_pkg} && \
     curl -LO ${code_server_download_url} && tar -xzvf ${code_server_pkg} && rm ${code_server_pkg} && \
     mv ${code_server_folder} code_server

@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  master:
+    image: ${IMAGE_SPARK}
+    hostname: master
+    environment:
+      - SPARK_MASTER_WEBUI_PORT=8080
+      - SPARK_MASTER_HOST=master
+      - SPARK_MASTER_RPC_PORT=7077
+      - SPARK_START=sparkstartall
+      - SPARK_HISTORY_ENABLE=true
+      - workers=worker1,worker2
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+      - "18080:18080"
+    depends_on:
+      - worker1
+      - worker2
+  worker1:
+    image: ${IMAGE_SPARK}
+    hostname: worker1
+    environment:
+      - SPARK_START=sparknotstart
+  worker2:
+    image: ${IMAGE_SPARK}
+    hostname: worker2
+    environment:
+      - SPARK_START=sparknotstart

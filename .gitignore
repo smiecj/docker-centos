@@ -7,3 +7,6 @@ Dockerfiles/emr/ambari
 Dockerfiles/backend/haproxy
 
 ./data
+
+# not implement
+starrocks_compile.Dockerfile

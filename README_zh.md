@@ -50,10 +50,10 @@
 |   | [mongodb](https://www.mongodb.com) | make build_mongo | mongo 6.0.0 |
 |   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>alertmanager 0.23.0<br>pushgateway 1.4.3<br>node exporter 1.3.1 |
 |   | [grafana](https://grafana.com) | make build_grafana | grafana 8.4.2 |
-|   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.6.3 |
+|   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.9.1 |
 |   | [kafka](https://kafka.apache.org) | make build_kafka | kafka 3.2 |
 |   | [nginx](https://www.nginx.com) | make build_nginx | nginx 1.23.2 |
-| emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.1.2 |
+| emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.7.3 |
 |   | [hdfs](https://hadoop.apache.org) | make build_hdfs | hdfs 3.3.2 |
 |   | [hive](https://hive.apache.org) | make build_hive | hive 3.1.2 |
 |   | [knox](https://knox.apache.org) | make build_knox | knox 1.6.1 |
@@ -67,16 +67,19 @@
 |   | [azkaban](https://azkaban.github.io) | make build_azkaban | azkaban master branch |
 |   | [prefect](https://www.prefect.io) | make build_prefect | prefect 2.7.7 |
 |   | [dolphinscheduler](https://github.com/apache/dolphinscheduler) | make build_dolphinscheduler | dolphinscheduler 3.1.4 |
-|   | [flink](https://github.com/apache/flink) | make build_flink | flink 1.15 |
+|   | [flink](https://flink.apache.org) | make build_flink | flink 1.15 |
+|   | [spark](https://spark.apache.org) | make build_spark | spark 3.4.1 |
 |   | [datalink](https://github.com/ucarGroup/DataLink) | make build_datalink | [datalink dev branch](https://github.com/smiecj/datalink/tree/dev_bugfix) |
 |   | [elasticsearch](https://www.elastic.co/cn/elasticsearch) | make build_es | elasticsearch 8.4.1 |
 |   | [kibana](https://www.elastic.co/cn/kibana) | make build_kibana | kibana 8.4.1 |
 |   | [atlas](https://atlas.apache.org) | make build_atlas | atlas 2.2.0 |
 |   | [clickhouse](https://github.com/ClickHouse/ClickHouse) | make build_clickhouse | clickhouse 21.7.8 |
+|   | [doris](https://doris.apache.org) | make build_doris | doris 2.0.2 |
 |   | [starrocks](https://starrocks.io) | make build_starrocks | starrocks 2.5.3 |
 |   | [minio](https://github.com/minio/minio) | make build_minio | minio release |
-| net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
+| 网络相关  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
+| 娱乐 | [navidrome](https://www.navidrome.org) | make build_navidrome | navidrome |
 
 注: 具体构建镜像 & 启动容器的指令可参考 [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 
@@ -115,8 +118,11 @@ REPO=mzsmieli make run_nacos_mysql
 |    | datalink   | REPO=mzsmieli make run_datalink_singleton | datalink: http://localhost:18080<br>admin/admin |
 |    | clickhouse   | REPO=mzsmieli make run_clickhouse_cluster | clickhouse 3节点集群: localhost:18123,localhost:28123,localhost:38123 |
 |    | starrocks   | REPO=mzsmieli make run_starrocks_cluster | starrocks 3节点集群，主节点: localhost:19030 |
+|    | doris   | REPO=mzsmieli make run_doris_cluster | doris 3节点集群，主节点: localhost:19030 |
 |    | es+kibana   | REPO=mzsmieli make run_es_kibana | es: http://localhost:9200<br>kibana: http://localhost:5601 |
 |    | flink  | REPO=mzsmieli make run_flink | flink ui: http://localhost:8081 |
+|    | spark  | REPO=mzsmieli make run_spark | spark ui: http://localhost:8081 |
+| 娱乐 | navidrome   | REPO=mzsmieli make run_hdfs_cluster | hadoop cluster<br>hdfs: http://localhost:8443/gateway/sandbox/hdfs<br>yarn: http://localhost:8443/gateway/sandbox/yarn<br>hive: localhost:10000<br>mysql: localhost:33306 |
 
 ## 待规划需求
 
@@ -133,14 +139,15 @@ REPO=mzsmieli make run_nacos_mysql
 | 二期 |  dockerfile  | 相关组件的版本放到 Makefile.vars 中，如 maven 版本 | 完成 |
 | 二期 |  readme  | 每个镜像（dockerfile）都提供单独的 readme，说明如何启动容器和服务提供的端口、服务页面截图，方便用户了解如何使用 | 待规划 |
 | 三期 |  通过 K8S 搭建 zk 集群  | 声明 k8s 部署配置文件，一键启动 zk 集群 | 待实现 |
-| 三期 |  vscode 开发镜像  | 预装开发环境，包括语言环境、vscode server 等 | 待实现 |
-| 三期 |  镜像优化  | 通过环境变量 net_cn 区分不同的网络环境 | 待实现 |
 | 四期 |  组件优化 | 存储组件的高可用探索，如: es、clickhouse 集群 | |
 | 四期 |  组件优化 | 调度组件的高可用探索，如: azkaban、airflow | |
 | 四期 |  组件优化 | emr组件的高可用探索，如: hdfs 集群和 namenode 高可用 | |
 | 四期 |  组件优化 | 各个组件的 https / ssl 启动、连接方式探索 | |
 | 四期 |  组件优化 | 各个组件对接统一的代理服务（nginx / knox）探索 | |
 | 四期 |  组件优化 | 各个组件的可视化管理平台，类似 ambari | |
+| 四期 |  脚本优化 | 各组件的安装脚本统一在 [shell-tools](https://github.com/smiecj/shell-tools) 中，这里只保留安装后组件的配置（env） | |
+| 四期 |  脚本优化 | Makefile 中对各组件的构建语句优化: 类似通过 name=zookeeper make build 方式构建和启动，减少 Makefile 行数 | |
+| 四期 |  脚本优化 | mix 镜像中的所有 ARG 路径相关的环境信息都统一放到 Makefile.vars.path 中 | |
 | 四期 |  镜像优化 | 区分组件的编译镜像和运行镜像，运行镜像使用更轻量的 | |
 | 持续迭代 |  需要扩展的 dockerfile  | backend - [TiDB](https://github.com/pingcap/tidb) | |
 |  |  需要扩展的 dockerfile  | emr - [nebula](https://github.com/vesoft-inc/nebula) | |

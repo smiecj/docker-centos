@@ -12,8 +12,5 @@ lower_case_table_names=1
 
 character-set-server=utf8
 
-[client]
-default-character-set=utf8
-
 [mysql]
 default-character-set=utf8

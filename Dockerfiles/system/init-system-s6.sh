@@ -2,21 +2,21 @@
 
 # install s6
 
-arch="amd64"
+arch=`uname -p`
 
-system_arch=`uname -p`
-if [[ "aarch64" == "$system_arch" ]]; then
-    arch="arm"
-fi
+s6_noarch_tar_download_url="${github_url}/just-containers/s6-overlay/releases/download/${s6_version}/s6-overlay-noarch.tar.xz"
+s6_arch_tar_download_url="${github_url}/just-containers/s6-overlay/releases/download/${s6_version}/s6-overlay-${arch}.tar.xz"
 
-s6_installer_download_url="${github_url}/just-containers/s6-overlay/releases/download/${s6_version}/s6-overlay-${arch}-installer"
-s6_installer=`echo $s6_installer_download_url | sed 's/.*\///g'`
+s6_noarch_tar=`echo ${s6_noarch_tar_download_url} | sed 's/.*\///g'`
+s6_arch_tar=`echo ${s6_arch_tar_download_url} | sed 's/.*\///g'`
 
 pushd /tmp
 
-curl -LO $s6_installer_download_url
-chmod +x $s6_installer
-./$s6_installer /
-rm -f $s6_installer
+curl -LO $s6_noarch_tar_download_url
+curl -LO $s6_arch_tar_download_url
+tar -xvf $s6_noarch_tar -C /
+tar -xvf $s6_arch_tar -C /
+rm $s6_noarch_tar
+rm $s6_arch_tar
 
 popd

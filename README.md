@@ -52,10 +52,10 @@ extend blog:
 |   | [mongodb](https://www.mongodb.com) | make build_mongo | mongo 6.0.0 |
 |   | [prometheus](https://prometheus.io) | make build_prometheus | prometheus 2.33.4<br>alertmanager 0.23.0<br>pushgateway 1.4.3<br>node exporter 1.3.1 |
 |   | [grafana](https://grafana.com) | make build_grafana | grafana 8.4.2 |
-|   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.6.3 |
+|   | [zookeeper](https://zookeeper.apache.org) | make build_zookeeper | zookeeper 3.9.1 |
 |   | [kafka](https://kafka.apache.org) | make build_kafka | kafka 3.2 |
 |   | [nginx](https://www.nginx.com) | make build_nginx | nginx 1.23.2 |
-| emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.1.2 |
+| emr  | [airflow](https://airflow.apache.org) | make build_airflow | airflow 2.7.3 |
 |   | [hdfs](https://hadoop.apache.org) | make build_hdfs | hdfs 3.3.2 |
 |   | [hive](https://hive.apache.org) | make build_hive | hive 3.1.2 |
 |   | [knox](https://knox.apache.org) | make build_knox | knox 1.6.1 |
@@ -65,7 +65,8 @@ extend blog:
 |   | [zeppelin](https://zeppelin.apache.org) | make build_zeppelin | zeppelin 0.10.1 |
 |   | [presto](https://prestodb.io) | make build_presto | presto 0.275 |
 |   | [trino](https://trino.io) | make build_trino | trino 403 |
-|   | [flink](https://github.com/apache/flink) | make build_flink | flink 1.15 |
+|   | [flink](https://flink.apache.org) | make build_flink | flink 1.15 |
+|   | [spark](https://spark.apache.org) | make build_spark | spark 3.4.1 |
 |   | [superset](https://superset.apache.org) | make build_superset | superset 2.0.0 |
 |   | [azkaban](https://azkaban.github.io) | make build_azkaban | azkaban master branch |
 |   | [prefect](https://www.prefect.io) | make build_prefect | prefect 2.7.7 |
@@ -75,10 +76,12 @@ extend blog:
 |   | [kibana](https://www.elastic.co/cn/kibana) | make build_kibana | kibana 8.4.1 |
 |   | [atlas](https://atlas.apache.org) | make build_atlas | atlas 2.2.0 |
 |   | [clickhouse](https://github.com/ClickHouse/ClickHouse) | make build_clickhouse | clickhouse 21.7.8 |
+|   | [doris](https://doris.apache.org) | make build_doris | doris 2.0.2 |
 |   | [starrocks](https://starrocks.io) | make build_starrocks | starrocks 2.5.3 |
 |   | [minio](https://github.com/minio/minio) | make build_minio | minio release |
 | net  | [xrdp](https://github.com/neutrinolabs/xrdp) | make build_xrdp | centos with xrdp |
 |   | [easyconnect](https://www.sangfor.com/cybersecurity/products/easyconnect) | make build_ec | easyconnect 7.6.7.3<br>[clash](https://github.com/Dreamacro/clash) 1.10.6<br>firefox |
+| entertainment | [navidrome](https://www.navidrome.org) | make build_navidrome | navidrome |
 
 note: build image & run container defail command refer: [Makefile](https://github.com/smiecj/docker-centos/blob/main/Makefile)
 
@@ -119,5 +122,6 @@ REPO=mzsmieli make run_nacos_mysql
 |    | datalink   | REPO=mzsmieli make run_datalink_singleton | datalink: http://localhost:18080<br>admin/admin |
 |    | clickhouse   | REPO=mzsmieli make run_clickhouse_cluster | 3 clickhouse nodes: localhost:18123,localhost:28123,localhost:38123 |
 |    | starrocks   | REPO=mzsmieli make run_starrocks_cluster | 3 starrocks nodes, master fe: localhost:19030 |
+|    | doris   | REPO=mzsmieli make run_doris_cluster | 3 doris nodes，master fe: localhost:19030 |
 |    | es+kibana   | REPO=mzsmieli make run_es_kibana | es: http://localhost:9200<br>kibana: http://localhost:5601 |
 |    | flink  | REPO=mzsmieli make run_flink | flink ui: http://localhost:8081 |

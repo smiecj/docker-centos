@@ -19,6 +19,7 @@ fi
 ## proxy
 sed -i "s#^c.ConfigurableHTTPProxy.auth_token = .*#c.ConfigurableHTTPProxy.auth_token = '${hub_token}'#g" ${config_file}
 sed -i "s#^c.ConfigurableHTTPProxy.api_url = .*#c.ConfigurableHTTPProxy.api_url = 'http://127.0.0.1:${api_port}'#g" ${config_file}
+sed -i "s#^c.ConfigurableHTTPProxy.public_url = .*#c.ConfigurableHTTPProxy.public_url = '0.0.0.0:${proxy_port}'#g" ${config_file}
 sed -i "s#^export CONFIGPROXY_AUTH_TOKEN=.*#export CONFIGPROXY_AUTH_TOKEN='${hub_token}'#g" /etc/profile
 
 ## authenticator
